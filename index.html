@@ -229,10 +229,178 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/30/setContentView源码分析/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="immrwk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="immrwk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/30/setContentView源码分析/" itemprop="url">setContentView源码分析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-30T17:20:55+08:00">
+                2018-10-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
+<p>平时我们开发过程中，给Activity设置布局的时候，直接调用的setContentView，然后我们在xml布局文件中写的布局就可以显示出来，那这个过程到底是怎么样的呢，今天我们来分析一下，setContentView都做了什么。</p>
+</blockquote>
+<h2 id="Activity-setContentView"><a href="#Activity-setContentView" class="headerlink" title="Activity setContentView"></a>Activity setContentView</h2><p>首先我们看Activity的setContentView方法，这个方法有几个重载:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public void setContentView(@LayoutRes int layoutResID) &#123;</span><br><span class="line">    getWindow().setContentView(layoutResID);</span><br><span class="line">    initWindowDecorActionBar();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void setContentView(View view) &#123;</span><br><span class="line">    getWindow().setContentView(view);</span><br><span class="line">    initWindowDecorActionBar();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void setContentView(View view, ViewGroup.LayoutParams params) &#123;</span><br><span class="line">    getWindow().setContentView(view, params);</span><br><span class="line">    initWindowDecorActionBar();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三个方法是在第二个方法的基础上加了ViewGroup.LayoutParams的参数，我们重点看第一个和第三个方法就好，这个两个方法共做了两件事，一是调用了window的setContentView方法，第二个是执行了initWindowDecorActionBar<br>我们知道window是一个抽象类，他的实现类是PhoneWindow，window是在Activity的attach()中初始化为PhoneWindow的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">final void attach(Context context, ActivityThread aThread,</span><br><span class="line">        Instrumentation instr, IBinder token, int ident,</span><br><span class="line">        Application application, Intent intent, ActivityInfo info,</span><br><span class="line">        CharSequence title, Activity parent, String id,</span><br><span class="line">        NonConfigurationInstances lastNonConfigurationInstances,</span><br><span class="line">        Configuration config, String referrer, IVoiceInteractor voic</span><br><span class="line">        Window window) &#123;</span><br><span class="line">    attachBaseContext(context);</span><br><span class="line">    mFragments.attachHost(null /*parent*/);</span><br><span class="line">    //初始化window</span><br><span class="line">    mWindow = new PhoneWindow(this, window);</span><br><span class="line">    mWindow.setWindowControllerCallback(this);</span><br><span class="line">    mWindow.setCallback(this);</span><br><span class="line">    mWindow.setOnWindowDismissedCallback(this);</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="PhoneWindow-setContentView"><a href="#PhoneWindow-setContentView" class="headerlink" title="PhoneWindow setContentView"></a>PhoneWindow setContentView</h2><p>接下来我们看看PhoneWindow的setContentView方法做了什么，主要有两个方法：</p>
+<font color="#ff0000" size="4" face="黑体"><strong>1. 参数为layoutResId</strong></font>  
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void setContentView(int layoutResID) &#123;</span><br><span class="line">    // Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window</span><br><span class="line">    // decor, when theme attributes and the like are crystalized. Do not check the feature</span><br><span class="line">    // before this happens.</span><br><span class="line">    if (mContentParent == null) &#123;</span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; else if (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">        mContentParent.removeAllViews();</span><br><span class="line">    &#125;</span><br><span class="line">    if (hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">        final Scene newScene = Scene.getSceneForLayout(mContentParent, layoutResID,</span><br><span class="line">                getContext());</span><br><span class="line">        transitionTo(newScene);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // 将layoutResID对应的布局文件inflate到父布局mContentParent上</span><br><span class="line">        mLayoutInflater.inflate(layoutResID, mContentParent);</span><br><span class="line">    &#125;</span><br><span class="line">    mContentParent.requestApplyInsets();</span><br><span class="line">    final Callback cb = getCallback();</span><br><span class="line">    if (cb != null &amp;&amp; !isDestroyed()) &#123;</span><br><span class="line">        cb.onContentChanged();</span><br><span class="line">    &#125;</span><br><span class="line">    mContentParentExplicitlySet = true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先判断mContentParent是否为空，为空则执行installDecor();</p>
+<p>installDecor()的内容很长，我们挑重点来看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">private void installDecor() &#123;</span><br><span class="line">    mForceDecorInstall = false;</span><br><span class="line">    if (mDecor == null) &#123;</span><br><span class="line">        mDecor = generateDecor(-1);</span><br><span class="line">        mDecor.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);</span><br><span class="line">        mDecor.setIsRootNamespace(true);</span><br><span class="line">        if (!mInvalidatePanelMenuPosted &amp;&amp; mInvalidatePanelMenuFeatures != 0) &#123;</span><br><span class="line">            mDecor.postOnAnimation(mInvalidatePanelMenuRunnable);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        mDecor.setWindow(this);</span><br><span class="line">    &#125;</span><br><span class="line">    if (mContentParent == null) &#123;</span><br><span class="line">        mContentParent = generateLayout(mDecor);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先调用的是generateDecor(-1)生成了一个DecorView</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">protected DecorView generateDecor(int featureId) &#123;</span><br><span class="line">    // System process doesn&apos;t have application context and in that case we need to directly use</span><br><span class="line">    // the context we have. Otherwise we want the application context, so we don&apos;t cling to the</span><br><span class="line">    // activity.</span><br><span class="line">    Context context;</span><br><span class="line">    if (mUseDecorContext) &#123;</span><br><span class="line">        Context applicationContext = getContext().getApplicationContext();</span><br><span class="line">        if (applicationContext == null) &#123;</span><br><span class="line">            context = getContext();</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            context = new DecorContext(applicationContext, getContext().getResources());</span><br><span class="line">            if (mTheme != -1) &#123;</span><br><span class="line">                context.setTheme(mTheme);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        context = getContext();</span><br><span class="line">    &#125;</span><br><span class="line">    return new DecorView(context, featureId, this, getAttributes());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后第13、14行的时候执行generateLayout()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">protected ViewGroup generateLayout(DecorView decor) &#123;</span><br><span class="line">    // Apply data from current theme.</span><br><span class="line">    // 用TypedArray获取窗口的属性进行相关设置</span><br><span class="line">    TypedArray a = getWindowStyle();</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">	// Inflate the window decor.</span><br><span class="line">	//根据设定好的features值选择不同的窗口修饰布局文件,得到layoutResource值</span><br><span class="line">	int layoutResource;</span><br><span class="line">	int features = getLocalFeatures();</span><br><span class="line">	</span><br><span class="line">	...</span><br><span class="line">	</span><br><span class="line">	// 将layoutResource添加进Decor对象中</span><br><span class="line">	mDecor.startChanging();</span><br><span class="line">	mDecor.onResourcesLoaded(mLayoutInflater, layoutResource);</span><br><span class="line">	</span><br><span class="line">	// 获取contentParent</span><br><span class="line">	ViewGroup contentParent = (ViewGroup)findViewById(ID_ANDROID_CONTENT);</span><br><span class="line">	if (contentParent == null) &#123;</span><br><span class="line">	    throw new RuntimeException(&quot;Window couldn&apos;t find content container view&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	...</span><br><span class="line">    return contentParent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由此可见，installDecor方法主要就是为我们生成了mDecor和mContentParent对象。</p>
+<p>下面的hasFeature(FEATURE_CONTENT_TRANSITIONS)是判断有没有设置过度动画，如果有，则启用过度动画来将布局添加到mContentParent中，否则直接将ayoutResID对应的布局文件inflate到父布局mContentParent上。</p>
+<font color="#ff0000" size="4" face="黑体"><strong>2. 参数为view和LayoutParams</strong></font>  
+
+<p><code>@Override
+public void setContentView(View view, ViewGroup.LayoutParams params) {
+    // Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window
+    // decor, when theme attributes and the like are crystalized. Do not check the feature
+    // before this happens.
+    if (mContentParent == null) {
+        installDecor();
+    } else if (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) {
+        mContentParent.removeAllViews();
+    }
+    if (hasFeature(FEATURE_CONTENT_TRANSITIONS)) {
+        view.setLayoutParams(params);
+        final Scene newScene = new Scene(mContentParent, view);
+        transitionTo(newScene);
+    } else {
+        mContentParent.addView(view, params);
+    }
+    mContentParent.requestApplyInsets();
+    final Callback cb = getCallback();
+    if (cb != null &amp;&amp; !isDestroyed()) {
+        cb.onContentChanged();
+    }
+    mContentParentExplicitlySet = true;
+}</code>/Users/kai/myspace/blog/source/_posts/setContentView源码分析.md</p>
+<p>这个方法和上面的大体相同，主要区别在于不用inflate resId，而是直接通过addView将布局view添加到mContentParent中。</p>
+<p>最后通过一张图，来简单展示下一个Activity布局大致逻辑:</p>
+<p><img src="https://img-blog.csdn.net/20180904114156875?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ltbXJ3aw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/30/Android Handler机制源码分析/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="immrwk">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
@@ -434,7 +602,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/30/Android Avtivity setContentView源码分析/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="immrwk">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
@@ -524,7 +692,30 @@
 <p>下面的hasFeature(FEATURE_CONTENT_TRANSITIONS)是判断有没有设置过度动画，如果有，则启用过度动画来将布局添加到mContentParent中，否则直接将ayoutResID对应的布局文件inflate到父布局mContentParent上。</p>
 <font color="#ff0000" size="4" face="黑体"><strong>2. 参数为view和LayoutParams</strong></font>  
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void setContentView(View view, ViewGroup.LayoutParams params) &#123;</span><br><span class="line">    // Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window</span><br><span class="line">    // decor, when theme attributes and the like are crystalized. Do not check the feature</span><br><span class="line">    // before this happens.</span><br><span class="line">    if (mContentParent == null) &#123;</span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; else if (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">        mContentParent.removeAllViews();</span><br><span class="line">    &#125;</span><br><span class="line">    if (hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">        view.setLayoutParams(params);</span><br><span class="line">        final Scene newScene = new Scene(mContentParent, view);</span><br><span class="line">        transitionTo(newScene);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        mContentParent.addView(view, params);</span><br><span class="line">    &#125;</span><br><span class="line">    mContentParent.requestApplyInsets();</span><br><span class="line">    final Callback cb = getCallback();</span><br><span class="line">    if (cb != null &amp;&amp; !isDestroyed()) &#123;</span><br><span class="line">        cb.onContentChanged();</span><br><span class="line">    &#125;</span><br><span class="line">    mContentParentExplicitlySet = true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>@Override
+public void setContentView(View view, ViewGroup.LayoutParams params) {
+    // Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window
+    // decor, when theme attributes and the like are crystalized. Do not check the feature
+    // before this happens.
+    if (mContentParent == null) {
+        installDecor();
+    } else if (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) {
+        mContentParent.removeAllViews();
+    }
+    if (hasFeature(FEATURE_CONTENT_TRANSITIONS)) {
+        view.setLayoutParams(params);
+        final Scene newScene = new Scene(mContentParent, view);
+        transitionTo(newScene);
+    } else {
+        mContentParent.addView(view, params);
+    }
+    mContentParent.requestApplyInsets();
+    final Callback cb = getCallback();
+    if (cb != null &amp;&amp; !isDestroyed()) {
+        cb.onContentChanged();
+    }
+    mContentParentExplicitlySet = true;
+}</code>/Users/kai/myspace/blog/source/_posts/setContentView源码分析.md</p>
 <p>这个方法和上面的大体相同，主要区别在于不用inflate resId，而是直接通过addView将布局view添加到mContentParent中。</p>
 <p>最后通过一张图，来简单展示下一个Activity布局大致逻辑:</p>
 <p><img src="https://img-blog.csdn.net/20180904114156875?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ltbXJ3aw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
@@ -598,7 +789,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-author-name" itemprop="name">immrwk</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
@@ -609,7 +800,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -654,7 +845,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">immrwk</span>
 
   
 </div>
