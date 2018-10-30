@@ -81,7 +81,7 @@
 
 <meta name="description" content="本文分析基于android-25  Handler是Android系统提供给我们的一个工具，主要用于多线程间的通讯，比如更新UI等等。 #一、Handler常见用法1.首先定义一个Handler，并重写handlerMessage方法，当收到消息时，根据msg.what判断来源，然后进行相关操作，这里是更新了一个textView的显示文字。 12345678910111213private Ha">
 <meta property="og:type" content="article">
-<meta property="og:title" content="immrwk">
+<meta property="og:title" content="Android Handler机制源码分析">
 <meta property="og:url" content="http://yoursite.com/2018/10/30/Android Handler机制源码分析/index.html">
 <meta property="og:site_name" content="immrwk">
 <meta property="og:description" content="本文分析基于android-25  Handler是Android系统提供给我们的一个工具，主要用于多线程间的通讯，比如更新UI等等。 #一、Handler常见用法1.首先定义一个Handler，并重写handlerMessage方法，当收到消息时，根据msg.what判断来源，然后进行相关操作，这里是更新了一个textView的显示文字。 12345678910111213private Ha">
@@ -89,9 +89,9 @@
 <meta property="og:image" content="https://img-blog.csdn.net/20180831153810644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ltbXJ3aw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://img-blog.csdn.net/20180831153828467?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ltbXJ3aw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://img-blog.csdn.net/20180831153858238?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ltbXJ3aw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:updated_time" content="2018-10-30T09:09:10.000Z">
+<meta property="og:updated_time" content="2018-10-30T09:34:36.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="immrwk">
+<meta name="twitter:title" content="Android Handler机制源码分析">
 <meta name="twitter:description" content="本文分析基于android-25  Handler是Android系统提供给我们的一个工具，主要用于多线程间的通讯，比如更新UI等等。 #一、Handler常见用法1.首先定义一个Handler，并重写handlerMessage方法，当收到消息时，根据msg.what判断来源，然后进行相关操作，这里是更新了一个textView的显示文字。 12345678910111213private Ha">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20180831153810644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ltbXJ3aw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 
@@ -129,7 +129,7 @@
 
 
 
-  <title> | immrwk</title>
+  <title>Android Handler机制源码分析 | immrwk</title>
   
 
 
@@ -253,7 +253,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">Android Handler机制源码分析</h1>
         
 
         <div class="post-meta">
@@ -265,7 +265,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-30T17:09:10+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-30T17:33:08+08:00">
                 2018-10-30
               </time>
             
@@ -410,15 +410,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/10/30/Android Activity setContentView源码分析/" rel="next" title="setContentView源码分析">
+                <i class="fa fa-chevron-left"></i> setContentView源码分析
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/30/Android Activity setContentView源码分析/" rel="prev" title="setContentView源码分析">
-                setContentView源码分析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
