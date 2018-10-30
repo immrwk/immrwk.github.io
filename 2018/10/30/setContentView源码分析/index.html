@@ -87,7 +87,7 @@
 <meta property="og:description" content="前言 平时我们开发过程中，给Activity设置布局的时候，直接调用的setContentView，然后我们在xml布局文件中写的布局就可以显示出来，那这个过程到底是怎么样的呢，今天我们来分析一下，setContentView都做了什么。  Activity setContentView首先我们看Activity的setContentView方法，这个方法有几个重载: 12345678910111">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://img-blog.csdn.net/20180904114156875?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ltbXJ3aw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:updated_time" content="2018-10-30T09:21:34.000Z">
+<meta property="og:updated_time" content="2018-10-30T09:24:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="setContentView源码分析">
 <meta name="twitter:description" content="前言 平时我们开发过程中，给Activity设置布局的时候，直接调用的setContentView，然后我们在xml布局文件中写的布局就可以显示出来，那这个过程到底是怎么样的呢，今天我们来分析一下，setContentView都做了什么。  Activity setContentView首先我们看Activity的setContentView方法，这个方法有几个重载: 12345678910111">
@@ -323,30 +323,7 @@
 <p>下面的hasFeature(FEATURE_CONTENT_TRANSITIONS)是判断有没有设置过度动画，如果有，则启用过度动画来将布局添加到mContentParent中，否则直接将ayoutResID对应的布局文件inflate到父布局mContentParent上。</p>
 <font color="#ff0000" size="4" face="黑体"><strong>2. 参数为view和LayoutParams</strong></font>  
 
-<p><code>@Override
-public void setContentView(View view, ViewGroup.LayoutParams params) {
-    // Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window
-    // decor, when theme attributes and the like are crystalized. Do not check the feature
-    // before this happens.
-    if (mContentParent == null) {
-        installDecor();
-    } else if (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) {
-        mContentParent.removeAllViews();
-    }
-    if (hasFeature(FEATURE_CONTENT_TRANSITIONS)) {
-        view.setLayoutParams(params);
-        final Scene newScene = new Scene(mContentParent, view);
-        transitionTo(newScene);
-    } else {
-        mContentParent.addView(view, params);
-    }
-    mContentParent.requestApplyInsets();
-    final Callback cb = getCallback();
-    if (cb != null &amp;&amp; !isDestroyed()) {
-        cb.onContentChanged();
-    }
-    mContentParentExplicitlySet = true;
-}</code>/Users/kai/myspace/blog/source/_posts/setContentView源码分析.md</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void setContentView(View view, ViewGroup.LayoutParams params) &#123;</span><br><span class="line">    // Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window</span><br><span class="line">    // decor, when theme attributes and the like are crystalized. Do not check the feature</span><br><span class="line">    // before this happens.</span><br><span class="line">    if (mContentParent == null) &#123;</span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; else if (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">        mContentParent.removeAllViews();</span><br><span class="line">    &#125;</span><br><span class="line">    if (hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">        view.setLayoutParams(params);</span><br><span class="line">        final Scene newScene = new Scene(mContentParent, view);</span><br><span class="line">        transitionTo(newScene);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        mContentParent.addView(view, params);</span><br><span class="line">    &#125;</span><br><span class="line">    mContentParent.requestApplyInsets();</span><br><span class="line">    final Callback cb = getCallback();</span><br><span class="line">    if (cb != null &amp;&amp; !isDestroyed()) &#123;</span><br><span class="line">        cb.onContentChanged();</span><br><span class="line">    &#125;</span><br><span class="line">    mContentParentExplicitlySet = true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这个方法和上面的大体相同，主要区别在于不用inflate resId，而是直接通过addView将布局view添加到mContentParent中。</p>
 <p>最后通过一张图，来简单展示下一个Activity布局大致逻辑:</p>
 <p><img src="https://img-blog.csdn.net/20180904114156875?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ltbXJ3aw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
