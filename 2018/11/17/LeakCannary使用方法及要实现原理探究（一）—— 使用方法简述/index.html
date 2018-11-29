@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="String,intern,">
+  <meta name="keywords" content="LeakCannary,内存泄漏,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="首先看一段代码，思考运行结果 123456789101112String s0 = new String(&amp;quot;ab&amp;quot;);String s1 = new String(&amp;quot;ab&amp;quot;);String s2 = &amp;quot;ab&amp;quot;;String s3 = &amp;quot;a&amp;quot; + &amp;quot;b&amp;quot;;String s4 = &amp;quot;b&amp;quo">
-<meta name="keywords" content="String,intern">
+<meta name="description" content="##简介LeakCanary是Square公司研发的一个可视化的内存泄漏分析工具，github地址为https://github.com/square/leakcanary。它的使用非常简单，下面我们将一步步进行分析。 ##集成LeakCannary在我们的build.gradle中添加如下依赖： 123456dependencies &amp;#123;  debugImplementation &amp;ap">
+<meta name="keywords" content="LeakCannary,内存泄漏">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java基础提高 String与String.intern()">
-<meta property="og:url" content="http://yoursite.com/2018/11/07/Java基础提高-String与String-intern/index.html">
+<meta property="og:title" content="LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述">
+<meta property="og:url" content="http://yoursite.com/2018/11/17/LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述/index.html">
 <meta property="og:site_name" content="多看书">
-<meta property="og:description" content="首先看一段代码，思考运行结果 123456789101112String s0 = new String(&amp;quot;ab&amp;quot;);String s1 = new String(&amp;quot;ab&amp;quot;);String s2 = &amp;quot;ab&amp;quot;;String s3 = &amp;quot;a&amp;quot; + &amp;quot;b&amp;quot;;String s4 = &amp;quot;b&amp;quo">
+<meta property="og:description" content="##简介LeakCanary是Square公司研发的一个可视化的内存泄漏分析工具，github地址为https://github.com/square/leakcanary。它的使用非常简单，下面我们将一步步进行分析。 ##集成LeakCannary在我们的build.gradle中添加如下依赖： 123456dependencies &amp;#123;  debugImplementation &amp;ap">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-07T07:28:43.000Z">
+<meta property="og:updated_time" content="2018-11-29T10:32:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java基础提高 String与String.intern()">
-<meta name="twitter:description" content="首先看一段代码，思考运行结果 123456789101112String s0 = new String(&amp;quot;ab&amp;quot;);String s1 = new String(&amp;quot;ab&amp;quot;);String s2 = &amp;quot;ab&amp;quot;;String s3 = &amp;quot;a&amp;quot; + &amp;quot;b&amp;quot;;String s4 = &amp;quot;b&amp;quo">
+<meta name="twitter:title" content="LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述">
+<meta name="twitter:description" content="##简介LeakCanary是Square公司研发的一个可视化的内存泄漏分析工具，github地址为https://github.com/square/leakcanary。它的使用非常简单，下面我们将一步步进行分析。 ##集成LeakCannary在我们的build.gradle中添加如下依赖： 123456dependencies &amp;#123;  debugImplementation &amp;ap">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/11/07/Java基础提高-String与String-intern/">
+  <link rel="canonical" href="http://yoursite.com/2018/11/17/LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述/">
 
 
 
 
 
-  <title>Java基础提高 String与String.intern() | 多看书</title>
+  <title>LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述 | 多看书</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/07/Java基础提高-String与String-intern/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/17/LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="immrwk">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java基础提高 String与String.intern()</h1>
+          <h1 class="post-title" itemprop="name headline">LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-07T14:37:38+08:00">
-                2018-11-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-17T19:37:38+08:00">
+                2018-11-17
               </time>
             
 
@@ -315,8 +315,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
 
@@ -352,23 +352,19 @@
       
 
       
-        <p>首先看一段代码，思考运行结果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String s0 = new String(&quot;ab&quot;);</span><br><span class="line">String s1 = new String(&quot;ab&quot;);</span><br><span class="line">String s2 = &quot;ab&quot;;</span><br><span class="line">String s3 = &quot;a&quot; + &quot;b&quot;;</span><br><span class="line">String s4 = &quot;b&quot;;</span><br><span class="line">String s5 = &quot;a&quot; + s4;</span><br><span class="line"></span><br><span class="line">System.out.println(s1.intern() == s0);//判断1</span><br><span class="line">System.out.println(s1.intern() == s2);//判断2</span><br><span class="line">System.out.println(s1.intern() == s3);//判断3</span><br><span class="line">System.out.println(s1.intern() == s5);//判断4</span><br><span class="line">System.out.println(s1.intern() == s0.intern()); //判断5</span><br></pre></td></tr></table></figure>
-<p>我们先来了解以下几点：</p>
-<blockquote>
-<p>1.String不是基本数据类型，是一个类，对象默认值为null<br>2.常量池(constant pool)指的是在编译期被确定，并被保存在已编译的.class文件中的一些数据。它包括了关于类、方法、接口等中的常量，也包括字符串常量。<br>3.一个字符串由多个字符串常量拼接而成，那么它也是字符串常量<br>4.Java会确保字符串常量只有一个拷贝<br>5.存在于.class文件中的常量池，在运行期被JVM装载，并且可以扩充。String的intern()方法就是扩充常量池的一个方法；当一个String实例str调用intern()方法时，Java查找常量池中是否有相同Unicode的字符串常量，如果有，则返回其的引用，如果没有，则在常量池中增加一个Unicode等于str的字符串并返回它的引用</p>
-</blockquote>
-<p>下面我们重新看上面的那段代码</p>
-<ul>
-<li><p>1.s1.intern()代表常量池中”ab”的引用，s2、s3、s4都是在编译时期被确定的字符串常量，所以也存在于常量池中，所以判断2、判断3结果为true。</p>
-</li>
-<li><p>2.s0、s1是new出来的，不是编译时期确定的，所以创建的字符串不存在于常量池中，所以判断1为false。</p>
-</li>
-<li><p>3.s5是运行时确定的，不能直接引用常量池中的”ab”，所以判断4为false</p>
-</li>
-<li><p>4.判断5中s1.intern()和s0.intern()引用的都是常量池中的”ab”，所以结果为true</p>
-</li>
-</ul>
+        <p>##简介<br>LeakCanary是Square公司研发的一个可视化的内存泄漏分析工具，github地址为<a href="https://github.com/square/leakcanary" target="_blank" rel="noopener">https://github.com/square/leakcanary</a>。<br>它的使用非常简单，下面我们将一步步进行分析。</p>
+<p>##集成LeakCannary<br>在我们的build.gradle中添加如下依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">  debugImplementation &apos;com.squareup.leakcanary:leakcanary-android:1.6.1&apos;</span><br><span class="line">  releaseImplementation &apos;com.squareup.leakcanary:leakcanary-android-no-op:1.6.1&apos;</span><br><span class="line">  // Optional, if you use support library fragments:</span><br><span class="line">  debugImplementation &apos;com.squareup.leakcanary:leakcanary-support-fragment:1.6.1&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Application中添加类似如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class ExampleApplication extends Application &#123;</span><br><span class="line"></span><br><span class="line">  @Override public void onCreate() &#123;</span><br><span class="line">    super.onCreate();</span><br><span class="line">    LeakCanary.install(this);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>添加完成之后，我们就可以使用LeakCannary了。</p>
+<p>##应用举例<br>要想使用LeakCannary对各个类进行监控，需要创建RefWatcher，所以我们首先重写Application，然后创建RefWatcher供外部使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class LeakApplication extends Application &#123;</span><br><span class="line"></span><br><span class="line">    private static RefWatcher refWatcher;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line"></span><br><span class="line">        refWatcher = LeakCanary.install(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //提供给外部调用的方法</span><br><span class="line">    public static RefWatcher getRefWatcher() &#123;</span><br><span class="line"></span><br><span class="line">        return refWatcher;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来我们创建一个Activity，然后手动制造一个内存泄漏。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class LeakActivity extends Activity &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_leak);</span><br><span class="line"></span><br><span class="line">        LeakThread leakThread = new LeakThread();</span><br><span class="line">        leakThread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onDestroy() &#123;</span><br><span class="line">        super.onDestroy();</span><br><span class="line"></span><br><span class="line">        LeakApplication.getRefWatcher().watch(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    class LeakThread extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep(6 * 60 * 1000);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注意，要想检测内存泄漏，需要再Activity的onDestroy中调用RefWatcher的watch方法。</strong></p>
+<p>LeakActivity存在内存泄漏，因为非静态内部类LeakThread持有外部类LeakActivity的引用，导致LeakActivity无法被回收。</p>
+<p>然后我们自己测试，就可以通过状态栏查看到泄露的具体信息。</p>
 
       
     </div>
@@ -386,9 +382,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/String/" rel="tag"># String</a>
+            <a href="/tags/LeakCannary/" rel="tag"># LeakCannary</a>
           
-            <a href="/tags/intern/" rel="tag"># intern</a>
+            <a href="/tags/内存泄漏/" rel="tag"># 内存泄漏</a>
           
         </div>
       
@@ -401,8 +397,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/05/Android系统是如何启动的/" rel="next" title="Android系统是如何启动的">
-                <i class="fa fa-chevron-left"></i> Android系统是如何启动的
+              <a href="/2018/11/09/Android finish()自动回调时机，Activity资源释放逻辑放在onDestroy中一定合适吗/" rel="next" title="Android finish()自动回调时机，Activity资源释放逻辑放在onDestroy中一定合适吗">
+                <i class="fa fa-chevron-left"></i> Android finish()自动回调时机，Activity资源释放逻辑放在onDestroy中一定合适吗
               </a>
             
           </div>
@@ -410,10 +406,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/09/Android finish()自动回调时机，Activity资源释放逻辑放在onDestroy中一定合适吗/" rel="prev" title="Android finish()自动回调时机，Activity资源释放逻辑放在onDestroy中一定合适吗">
-                Android finish()自动回调时机，Activity资源释放逻辑放在onDestroy中一定合适吗 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
