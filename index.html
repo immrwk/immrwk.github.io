@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/24/Android 网络请求框架volley源码解析（一） —— 网络请求部分/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/24/Android 网络请求框架volley源码解析（二） —— volley缓存原理/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="immrwk">
@@ -281,7 +281,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/24/Android 网络请求框架volley源码解析（一） —— 网络请求部分/" itemprop="url">Android 网络请求框架volley源码解析（一） —— 网络请求部分</a></h1>
+                <a class="post-title-link" href="/2018/11/24/Android 网络请求框架volley源码解析（二） —— volley缓存原理/" itemprop="url">Android 网络请求框架volley源码解析（二） —— volley缓存原理</a></h1>
         
 
         <div class="post-meta">
@@ -355,14 +355,11 @@
       
         
           
-          
-volley是google提供的一个网络通信框架，非常适合我们进行一些数据量不大、频繁的网络通信操作。这是一个开源项目，地址为https://github.com/google/volley，今天我们就分章节来分析一下volley框架源码，探寻它内部的实现机制。
-
-基本使用这里列举一个volley
+          volley的缓存目录通过上一篇分析中我们发现，创建一个请求队列的同时，会同时创建Volley的缓存目录和DiskBasedCache缓存对象，我们可以得知Volley的缓存目录就是在我们应用内置的cacheDir目录下的volley文件夹中，然后把这个目录用作DiskBasedCache硬盘缓存的
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/11/24/Android 网络请求框架volley源码解析（一） —— 网络请求部分/#more" rel="contents">
+            <a class="btn" href="/2018/11/24/Android 网络请求框架volley源码解析（二） —— volley缓存原理/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -413,7 +410,7 @@ volley是google提供的一个网络通信框架，非常适合我们进行一�
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/23/Android 网络请求框架volley源码解析（二） —— volley缓存原理/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/23/Android 网络请求框架volley源码解析（一） —— 网络请求部分/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="immrwk">
@@ -432,7 +429,7 @@ volley是google提供的一个网络通信框架，非常适合我们进行一�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/23/Android 网络请求框架volley源码解析（二） —— volley缓存原理/" itemprop="url">Android 网络请求框架volley源码解析（二） —— volley缓存原理</a></h1>
+                <a class="post-title-link" href="/2018/11/23/Android 网络请求框架volley源码解析（一） —— 网络请求部分/" itemprop="url">Android 网络请求框架volley源码解析（一） —— 网络请求部分</a></h1>
         
 
         <div class="post-meta">
@@ -506,11 +503,14 @@ volley是google提供的一个网络通信框架，非常适合我们进行一�
       
         
           
-          volley的缓存目录通过上一篇分析中我们发现，创建一个请求队列的同时，会同时创建Volley的缓存目录和DiskBasedCache缓存对象，我们可以得知Volley的缓存目录就是在我们应用内置的cacheDir目录下的volley文件夹中，然后把这个目录用作DiskBasedCache硬盘缓存的
+          
+volley是google提供的一个网络通信框架，非常适合我们进行一些数据量不大、频繁的网络通信操作。这是一个开源项目，地址为https://github.com/google/volley，今天我们就分章节来分析一下volley框架源码，探寻它内部的实现机制。
+
+基本使用这里列举一个volley
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/11/23/Android 网络请求框架volley源码解析（二） —— volley缓存原理/#more" rel="contents">
+            <a class="btn" href="/2018/11/23/Android 网络请求框架volley源码解析（一） —— 网络请求部分/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
