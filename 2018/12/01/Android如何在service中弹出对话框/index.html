@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="LeakCannary,内存泄漏,">
+  <meta name="keywords" content="service,对话框,dialog,">
 
 
 
@@ -79,18 +79,23 @@
 
 
 
-<meta name="description" content="简介LeakCanary是Square公司研发的一个可视化的内存泄漏分析工具，github地址为https://github.com/square/leakcanary。它的使用非常简单，下面我们将一步步进行分析。 集成LeakCannary在我们的build.gradle中添加如下依赖： 123456dependencies &amp;#123;  debugImplementation &amp;apos;c">
-<meta name="keywords" content="LeakCannary,内存泄漏">
+<meta name="description" content="最近又听人聊到Android能不能在service中弹出对话框的问题，于是总结一下答案是肯定的，系统可以在低电量的时候弹出电量不足的提示，那么我们也可以按同样的方法做到下面介绍在service中弹出对话框的两种方法： 1.将dialog的Type设置为TYPE_SYSTEM_ALERT写一个service代码如下：123456789101112131415161718192021222324252">
+<meta name="keywords" content="service,对话框,dialog">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述">
-<meta property="og:url" content="http://yoursite.com/2018/11/17/LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述/index.html">
+<meta property="og:title" content="Android如何在service中弹出对话框">
+<meta property="og:url" content="http://yoursite.com/2018/12/01/Android如何在service中弹出对话框/index.html">
 <meta property="og:site_name" content="多看书">
-<meta property="og:description" content="简介LeakCanary是Square公司研发的一个可视化的内存泄漏分析工具，github地址为https://github.com/square/leakcanary。它的使用非常简单，下面我们将一步步进行分析。 集成LeakCannary在我们的build.gradle中添加如下依赖： 123456dependencies &amp;#123;  debugImplementation &amp;apos;c">
+<meta property="og:description" content="最近又听人聊到Android能不能在service中弹出对话框的问题，于是总结一下答案是肯定的，系统可以在低电量的时候弹出电量不足的提示，那么我们也可以按同样的方法做到下面介绍在service中弹出对话框的两种方法： 1.将dialog的Type设置为TYPE_SYSTEM_ALERT写一个service代码如下：123456789101112131415161718192021222324252">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-29T10:36:35.000Z">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fxx3okjl5wj30ok14wt9z.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fxx3oypkk8j30oi14ujut.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fxx3pd2d0wj30ok150q7e.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fxx3qji0utj30oo14swfi.jpg">
+<meta property="og:updated_time" content="2018-12-06T08:24:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述">
-<meta name="twitter:description" content="简介LeakCanary是Square公司研发的一个可视化的内存泄漏分析工具，github地址为https://github.com/square/leakcanary。它的使用非常简单，下面我们将一步步进行分析。 集成LeakCannary在我们的build.gradle中添加如下依赖： 123456dependencies &amp;#123;  debugImplementation &amp;apos;c">
+<meta name="twitter:title" content="Android如何在service中弹出对话框">
+<meta name="twitter:description" content="最近又听人聊到Android能不能在service中弹出对话框的问题，于是总结一下答案是肯定的，系统可以在低电量的时候弹出电量不足的提示，那么我们也可以按同样的方法做到下面介绍在service中弹出对话框的两种方法： 1.将dialog的Type设置为TYPE_SYSTEM_ALERT写一个service代码如下：123456789101112131415161718192021222324252">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fxx3okjl5wj30ok14wt9z.jpg">
 
 
 
@@ -120,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/11/17/LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述/">
+  <link rel="canonical" href="http://yoursite.com/2018/12/01/Android如何在service中弹出对话框/">
 
 
 
 
 
-  <title>LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述 | 多看书</title>
+  <title>Android如何在service中弹出对话框 | 多看书</title>
   
 
 
@@ -263,7 +268,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/17/LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/01/Android如何在service中弹出对话框/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="immrwk">
@@ -280,7 +285,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">LeakCannary使用方法及要实现原理探究（一）—— 使用方法简述</h1>
+          <h1 class="post-title" itemprop="name headline">Android如何在service中弹出对话框</h1>
         
 
         <div class="post-meta">
@@ -292,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-17T19:37:38+08:00">
-                2018-11-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-01T10:10:15+08:00">
+                2018-12-01
               </time>
             
 
@@ -352,19 +357,12 @@
       
 
       
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>LeakCanary是Square公司研发的一个可视化的内存泄漏分析工具，github地址为<a href="https://github.com/square/leakcanary" target="_blank" rel="noopener">https://github.com/square/leakcanary</a>。<br>它的使用非常简单，下面我们将一步步进行分析。</p>
-<h2 id="集成LeakCannary"><a href="#集成LeakCannary" class="headerlink" title="集成LeakCannary"></a>集成LeakCannary</h2><p>在我们的build.gradle中添加如下依赖：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">  debugImplementation &apos;com.squareup.leakcanary:leakcanary-android:1.6.1&apos;</span><br><span class="line">  releaseImplementation &apos;com.squareup.leakcanary:leakcanary-android-no-op:1.6.1&apos;</span><br><span class="line">  // Optional, if you use support library fragments:</span><br><span class="line">  debugImplementation &apos;com.squareup.leakcanary:leakcanary-support-fragment:1.6.1&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在Application中添加类似如下代码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class ExampleApplication extends Application &#123;</span><br><span class="line"></span><br><span class="line">  @Override public void onCreate() &#123;</span><br><span class="line">    super.onCreate();</span><br><span class="line">    LeakCanary.install(this);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>添加完成之后，我们就可以使用LeakCannary了。</p>
-<h2 id="应用举例"><a href="#应用举例" class="headerlink" title="应用举例"></a>应用举例</h2><p>要想使用LeakCannary对各个类进行监控，需要创建RefWatcher，所以我们首先重写Application，然后创建RefWatcher供外部使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class LeakApplication extends Application &#123;</span><br><span class="line"></span><br><span class="line">    private static RefWatcher refWatcher;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line"></span><br><span class="line">        refWatcher = LeakCanary.install(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //提供给外部调用的方法</span><br><span class="line">    public static RefWatcher getRefWatcher() &#123;</span><br><span class="line"></span><br><span class="line">        return refWatcher;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>接下来我们创建一个Activity，然后手动制造一个内存泄漏。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class LeakActivity extends Activity &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_leak);</span><br><span class="line"></span><br><span class="line">        LeakThread leakThread = new LeakThread();</span><br><span class="line">        leakThread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onDestroy() &#123;</span><br><span class="line">        super.onDestroy();</span><br><span class="line"></span><br><span class="line">        LeakApplication.getRefWatcher().watch(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    class LeakThread extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep(6 * 60 * 1000);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p><strong>注意，要想检测内存泄漏，需要再Activity的onDestroy中调用RefWatcher的watch方法。</strong></p>
-<p>LeakActivity存在内存泄漏，因为非静态内部类LeakThread持有外部类LeakActivity的引用，导致LeakActivity无法被回收。</p>
-<p>然后我们自己测试，就可以通过状态栏查看到泄露的具体信息。</p>
+        <p>最近又听人聊到Android能不能在service中弹出对话框的问题，于是总结一下<br>答案是肯定的，系统可以在低电量的时候弹出电量不足的提示，那么我们也可以按同样的方法做到<br>下面介绍在service中弹出对话框的两种方法：</p>
+<h2 id="1-将dialog的Type设置为TYPE-SYSTEM-ALERT"><a href="#1-将dialog的Type设置为TYPE-SYSTEM-ALERT" class="headerlink" title="1.将dialog的Type设置为TYPE_SYSTEM_ALERT"></a><strong>1.将dialog的Type设置为TYPE_SYSTEM_ALERT</strong></h2><p>写一个service代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">public class DialogService extends Service &#123;</span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int onStartCommand(Intent intent, int flags, int startId) &#123;</span><br><span class="line"></span><br><span class="line">        showDialog();</span><br><span class="line"></span><br><span class="line">        return super.onStartCommand(intent, flags, startId);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void showDialog() &#123;</span><br><span class="line"></span><br><span class="line">        new Handler().postDelayed(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                AlertDialog dialog = new AlertDialog.Builder(getApplicationContext()).setTitle(&quot;title&quot;)</span><br><span class="line">                        .setMessage(&quot;这是一个由service弹出的对话框&quot;)</span><br><span class="line">                        .setCancelable(false)</span><br><span class="line">                        .setPositiveButton(&quot;button confirm&quot;, new DialogInterface.OnClickListener() &#123;</span><br><span class="line">                            public void onClick(DialogInterface dialog, int id) &#123;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;)</span><br><span class="line">                        .create();</span><br><span class="line">                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);</span><br><span class="line">                dialog.show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, 3 * 1000);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为了方便测试，我们让dialog延迟3s出现，运行代码之后发现抛出了异常<br> android.view.WindowManager$BadTokenException: Unable to add window android.view.ViewRootImpl$W@3ca3d69d – permission denied for this window type<br> 原因是缺少相关权限，于是在AndroidMainfest.xml中添加权限<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"></uses-permission>，再次运行观察结果，如期弹出了dialog，如下面几种截图，可以发现在开启service之后，不管当前处于应用内还是应用外，甚至在其他应用内，都弹出了dialog。<br><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fxx3okjl5wj30ok14wt9z.jpg" width="300" height="500" alt="效果示例图片1" align="center/"><br><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fxx3oypkk8j30oi14ujut.jpg" width="300" height="500" alt="效果示例图片2" align="center/"><br><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fxx3pd2d0wj30ok150q7e.jpg" width="300" height="500" alt="效果示例图片3" align="center/"></p>
+<h2 id="2-将Activity设置成dialog主题弹出"><a href="#2-将Activity设置成dialog主题弹出" class="headerlink" title="2.将Activity设置成dialog主题弹出"></a><strong>2.将Activity设置成dialog主题弹出</strong></h2><p>将activity设置成dialog主题需要再AndroidManifest.xml中加上android:theme=”@android:style/Theme.Dialog”<br>相关代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">private void showDialog2() &#123;</span><br><span class="line">    new Handler().postDelayed(new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            Intent intent = new Intent(getApplicationContext(), DialogActivity.class);</span><br><span class="line">            startActivity(intent);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, 3 * 1000);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行出错<br>android.util.AndroidRuntimeException: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag. Is this really what  you want?    </p>
+<p>需要将activity的启动模式设置为Intent.FLAG_ACTIVITY_NEW_TASK，重新设置之后运行如下：<br><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fxx3qji0utj30oo14swfi.jpg" width="300" height="500" alt="效果示例图片3" align="center/"><br>值得注意的是，<font color="#ff0000" size="4" face="黑体"><strong>这种方式在弹出对话框的时候，会先跳转到我们的应用，然后再弹出对话框。</strong></font></p>
 
       
     </div>
@@ -382,9 +380,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/LeakCannary/" rel="tag"># LeakCannary</a>
+            <a href="/tags/service/" rel="tag"># service</a>
           
-            <a href="/tags/内存泄漏/" rel="tag"># 内存泄漏</a>
+            <a href="/tags/对话框/" rel="tag"># 对话框</a>
+          
+            <a href="/tags/dialog/" rel="tag"># dialog</a>
           
         </div>
       
@@ -397,8 +397,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/09/Android finish()自动回调时机，Activity资源释放逻辑放在onDestroy中一定合适吗/" rel="next" title="Android finish()自动回调时机，Activity资源释放逻辑放在onDestroy中一定合适吗">
-                <i class="fa fa-chevron-left"></i> Android finish()自动回调时机，Activity资源释放逻辑放在onDestroy中一定合适吗
+              <a href="/2018/11/24/Android 网络请求框架volley源码解析（二） —— volley缓存原理/" rel="next" title="Android 网络请求框架volley源码解析（二） —— volley缓存原理">
+                <i class="fa fa-chevron-left"></i> Android 网络请求框架volley源码解析（二） —— volley缓存原理
               </a>
             
           </div>
@@ -406,10 +406,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/19/LeakCannary使用方法及要实现原理探究（二）—— LeakCannary实现原理及源码分析/" rel="prev" title="LeakCannary使用方法及要实现原理探究（二）—— LeakCannary实现原理及源码分析">
-                LeakCannary使用方法及要实现原理探究（二）—— LeakCannary实现原理及源码分析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -541,7 +537,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集成LeakCannary"><span class="nav-number">2.</span> <span class="nav-text">集成LeakCannary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用举例"><span class="nav-number">3.</span> <span class="nav-text">应用举例</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-将dialog的Type设置为TYPE-SYSTEM-ALERT"><span class="nav-number">1.</span> <span class="nav-text">1.将dialog的Type设置为TYPE_SYSTEM_ALERT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-将Activity设置成dialog主题弹出"><span class="nav-number">2.</span> <span class="nav-text">2.将Activity设置成dialog主题弹出</span></a></li></ol></div>
             
 
           </div>
