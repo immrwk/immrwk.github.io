@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="类加载,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、类加载时机类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括：  加载-&amp;gt;验证-&amp;gt;准备-&amp;gt;解析-&amp;gt;初始化-&amp;gt;使用-&amp;gt;卸载   其中加载、验证、准备、初始化、卸载这5个阶段是固定的，解析阶段则不一定，它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定）。 对于初始化阶段，虚拟机规范严格规定有且只有5">
+<meta name="keywords" content="类加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解Java虚拟机读书笔记第7章---虚拟机类加载机制">
+<meta property="og:url" content="http://yoursite.com/2019/01/15/深入理解Java虚拟机读书笔记第7章-虚拟机类加载机制/index.html">
+<meta property="og:site_name" content="多看书">
+<meta property="og:description" content="一、类加载时机类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括：  加载-&amp;gt;验证-&amp;gt;准备-&amp;gt;解析-&amp;gt;初始化-&amp;gt;使用-&amp;gt;卸载   其中加载、验证、准备、初始化、卸载这5个阶段是固定的，解析阶段则不一定，它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定）。 对于初始化阶段，虚拟机规范严格规定有且只有5">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e066cnbj30gn039748.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e3pj2huj30af0adwf4.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e9ym9rqj313m0puwl7.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fz7eb1rgpuj31030u0gxt.jpg">
+<meta property="og:updated_time" content="2019-01-15T09:40:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解Java虚拟机读书笔记第7章---虚拟机类加载机制">
+<meta name="twitter:description" content="一、类加载时机类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括：  加载-&amp;gt;验证-&amp;gt;准备-&amp;gt;解析-&amp;gt;初始化-&amp;gt;使用-&amp;gt;卸载   其中加载、验证、准备、初始化、卸载这5个阶段是固定的，解析阶段则不一定，它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定）。 对于初始化阶段，虚拟机规范严格规定有且只有5">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e066cnbj30gn039748.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/15/深入理解Java虚拟机读书笔记第7章-虚拟机类加载机制/">
+
+
+
+
+
+  <title>深入理解Java虚拟机读书笔记第7章---虚拟机类加载机制 | 多看书</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">多看书</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/15/深入理解Java虚拟机读书笔记第7章-虚拟机类加载机制/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="immrwk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="多看书">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深入理解Java虚拟机读书笔记第7章---虚拟机类加载机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-15T14:33:55+08:00">
+                2019-01-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、类加载时机"><a href="#一、类加载时机" class="headerlink" title="一、类加载时机"></a><font color="#ff0000" size="6" face="黑体">一、类加载时机</font></h1><p>类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括： </p>
+<font color="#ff0000" size="5" face="黑体">加载-&gt;验证-&gt;准备-&gt;解析-&gt;初始化-&gt;使用-&gt;卸载<br></font>
+
+
+<p>其中加载、验证、准备、初始化、卸载这5个阶段是固定的，解析阶段则不一定，它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定）。</p>
+<p>对于初始化阶段，虚拟机规范严格规定<font color="#ff0000" size="5" face="黑体">有且只有5种情况</font>必须立即对类进行初始化（而加载、验证、准备需要在此之前开始）</p>
+<ol>
+<li><p>遇到new、getstatic、putstatic或invokestatic这4条字节码指令时，如果类没有进行过初始化，则需要触发其初始化。</p>
+<p>生成这4条指令的最常见的Java代码场景是：</p>
+<p>1&gt; 使用new关键字实例化对象的时候<br>2&gt; 读取或设置一个类的静态字段（被final修饰、已在编译期把结果放在常量池的静态字段除外）的时候<br>3&gt; 调用一个类的静态方法的时候</p>
+</li>
+<li><p>使用java.lang.reflect包的方法对类进行发射调用的时候</p>
+</li>
+<li>当初始化一个类的时候，如果发现其父类还没有初始化，则需要先触发其父类的初始化</li>
+<li>当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类</li>
+<li>当使用JDK1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的即系结果是REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄，并且这个句柄对应的类没有金新国初始化，则需要先触发其初始化。</li>
+</ol>
+<p>除了上面5种情况外，所有引用类的方式都不会触发其初始化，称为<font color="#ff0000" size="5" face="黑体">被动引用</font>。</p>
+<font color="#ff0000" size="5" face="黑体">被动引用的几个例子：<br></font>
+
+<ol>
+<li>通过子类使用父类的静态字段，不会导致子类初始化。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class SuperClass &#123;</span><br><span class="line"></span><br><span class="line">	static &#123;</span><br><span class="line">		System.out.println(&quot;SuperClass init&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	public static int value = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class SubClass extends SuperClass &#123;</span><br><span class="line"></span><br><span class="line">	static &#123;</span><br><span class="line">		System.out.println(&quot;SubClass init&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class NotInitialization&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		System.out.println(SubClass.value);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的例子输出结果为：SuperClass init<br>不会输出：SubClass init</p>
+<ol start="2">
+<li>通过数组定义来引用类，不会触发此类的初始化</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class NotInitialization &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		SuperClass[] superClasses = new SuperClass[10];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>常量在编译阶段会存入调用类的常量池中，本质上并没有直接引用到定义常量的类，因此不会触发定义常量的类的初始化。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class ConstClass &#123;</span><br><span class="line">	static &#123;</span><br><span class="line">		System.out.println(&quot;ConstClass init&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public static final String HELLOWORLD = &quot;hello world&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class NotInitialization &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		System.out.println(ConstClass.HELLOWORLD);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码运行之后，不会输出：ConstClass init</p>
+<p><font color="#ff0000" size="5" face="黑体">接口</font>与类的其别在于上面5种场景中的第3种：当一个类在初始化时，要求其父类都已经初始化过了，但是在一个接口初始化时，并不要求其父类接口全部都完成了初始化，只有在真正使用到父接口的时候（如引用接口中定义的常量）才会初始化。</p>
+<h1 id="二、类加载过程"><a href="#二、类加载过程" class="headerlink" title="二、类加载过程"></a><font color="#ff0000" size="6" face="黑体">二、类加载过程</font></h1><h2 id="1-加载"><a href="#1-加载" class="headerlink" title="1. 加载"></a>1. 加载</h2><p>在加载阶段，虚拟机需要完成以下3件事情:</p>
+<ol>
+<li>通过一个类的全限定名来获取定义此类的二进制字节流</li>
+<li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构</li>
+<li>在内存中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口</li>
+</ol>
+<h2 id="2-验证"><a href="#2-验证" class="headerlink" title="2. 验证"></a>2. 验证</h2><ol>
+<li>文件格式验证</li>
+<li>元数据验证</li>
+<li>字节码验证</li>
+<li>符号引用验证</li>
+</ol>
+<h2 id="3-准备"><a href="#3-准备" class="headerlink" title="3. 准备"></a>3. 准备</h2><p>准备阶段是正式为类变量分配内存并<font color="#ff0000" size="5" face="黑体">设置类的变量初始值</font>的阶段，这些变量所使用的内存都将在方法区进行分配。</p>
+<p><font color="#ff0000" size="5" face="黑体">注意</font>：</p>
+<blockquote>
+<ol>
+<li>这时候进行内存分配的仅包括类变量（被static修饰的变量），而不包括实例变量，实例变量会在对象实例化时随着对象一起分配在Java堆中</li>
+<li>这里说的初始值通常情况下时数据的数据类型的零值（数据类型默认值），假设一个类变量的定义为：<br>public static int value = 123;<br>value在准备阶段过后的值是0而不是123，把value赋值为123的动作将在初始化阶段才会执行。</li>
+</ol>
+</blockquote>
+<h2 id="4-解析"><a href="#4-解析" class="headerlink" title="4. 解析"></a>4. 解析</h2><p>解析阶段是虚拟机将常量池内的符号引用替换为直接引用的过程。</p>
+<p><strong>符号引用</strong>以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可<br><strong>直接引用</strong>可以是指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。如果有了直接引用，那引用的目标必定已经在内存中存在。</p>
+<p>解析动作主要针对类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符7类符号引用进行。</p>
+<h2 id="5-初始化"><a href="#5-初始化" class="headerlink" title="5. 初始化"></a>5. 初始化</h2><p>到了初始化阶段，才开始真正执行类中定义的Java程序代码（或者说是字节码）</p>
+<blockquote>
+<p>初始化阶段是执行类构造器&lt;clinit&gt;()方法的过程。</p>
+</blockquote>
+<ol>
+<li>&lt;clinit&gt;()方法是由编译器自动收集类中所有类变量的赋值动作和静态语句块（static{}块）中语句合并产生的，编译器收集的顺序是由语句在源⽂件中出现的顺序所决定的，静态语句块中只能访问到定义在静态语句块之前的变量，定义在它之后的变量，在前⾯的静态语句块可以赋值，但是不能访问：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class Test &#123;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line"></span><br><span class="line">        i = 0;  //  给变量复制可以正常编译通过</span><br><span class="line"></span><br><span class="line">        System.out.print(i);  // 这句编译器会提示“非法向前引用”  </span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static int i = 1;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>&lt;clinit&gt;()⽅法与「类的构造函数」（或者说「实例构造器」＜init＞()⽅法） 不同，它不需要显式地调⽤⽗类构造器，虚拟机会保证在⼦类的＜clinit＞()⽅法执⾏之前，⽗类的＜clinit＞()⽅法已经执⾏完毕。因此在虚拟机中第⼀个被执⾏的＜clinit＞()⽅法的类肯定是java.lang.Object。</li>
+<li>由于⽗类的＜clinit＞()⽅法先执⾏，也就意味着⽗类中定义的静态语句块要优先于⼦类的变量赋值操作, 如下面的代码，字段B的值会是2而不是1。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">static class Parent &#123;</span><br><span class="line"></span><br><span class="line">    public static int A = 1;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line"></span><br><span class="line">        A = 2;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 编译器收集顺序：从上往下，因此 A=2 后初始化</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">static class Sub extends Parent &#123;</span><br><span class="line"></span><br><span class="line">    public static int B = A; // B = 2 而不是 1</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">    System.out.println(Sub.B);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li><p>＜clinit＞()⽅法对于类或接⼜来说并不是必需的，如果⼀个类中没有静态语句块，也没有对变量的赋值操作，那么编译器可以不为这个类⽣成 ＜clinit＞()⽅法。</p>
+</li>
+<li><p>接口中不能使⽤静态语句块，但仍然有变量初始化的赋值操作，因此接口与类⼀样都会⽣成＜clinit＞()⽅法。但接口与类不同的是，执⾏接口的＜clinit＞()⽅法不需要先执⾏⽗接口的＜clinit＞()⽅法。只有当⽗接口中定义的变量使⽤时，⽗接口才会初始化。另外，接口的实现类在初始化时也⼀样不会执⾏接口的＜clinit＞()⽅法。</p>
+</li>
+<li><p>虚拟机会保证⼀个类的＜clinit＞()⽅法在多线程环境中被正确地加 锁、同步，如果多个线程同时去初始化⼀个类，那么只会有⼀个线程去执⾏这个类的＜clinit＞()⽅法，其他线程都需要阻塞等待，直到活动线程执 ⾏＜clinit＞()⽅法完毕。如果在⼀个类的＜clinit＞()⽅法中有耗时很长的操作，就可能造成多个进程阻塞，在实际应⽤中这种阻塞往往是很隐蔽的</p>
+</li>
+</ol>
+<p><strong>在同一个类加载器下，一个类型只会初始化一次</strong></p>
+<h1 id="三、类加载器"><a href="#三、类加载器" class="headerlink" title="三、类加载器"></a><font color="#ff0000" size="6" face="黑体">三、类加载器</font></h1><p>类加载过程中的”加载阶段 Loading”是由 Java 虚拟机外部实现的，其通过⼀个类的全限定名来获取描述 此类的⼆进制字节流。</p>
+<blockquote>
+<p>为什么要在虚拟机外部实现？以便让应⽤程序⾃⼰决定如何去获取所需要的类。</p>
+</blockquote>
+<p>实现这个动作的代码模块称为“类加载器 ClassLoader。</p>
+<p>类加载器可以说是Java语⾔的⼀项创新，也是Java语⾔流⾏的重要原因之⼀，它最初是为了满⾜Java Applet的需求⽽开发出来的。虽然⽬前 Java Applet 技术基本上已经“死掉” ，但类加载器却在类层次划分、 OSGi、热部署、代码加密等领域⼤放异彩，成为了Java技术体系中⼀块重要的基⽯，可谓是失之桑榆，收之东隅。</p>
+<h2 id="1-类与类加载器"><a href="#1-类与类加载器" class="headerlink" title="1. 类与类加载器"></a>1. 类与类加载器</h2><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e066cnbj30gn039748.jpg" alt=""></p>
+<p>每个 Class 对象的内部都有一个 classLoader 字段来标识自己是由哪个 ClassLoader 加载的。ClassLoader 就像一个容器，里面装了很多已经加载的 Class 对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Class&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  private final ClassLoader classLoader;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>类加载器虽然只⽤于实现类的加载动作，但它在Java程序中起到的作⽤却远远不限于类加载阶段。</p>
+<p>对于任意⼀个类，都需要由加载它的「类加载器」和这个「类本⾝」⼀同确⽴其在Java虚拟机中的唯⼀性，每⼀个类加载器， 都拥有⼀个独⽴的类名称空间。这句话可以表达得更通俗⼀些：⽐较两个类是否“相等”，只有在这两个类是由同⼀个类加载器加载的前提下才有意义，否则，即使这两个类来源于同⼀个 Class ⽂件，被同⼀个虚拟机加载， 只要加载它们的类加载器不同，那这两个类就必定不相等。</p>
+<p>这⾥所指的“相等”，包括代表类的Class对象的equals()⽅法、 isAssignableFrom()⽅法、isInstance()⽅法的返回结果，也包括使⽤ instanceof关键字做对象所属关系判定等情况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 类加载器与instanceof关键字演示</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">public class ClassLoaderTest &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        //实现了一个自定义的加载器：加载同一路径下的 Class 文件</span><br><span class="line">        ClassLoader myLoader = new ClassLoader() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public Class&lt;?&gt; loadClass(String name) throws ClassNotFoundException &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    String fileName = name.substring(name.lastIndexOf(&quot;.&quot;) + 1) + &quot;.class&quot;;</span><br><span class="line">                    InputStream is = getClass().getResourceAsStream(fileName);</span><br><span class="line">                    if (is == null) &#123;</span><br><span class="line">                        return super.loadClass(name);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    // 字节码</span><br><span class="line">                    byte[] b = new byte[is.available()];</span><br><span class="line">                    is.read(b);</span><br><span class="line"></span><br><span class="line">                    // 返回一个类</span><br><span class="line">                    return defineClass(name, b, 0, b.length);</span><br><span class="line">                &#125; catch (IOException e) &#123;</span><br><span class="line">                    throw new ClassNotFoundException(name);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        //这个类加载器，是否与默认的「系统应⽤程序类加载器 Application ClassLoader」加载的类是同一个实例</span><br><span class="line">        Object obj = myLoader.loadClass(&quot;org.fenixsoft.classloading.ClassLoaderTest&quot;).newInstance();</span><br><span class="line"></span><br><span class="line">        System.out.println(obj.getClass());</span><br><span class="line"></span><br><span class="line">        System.out.println(obj instanceof org.fenixsoft.classloading.ClassLoaderTest);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-双亲委派模型"><a href="#2-双亲委派模型" class="headerlink" title="2. 双亲委派模型"></a>2. 双亲委派模型</h2><p>从 Java 虚拟机的⾓度来讲，只存在两种不同的类加载器：⼀种是「启动类加载器」（Bootstrap ClassLoader），这个类加载器使⽤ C++ 语⾔实现（只限于 HotSpot），是虚拟机⾃⾝的⼀部分；另⼀种就是所有其他的类加载器，这些类加载器都由Java语⾔实现，独⽴于虚拟机外部，并且全都继承⾃抽象类 java.lang.ClassLoader。</p>
+<p>程序在运行过程中，遇到了一个未知的类，它会选择哪个 ClassLoader 来加载它呢？虚拟机的策略是使用「调用者」 Class 对象的 ClassLoader 来加载当前未知的类。何为「调用者 Class 对象」？就是在遇到这个未知的类时，虚拟机肯定正在运行一个方法调用（静态方法或者实例方法），这个方法挂在哪个类上面，那这个类就是调用者 Class 对象。前面我们提到每个 Class 对象里面都有一个 classLoader 属性记录了当前的类是由谁来加载的。</p>
+<p>因为 ClassLoader 的传递性，所有延迟加载的类都会由初始调用 main 方法的这个 ClassLoader 全全负责，它就是 AppClassLoader。AppClassLoader 在加载一个未知的类名时，它并不是立即去搜寻 Classpath，它会首先将这个类名称交给 ExtensionClassLoader 来加载，如果 ExtensionClassLoader 可以加载，那么 AppClassLoader 就不用麻烦了。否则它就会搜索 Classpath 。</p>
+<p>从Java开发⼈员的⾓度来看，类加载器还可以划分得更细致⼀些，绝⼤部分Java程序都会使⽤到以下 3 种系统提供的类加载器：</p>
+<ol>
+<li><p>启动类加载器（Bootstrap ClassLoader）</p>
+</li>
+<li><p>扩展类加载器（Extension ClassLoader）</p>
+</li>
+<li><p>应用程序类加载器（Application ClassLoader）。</p>
+</li>
+</ol>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e3pj2huj30af0adwf4.jpg" alt=""></p>
+<p>值得注意的是图中的 ExtensionClassLoader 的 parent 指针画了虚线，这是因为它的 parent 的值是 null，当 parent 字段是 null 时就表示它的父加载器是「根加载器」。如果某个 Class 对象的 classLoader 属性值是 null，那么就表示这个类也是「根加载器」加载的。注意这里的 parent 不是 super 不是父类，只是 ClassLoader 内部的字段。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class ClassLoader &#123;</span><br><span class="line">  ...</span><br><span class="line">  private final ClassLoader parent;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-启动类加载器"><a href="#1-启动类加载器" class="headerlink" title="1. 启动类加载器"></a>1. 启动类加载器</h3><p>Bootstrap ClassLoader：这个类将器负责将存放在＜JAVA_HOME＞/lib⽬录中的，常用内置库 java.xxx.* 都在里面，比如 java.util.、java.io.、java.nio.、java.lang. 等等。，或者被-Xbootclasspath参数所指定的路径中的，并且是虚拟机识别的（仅按照⽂件名识别，如 rt.jar，名字不符合的类库即使放在lib⽬录中也不会被加载）类库加载到虚拟机内存中。</p>
+<p>启动类加载器⽆法被Java程序直接引⽤，⽤户在编写⾃定义类加载器时，如果需要把加载请求委派给引导类加载器，那直接使⽤ null 代替即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public ClassLoader getClassLoader()&#123;</span><br><span class="line">    ClassLoader cl = getClassLoader0();</span><br><span class="line">    if(c1 == null) </span><br><span class="line">        return null;</span><br><span class="line">    SecurityManager sm = System.getSecurityManager()；</span><br><span class="line">    if(sm!=null)&#123;</span><br><span class="line">        ClassLoader ccl=ClassLoader.getCallerClassLoader()；</span><br><span class="line">        if(ccl!=null＆＆ccl!=cl＆＆!cl.isAncestor(ccl)&#123;</span><br><span class="line">sm.checkPermission(SecurityConstants.GET_CLASSLOADER_PERMISSION)；</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return c1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-扩展类加载器"><a href="#2-扩展类加载器" class="headerlink" title="2. 扩展类加载器"></a>2. 扩展类加载器</h3><p>Extension ClassLoader：这个加载器由 sun.misc.Launcher $ExtClassLoader实现，它负责加载＜JAVA_HOME＞ /lib/ext⽬录中的类库（比如 swing 系列、内置的 js 引擎、xml 解析器 等等，这些库名通常以 javax 开头），或者被java.ext.dirs系统变量所指定的路径中的所有类库，开发者可以直接使⽤扩展类加载器。</p>
+<h3 id="3-应用程序类加载器"><a href="#3-应用程序类加载器" class="headerlink" title="3. 应用程序类加载器"></a>3. 应用程序类加载器</h3><p>Application ClassLoader：这个类加载器由 sun.misc.Launcher $App-ClassLoader实现。由于这个类加载器是 ClassLoader 中的 getSystemClassLoader()⽅法的返回值，所以⼀般也称它为系统类加载器。</p>
+<p>它负责加载⽤户类路径（ClassPath）上所指定的类库，开发者可以直接使⽤这个类加载器，如果应⽤程序中没有⾃定义过⾃⼰的类加载器，⼀般情况下这个就是程序中默认的类加载器。</p>
+<p>那些位于网络上静态文件服务器提供的 jar 包和 class文件，jdk 内置了一个 URLClassLoader，用户只需要传递规范的网络路径给构造器，就可以使用 URLClassLoader 来加载远程类库了。URLClassLoader 不但可以加载远程类库，还可以加载本地路径的类库，取决于构造器中不同的地址形式。ExtensionClassLoader 和 AppClassLoader 都是 URLClassLoader 的子类，它们都是从本地文件系统里加载类库。</p>
+<hr>
+<p>我们的应⽤程序都是由这 3 种类加载器互相配合进⾏加载的，如果有必要，还可以加⼊⾃⼰定义的类加载器。这些类加载器之间的关系⼀般如图所示：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e9ym9rqj313m0puwl7.jpg" alt=""></p>
+<p>图中所展⽰的类加载器之间的这种层次关系，称为类加载器的「双亲委派模型」（Parents Delegation Model）。双亲委派模型要求除了顶层的「启动类加载器」外，其余的类加载器都应当有⾃⼰的⽗类加载器。这⾥类加载器之 间的⽗⼦关系⼀般不会以继承（Inheritance）的关系来实现，⽽是都使⽤组合（Composition）关系来复⽤⽗加载器的代码。</p>
+<p>类加载器的双亲委派模型在JDK 1.2期间被引⼊并被⼴泛应⽤于之后⼏乎所有的Java程序中，但它并不是⼀个强制性的约束模型，⽽是 Java设计 者推荐给开发者的⼀种类加载器实现⽅式。</p>
+<h3 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h3><blockquote>
+<p>双亲委派模型的⼯作过程是：如果⼀个类加载器收到了类加载的请求，它⾸先不会⾃⼰去尝试加载这个类，⽽是把这个请求委派给⽗类加载器去完成。每⼀个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到「顶层的启动类加载器」中，只有当⽗加载器反馈⾃⼰⽆法完成这个加载请求（它的搜索范围中没有找到所需的类）时，⼦加载器才会尝试⾃⼰去加载。</p>
+</blockquote>
+<p>这三个 ClassLoader 之间形成了级联的父子关系，每个 ClassLoader 都很懒，尽量把工作交给父亲做，父亲干不了了自己才会干。每个 ClassLoader 对象内部都会有一个 parent 属性指向它的父加载器。</p>
+<p>使⽤「双亲委派模型」来组织「类加载器之间的关系」，有⼀个显⽽易见的好处就是 Java 类随着它的类加载器⼀起具备了⼀种带有优先级的层次关系。 例如类 java.lang.Object，它存放在rt.jar之中，⽆论哪⼀个类加载器要加载这个类，最终都是委派给处于模型最顶端的启动类加载器进⾏加载，因此 Object 类在程序的各种类加载器环境中都是同⼀个类。相反，如果没有使⽤双亲委派模型，由各个类加载器⾃⾏去加载的话，如果⽤户⾃⼰编写了 ⼀个称为 java.lang.Object 的类，并放在程序的ClassPath中，那系统中将会出现多个不同的Object类，Java 类型体系中最基础的⾏为也就⽆法保证，应⽤程序也将会变得⼀⽚混乱。有兴趣的话，可以尝试去编写⼀个与 rt.jar类库中已有类重名的Java类，将会发现可以正常编译，但永远⽆法被加载运⾏ 。</p>
+<p>双亲委派模型对于保证 Java 程序的稳定运作很重要，但它的实现却⾮常简单，实现双亲委派的代码都集中在java.lang.ClassLoader的loadClass()⽅法之中，如下列代码所⽰，逻辑清晰易懂：先检查是否已经被加载 过，若没有加载则调⽤⽗加载器的loadClass()⽅法，若⽗加载器为空则默认使⽤「启动类加载器」作为⽗加载器。如果⽗类加载失败，抛出ClassNotFoundException异常后，再调⽤⾃⼰的findClass()⽅法进⾏加载。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fz7eb1rgpuj31030u0gxt.jpg" alt=""></p>
+<h2 id="破坏双亲委派模型"><a href="#破坏双亲委派模型" class="headerlink" title="破坏双亲委派模型"></a>破坏双亲委派模型</h2><h3 id="1-第一次破坏"><a href="#1-第一次破坏" class="headerlink" title="1. 第一次破坏"></a>1. 第一次破坏</h3><p>双亲委派模型的第⼀次“被破坏”其实发⽣在双亲委派模型出现之前——即 JDK 1.2 发布之前。由于双亲委派模型在JDK 1.2之后才被引⼊，⽽类加载器和抽象类java.lang.ClassLoader则在JDK 1.0时代就已经存在，⾯对 已经存在的⽤户⾃定义类加载器的实现代码，Java设计者引⼊「双亲委派模型」时不得不做出⼀些妥协。</p>
+<p>为了向前兼容，JDK 1.2之后的 java.lang.ClassLoader添加了⼀个新的protected⽅法findClass()，在此之前， ⽤户去继承java.lang.ClassLoader的唯⼀⽬的就是为了重写loadClass()⽅法， 因为虚拟机在进⾏类加载的时候会调⽤「加载器的私有⽅法」 loadClassInternal()，⽽这个⽅法的唯⼀逻辑就是去调⽤⾃⼰的loadClass()。</p>
+<p>上⼀节我们已经看过loadClass()⽅法的代码，双亲委派的具体逻辑就实现在这个⽅法之中，JDK 1.2之后已不提倡⽤户再去覆盖loadClass()⽅法，⽽应当把⾃⼰的类加载逻辑写到findClass()⽅法中，在loadClass()⽅法的逻辑⾥如果⽗类加载失败，则会调⽤⾃⼰的findClass()⽅法来完成加载， 这样就可以保证新写出来的类加载器是符合双亲委派规则的。</p>
+<h3 id="2-第二次破坏"><a href="#2-第二次破坏" class="headerlink" title="2. 第二次破坏"></a>2. 第二次破坏</h3><p>双亲委派模型的第⼆次“被破坏”是由这个「模型⾃⾝的缺陷」所导致的， 双亲委派很好地解决了「各个类加载器的基础类的统⼀问题」（越基础的类由越上层的加载器进⾏加载），基础类之所以称为“基础”，是因为它们总是 作为被⽤户代码调⽤的 API，但世事往往没有绝对的完美，如果基础类又要调⽤回⽤户的代码，那该怎么办？</p>
+<p>这并⾮是不可能的事情，⼀个典型的例⼦便是 JNDI 服务，JNDI现在已经是Java的标准服务，它的代码由启动类加载器去加载（在JDK 1.3时放进 去的rt.jar），但JNDI的⽬的就是对资源进⾏集中管理和查找，它需要调⽤由独⽴⼚商实现并部署在应⽤程序的 ClassPath 下的JNDI接口提供者 （SPI,Service Provider Interface）的代码，但启动类加载器不可能“认识”这 些代码！那该怎么办？</p>
+<p>为了解决这个问题，Java设计团队只好引⼊了⼀个不太优雅的设计： 「线程上下⽂类加载器」（Thread Context ClassLoader）。这个类加载器可以通过java.lang.Thread类的setContextClassLoaser()⽅法进⾏设置，如果创建线程时还未设置，它将会从⽗线程中继承⼀个，如果在应⽤程序的全局范围内都没有设置过的话，那这个类加载器默认就是应⽤程序类加载器。</p>
+<p>有了线程上下⽂类加载器，就可以做⼀些“舞弊”的事情了，JNDI服务使⽤这个线程上下⽂类加载器去加载所需要的SPI代码，也就是⽗类加载器请求⼦类加载器去完成类加载的动作，这种⾏为实际上就是打通了双亲委派模型的层次结构来逆向使⽤类加载器，实际上已经违背了双亲委派模型的⼀般性原则，但这也是⽆可奈何的事情。Java中所有涉及SPI的加载动作基本上都采⽤这种⽅式，例如JNDI、JDBC、JCE、JAXB和JBI等。</p>
+<h3 id="3-第三次破坏"><a href="#3-第三次破坏" class="headerlink" title="3. 第三次破坏"></a>3. 第三次破坏</h3><p>双亲委派模型的第三次“被破坏”是由于⽤户对程序动态性的追求⽽导致的，这⾥所说的“动态性”指的是当前⼀些⾮常“热门”的名词：代码热替换（HotSwap）、模块热部署（Hot Deployment）等，说⽩了就是希望应⽤程序能像我们的计算机外设那样，接上⿏标、U盘，不⽤重启机器就能⽴ 即使⽤，⿏标有问题或要升级就换个⿏标，不⽤停机也不⽤重启。对于个 ⼈计算机来说，重启⼀次其实没有什么⼤不了的，但对于⼀些⽣产系统来 说，关机重启⼀次可能就要被列为⽣产事故，这种情况下热部署就对软件 开发者，尤其是企业级软件开发者具有很⼤的吸引⼒。</p>
+<p>⽬前 OSGi 已经成为了业界“事实上”的Java模块化标准，⽽ OSGi 实现模块化热部署的关键则是它⾃定义的类加 载器机制的实现。每⼀个「程序模块」（OSGi中称为Bundle）都有⼀个⾃⼰的类加载器，当需要更换⼀个Bundle 时，就把Bundle连同类加载器⼀起换掉以实现代码的热替换。</p>
+<p>在OSGi环境下，类加载器不再是双亲委派模型中的树状结构，⽽是进 ⼀步发展为更加复杂的⽹状结构，当收到类加载请求时，OSGi 将按照下⾯的顺序进⾏类搜索：</p>
+<ol>
+<li><p>将以java.*开头的类委派给⽗类加载器加载</p>
+</li>
+<li><p>否则，将委派列表名单内的类委派给⽗类加载器加载</p>
+</li>
+<li><p>否则，将 Import 列表中的类委派给Export这个类的Bundle的类加载器加载</p>
+</li>
+<li><p>否则，查找当前Bundle的ClassPath，使⽤⾃⼰的类加载器加载</p>
+</li>
+<li><p>否则，查找类是否在⾃⼰的Fragment Bundle中，如果在，则委派给 Fragment Bundle的类加载器加载</p>
+</li>
+<li><p>否则，查找Dynamic Import列表的Bundle，委派给对应Bundle的 加载器加载</p>
+</li>
+<li><p>否则，类查找失败</p>
+</li>
+</ol>
+<p>上⾯的查找顺序中只有开头两点仍然符合双亲委派规则，其余的类查 找都是在平级的类加载器中进⾏的。</p>
+<p>但这⾥“被破坏”并不带有贬义的感情⾊彩。只要有⾜够意义和理由，突破已有的原则就可认为是⼀种创新。正如OSGi中的类加载器并不符合传统的双亲委派的类加载器，并且业界对其为了实现热部署⽽带来的额外的⾼复杂度还存在不少争议，但在Java程序员中基本有⼀个共识：OSGi 中对类加载器的使⽤是很值得学习的，弄懂了「OSGi 的实现」，就可以算是掌握了类加载器的精髓。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/类加载/" rel="tag"># 类加载</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/08/Java synchronized关键字使用说明及实现原理解析/" rel="next" title="Java synchronized关键字使用说明及实现原理解析">
+                <i class="fa fa-chevron-left"></i> Java synchronized关键字使用说明及实现原理解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">immrwk</p>
+              <p class="site-description motion-element" itemprop="description">Android程序员</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、类加载时机"><span class="nav-number">1.</span> <span class="nav-text">一、类加载时机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、类加载过程"><span class="nav-number">2.</span> <span class="nav-text">二、类加载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-加载"><span class="nav-number">2.1.</span> <span class="nav-text">1. 加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-验证"><span class="nav-number">2.2.</span> <span class="nav-text">2. 验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-准备"><span class="nav-number">2.3.</span> <span class="nav-text">3. 准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-解析"><span class="nav-number">2.4.</span> <span class="nav-text">4. 解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-初始化"><span class="nav-number">2.5.</span> <span class="nav-text">5. 初始化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、类加载器"><span class="nav-number">3.</span> <span class="nav-text">三、类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-类与类加载器"><span class="nav-number">3.1.</span> <span class="nav-text">1. 类与类加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-双亲委派模型"><span class="nav-number">3.2.</span> <span class="nav-text">2. 双亲委派模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-启动类加载器"><span class="nav-number">3.2.1.</span> <span class="nav-text">1. 启动类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-扩展类加载器"><span class="nav-number">3.2.2.</span> <span class="nav-text">2. 扩展类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-应用程序类加载器"><span class="nav-number">3.2.3.</span> <span class="nav-text">3. 应用程序类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">3.2.4.</span> <span class="nav-text">双亲委派模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#破坏双亲委派模型"><span class="nav-number">3.3.</span> <span class="nav-text">破坏双亲委派模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-第一次破坏"><span class="nav-number">3.3.1.</span> <span class="nav-text">1. 第一次破坏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-第二次破坏"><span class="nav-number">3.3.2.</span> <span class="nav-text">2. 第二次破坏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-第三次破坏"><span class="nav-number">3.3.3.</span> <span class="nav-text">3. 第三次破坏</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">immrwk</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
