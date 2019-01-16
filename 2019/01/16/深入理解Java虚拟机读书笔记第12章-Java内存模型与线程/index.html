@@ -93,7 +93,8 @@
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fz8i3yt6qhj317k0tm150.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz8i547128j319w0doag4.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fz8ihefrqqj30zq0u01kx.jpg">
-<meta property="og:updated_time" content="2019-01-16T08:43:04.000Z">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fz8ks8p703j30cs082gmg.jpg">
+<meta property="og:updated_time" content="2019-01-16T09:56:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解Java虚拟机读书笔记第12章---Java内存模型与线程">
 <meta name="twitter:description" content="计算机的运行速度是远远大于它的存储和通信子系统的速度。  基于⾼速缓存的存储交互很好地解决了处理器与内存的速度⽭盾，但 是也为计算机系统带来更⾼的复杂度，因为它引⼊了⼀个新的问题：缓存⼀致性（Cache Coherence）。在多处理器系统中，每个处理器都有⾃⼰的⾼速缓存，⽽它们又共享同⼀主内存（Main Memory） 当多个处理器的运算任务都涉及同⼀块主内存区域时，将可能导致各⾃的缓存数据不">
@@ -521,6 +522,59 @@
 <p>不满足上述任一个先行发生原则，操作不慎线程安全的。</p>
 <p>可以把 getter/setter 方法都定义为「synchronized」，这样就可以套用「管程锁规则」，要么把 value 定义为 volatile 变量，由于 setter 方法对 value 的修改不依赖于 value 值，满足 volatile 关键字使用场景，可以套用「volatile」变量的规则。</p>
 <p>⼀个操作“时间上的先发⽣”不代表这个操作会是“先⾏发⽣”，反之亦然，先行发生也不代表时间上先发生。时间先后顺序与先⾏发⽣原则之间基本没有太⼤的关系，所以我们衡量并发安全问题的时候不要受到 时间顺序的⼲扰，⼀切必须以先⾏发⽣原则为准。</p>
+<h1 id="2-Java与线程"><a href="#2-Java与线程" class="headerlink" title="2. Java与线程"></a><font color="#3FBA8B" size="6" face="黑体">2. Java与线程</font></h1><h2 id="2-1-线程的实现"><a href="#2-1-线程的实现" class="headerlink" title="2.1 线程的实现"></a><font color="#3FBA8B" size="face=" 黑体""="">2.1 线程的实现</font></h2><blockquote>
+<p>线程是CPU调度的基本单位</p>
+</blockquote>
+<p>实现线程主要有3种方式：</p>
+<ul>
+<li>使用内核线程实现</li>
+<li>使用用户线程实现</li>
+<li>使用用户线程加轻量级进程混合实现</li>
+</ul>
+<h3 id="2-1-1-使用内核线程实现"><a href="#2-1-1-使用内核线程实现" class="headerlink" title="2.1.1 使用内核线程实现"></a><font color="#3FBA8B" size="4" face="黑体">2.1.1 使用内核线程实现</font></h3><p>内核线程（Kernel-Level Thread，KLT）就是由操作系统内核支持的线程，这种线程由内核来完成线程切换。</p>
+<p>程序一般不会直接去使用内核线程，而是去使用内核线程的一种高级接口—轻量级进程（Light Weight Process，LWP），轻量级进程就是我们通常意义上所讲的线程，每个轻量级进程都由一个内核线程支持，因此只有先支持内核线程，才能有轻量级进程。这种轻量级进程与内核线程之间1:1的关系称为一对一的线程模型。</p>
+<p>轻量级进程具有它的局限性：首先，由于是基于内核线程实现的，所以各种线程操作，如创建、析构及同步，都需要进行系统调用。而系统调用的代价相对较高，需要在用户态和内核态中来回切换。其次，每个轻量级进程都需要有一个内核线程的支持，因此轻量级进程要消耗一定的内核资源（如内核线程的栈空间），因此一个系统支持轻量级进程的数量是优先的。</p>
+<h3 id="2-1-2-使用用户线程实现"><a href="#2-1-2-使用用户线程实现" class="headerlink" title="2.1.2 使用用户线程实现"></a><font color="#3FBA8B" size="4" face="黑体">2.1.2 使用用户线程实现</font></h3><p>从广义上来讲，一个线程只要不是内核线程就可以认为是用户线程。因此，从这个定义来讲，轻量级进程也属于用户线程，但轻量级进程的实现始终是建立在内核之上的，许多操作都要进行系统调用，效率会受到限制。</p>
+<p>而狭义上的用户线程指的是完全建立在用户空间的线程库上，系统内核不能感知线程存在的实现。</p>
+<p>进程与用户线程是1:N的对应关系。</p>
+<blockquote>
+<p>用户线程有许多弊端，诸如阻塞如何处理、多处理器系统中如何将线程映射到其他处理器上，这样的问题解决起来将异常困难，甚至不可完成。Java、Ruby都曾使用过用户线程，最终又放弃它。</p>
+</blockquote>
+<h3 id="2-1-3-使用用户线程加轻量级进程混合实现"><a href="#2-1-3-使用用户线程加轻量级进程混合实现" class="headerlink" title="2.1.3 使用用户线程加轻量级进程混合实现"></a><font color="#3FBA8B" size="4" face="黑体">2.1.3 使用用户线程加轻量级进程混合实现</font></h3><p>这种模式下用户线程与轻量级进程的数量比是不定的，即为N:M的关系。</p>
+<h3 id="2-1-4-Java线程的实现"><a href="#2-1-4-Java线程的实现" class="headerlink" title="2.1.4 Java线程的实现"></a><font color="#3FBA8B" size="4" face="黑体">2.1.4 Java线程的实现</font></h3><p>Java线程在不同平台上的实现不一样，但对Java编码和程序运行来说，这些差异都是透明的。</p>
+<h2 id="2-2-Java线程调度"><a href="#2-2-Java线程调度" class="headerlink" title="2.2 Java线程调度"></a><font color="#3FBA8B" size="face=" 黑体""="">2.2 Java线程调度</font></h2><p>主要调度方式有两种，分别是协同式线程调度和抢占式线程调度。</p>
+<h3 id="2-2-1-协同式线程调度"><a href="#2-2-1-协同式线程调度" class="headerlink" title="2.2.1 协同式线程调度"></a><font color="#3FBA8B" size="4" face="黑体">2.2.1 协同式线程调度</font></h3><p>如果使用协同式调度的多线程系统，线程的执行时间由线程本身来控制，线程把自己的工作执行完了之后，要主动通知系统切换到另外一个线程上。</p>
+<ul>
+<li>优点： 实现简单，且切换操作对线程自己是可知的，没啥线程同步问题。</li>
+<li>缺点： 线程执行时间不可控制，如果一个线程有问题，可能一直阻塞在那里。</li>
+</ul>
+<h3 id="2-2-2-抢占式线程调度"><a href="#2-2-2-抢占式线程调度" class="headerlink" title="2.2.2 抢占式线程调度"></a><font color="#3FBA8B" size="4" face="黑体">2.2.2 抢占式线程调度</font></h3><p>抢占式调度，每个线程将由系统来分配执行时间，线程的切换不由线程本身来决定。</p>
+<blockquote>
+<p>Java中，Thread.yield()可以让出执行时间，但无法获取执行时间。</p>
+</blockquote>
+<h3 id="2-2-3-线程优先级"><a href="#2-2-3-线程优先级" class="headerlink" title="2.2.3 线程优先级"></a><font color="#3FBA8B" size="4" face="黑体">2.2.3 线程优先级</font></h3><p>如果希望系统能给某些线程多分配一些时间，给一些线程少分配一些时间，可以通过设置线程优先级来完成。<br>Java语言一共10个级别的线程优先级（Thread.MIN_PRIORITY至Thread.MAX_PRIORITY），在两线程同时处于ready状态时，优先级越高的线程越容易被系统选择执行。但优先级并不是很靠谱，因为Java线程是通过映射到系统的原生线程上来实现的，所以线程调度最终还是取决于操作系统。</p>
+<h2 id="2-3线程的状态转换"><a href="#2-3线程的状态转换" class="headerlink" title="2.3线程的状态转换"></a><font color="#3FBA8B" size="face=" 黑体""="">2.3线程的状态转换</font></h2><p>Java定义了5种线程状态，在任意一个点一个线程只能有且只有其中一种状态。无限等待和等待可以算在一起。所以共五种。（好像也有人喜欢说是六种）</p>
+<ul>
+<li>新建(New)：创建后尚未启动的线程。</li>
+<li>运行(Runnable)：Runnable包括操作系统线程状态中的Running和Ready，也就是处于此状态的线程有可能正在执行，也有可能等待CPU为它分配执行时间。线程对象创建后，其他线程调用了该对象的start()方法。该状态的线程位于“可运行线程池”中，变得可运行，只等待获取CPU的使用权。即在就绪状态的进程除CPU之外，其它的运行所需资源都已全部获得。</li>
+<li>无限期等待(Waiting)：该状态下线程不会被分配CPU执行时间，要等待被其他线程显式唤醒。以下方法会让线程陷入无限期的等待状态：<ol>
+<li>Timeout的object.wait()方</li>
+<li>Thread.join()方法</li>
+<li>LockSupport.park()方法。</li>
+</ol>
+</li>
+<li>限期等待(Timed Waiting)：不会被分配CPU执行时间，不过无须等待被其他线程显式唤醒，在一定时间之后会由系统自动唤醒。以下方法会让线程进入限期等待状态：<ol>
+<li>如Thread.sleep()</li>
+<li>设置了Timeout的object.wait()</li>
+<li>设置了Timeout的thread.join()</li>
+<li>LockSupport.parkNanos()以及</li>
+<li>LockSupport.parkUntil()方法。</li>
+</ol>
+</li>
+<li>阻塞（Blocked）:线程被阻塞了。与等待状态的区别是：阻塞在等待着获取到一个排他锁，这个事件将在另外一个线程放弃这个锁的时候发生；而等待则在等待一段时间，或唤醒动作的发生。在等待进入同步区域时，线程将进入这种状态。</li>
+<li>结束（Terminated）：已终止线程的线程状态，线程已经结束执行。</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fz8ks8p703j30cs082gmg.jpg" alt=""></p>
 
       
     </div>
@@ -693,7 +747,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Java-内存模型"><span class="nav-number">1.</span> <span class="nav-text">1. Java 内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-主内存与工作内存"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 主内存与工作内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-内存间交互操作"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 内存间交互操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-对-volatile-型变量的特殊规则"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 对 volatile 型变量的特殊规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-1-保证可见性"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.3.1 保证可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-2-禁止指令重排序优化"><span class="nav-number">1.3.2.</span> <span class="nav-text">1.3.2. 禁止指令重排序优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-3-用-volatile-的意义"><span class="nav-number">1.3.3.</span> <span class="nav-text">1.3.3 用 volatile 的意义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-对于-long-和-double-型变量的特殊规则"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 对于 long 和 double 型变量的特殊规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-原子性、可见性、有序性"><span class="nav-number">1.5.</span> <span class="nav-text">1.5 原子性、可见性、有序性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-先行发生原则"><span class="nav-number">1.6.</span> <span class="nav-text">1.6 先行发生原则</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Java-内存模型"><span class="nav-number">1.</span> <span class="nav-text">1. Java 内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-主内存与工作内存"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 主内存与工作内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-内存间交互操作"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 内存间交互操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-对-volatile-型变量的特殊规则"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 对 volatile 型变量的特殊规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-1-保证可见性"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.3.1 保证可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-2-禁止指令重排序优化"><span class="nav-number">1.3.2.</span> <span class="nav-text">1.3.2. 禁止指令重排序优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-3-用-volatile-的意义"><span class="nav-number">1.3.3.</span> <span class="nav-text">1.3.3 用 volatile 的意义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-对于-long-和-double-型变量的特殊规则"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 对于 long 和 double 型变量的特殊规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-原子性、可见性、有序性"><span class="nav-number">1.5.</span> <span class="nav-text">1.5 原子性、可见性、有序性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-先行发生原则"><span class="nav-number">1.6.</span> <span class="nav-text">1.6 先行发生原则</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Java与线程"><span class="nav-number">2.</span> <span class="nav-text">2. Java与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-线程的实现"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 线程的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-使用内核线程实现"><span class="nav-number">2.1.1.</span> <span class="nav-text">2.1.1 使用内核线程实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-使用用户线程实现"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.1.2 使用用户线程实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-使用用户线程加轻量级进程混合实现"><span class="nav-number">2.1.3.</span> <span class="nav-text">2.1.3 使用用户线程加轻量级进程混合实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-4-Java线程的实现"><span class="nav-number">2.1.4.</span> <span class="nav-text">2.1.4 Java线程的实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Java线程调度"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Java线程调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-协同式线程调度"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 协同式线程调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-抢占式线程调度"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 抢占式线程调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-线程优先级"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.2.3 线程优先级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3线程的状态转换"><span class="nav-number">2.3.</span> <span class="nav-text">2.3线程的状态转换</span></a></li></ol></li></ol></div>
             
 
           </div>
