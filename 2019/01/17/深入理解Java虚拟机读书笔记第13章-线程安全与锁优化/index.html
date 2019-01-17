@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="线程安全,锁,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 线程安全1.1 Java语言中的线程安全按照线程安全的”安全强度”由强至弱来排序，我们可以将 Java 语⾔中各种操作共享的数据分为以下5类：不可变、绝对线程安全、相对线程安全、线程兼容和线程对⽴。 一、 不可变不可变（Immutable）的对象⼀定是线程安全的，⽆论是对象的⽅ 法实现还是⽅法的调⽤者，都不需要再采取任何的线程安全保障措施，我们谈到final关键字带来的可见性时曾经提到过这⼀">
+<meta name="keywords" content="线程安全,锁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解Java虚拟机读书笔记第13章---线程安全与锁优化">
+<meta property="og:url" content="http://yoursite.com/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/index.html">
+<meta property="og:site_name" content="多看书">
+<meta property="og:description" content="1. 线程安全1.1 Java语言中的线程安全按照线程安全的”安全强度”由强至弱来排序，我们可以将 Java 语⾔中各种操作共享的数据分为以下5类：不可变、绝对线程安全、相对线程安全、线程兼容和线程对⽴。 一、 不可变不可变（Immutable）的对象⼀定是线程安全的，⽆论是对象的⽅ 法实现还是⽅法的调⽤者，都不需要再采取任何的线程安全保障措施，我们谈到final关键字带来的可见性时曾经提到过这⼀">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fz9linc86ij313k0p2wlm.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz9ll69ejkj317m088ae7.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz9lwvfmr8j31aw0b8dn7.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fz9lxai3ccj319i0g845g.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fz9ly6xx0cj31900lmqef.jpg">
+<meta property="og:updated_time" content="2019-01-17T07:28:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解Java虚拟机读书笔记第13章---线程安全与锁优化">
+<meta name="twitter:description" content="1. 线程安全1.1 Java语言中的线程安全按照线程安全的”安全强度”由强至弱来排序，我们可以将 Java 语⾔中各种操作共享的数据分为以下5类：不可变、绝对线程安全、相对线程安全、线程兼容和线程对⽴。 一、 不可变不可变（Immutable）的对象⼀定是线程安全的，⽆论是对象的⽅ 法实现还是⽅法的调⽤者，都不需要再采取任何的线程安全保障措施，我们谈到final关键字带来的可见性时曾经提到过这⼀">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fz9linc86ij313k0p2wlm.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/">
+
+
+
+
+
+  <title>深入理解Java虚拟机读书笔记第13章---线程安全与锁优化 | 多看书</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">多看书</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="immrwk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="多看书">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深入理解Java虚拟机读书笔记第13章---线程安全与锁优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-17T10:31:33+08:00">
+                2019-01-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-线程安全"><a href="#1-线程安全" class="headerlink" title="1. 线程安全"></a><font color="#3FBA8B" size="6" face="黑体">1. 线程安全</font></h1><h2 id="1-1-Java语言中的线程安全"><a href="#1-1-Java语言中的线程安全" class="headerlink" title="1.1 Java语言中的线程安全"></a><font color="#3FBA8B" size="5" face="黑体">1.1 Java语言中的线程安全</font></h2><p>按照线程安全的”安全强度”由强至弱来排序，我们可以将 Java 语⾔中各种操作共享的数据分为以下5类：不可变、绝对线程安全、相对线程安全、线程兼容和线程对⽴。</p>
+<h3 id="一、-不可变"><a href="#一、-不可变" class="headerlink" title="一、 不可变"></a><font color="#3FBA8B" size="4" face="黑体">一、 不可变</font></h3><p>不可变（Immutable）的对象⼀定是线程安全的，⽆论是对象的⽅ 法实现还是⽅法的调⽤者，都不需要再采取任何的线程安全保障措施，我们谈到final关键字带来的可见性时曾经提到过这⼀点，只要⼀个 不可变的对象被正确地构建出来（没有发⽣this引⽤逃逸的情况），那其外 部的可见状态永远也不会改变，永远也不会看到它在多个线程之中处于不 ⼀致的状态。”不可变”带来的安全性是最简单和最纯粹的。</p>
+<p>Java语⾔中，如果共享数据是⼀个基本数据类型，那么只要在定义时使⽤final关键字修饰它就可以保证它是不可变的。如果共享数据是⼀个对 象，那就需要保证对象的⾏为不会对其状态产⽣任何影响才⾏，如果读者 还没想明⽩这句话，不妨想⼀想java.lang.String类的对象，它是⼀个典型的 不可变对象，我们调⽤它的substring()、replace()和concat()这些⽅法都不会影响它原来的值，只会返回⼀个新构造的字符串对象。</p>
+<p>保证对象⾏为不影响⾃⼰状态的途径有很多种，其中最简单的就是把对象中带有状态的变量都声明为final，这样在构造函数结束之后，它就是不可变的，例如下面java.lang.Integer构造函数所⽰的，它通过将内部状态变量value定义为final来保障状态不变。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fz9linc86ij313k0p2wlm.jpg" alt=""></p>
+<p>在 Java API 中符合不可变要求的类型，除了上⾯提到的String之外，常 ⽤的还有枚举类型，以及java.lang.Number的部分⼦类，如Long和Double等「数值包装类型」，BigInteger和BigDecimal等⼤数据类型；但同为Number的⼦类型的原⼦类AtomicInteger和AtomicLong则并⾮不可变的。</p>
+<h3 id="二、绝对线程安全"><a href="#二、绝对线程安全" class="headerlink" title="二、绝对线程安全"></a><font color="#3FBA8B" size="4" face="黑体">二、绝对线程安全</font></h3><p>绝对的线程安全完全满⾜ Brian Goetz 给出的线程安全的定义，这个定义其实是很严格的，⼀个类要达到”不管运⾏时环境如何，调⽤者都不需要任何额外的同步措施“通常需要付出很⼤的，甚⾄有时候是不切实际的代价。在Java API中标注⾃⼰是线程安全的类，⼤多数都不是绝对的线程安全。</p>
+<p>如果说java.util.Vector是⼀个线程安全的容器，相信所有的Java程序员对此都不会有异议，因为它的add()、get()和size()这类⽅法都是被synchronized修饰的，尽管这样效率很低，但确实是安全的。但是，即使它所有的⽅法都被修饰成同步，也不意味着调⽤它的时候永远都不再需要同步⼿段了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">private static Vector&lt;Integer&gt; vector = new Vector&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    while (true) &#123;</span><br><span class="line">        for (int i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">            vector.add(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Thread removeThread = new Thread(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                for (int i = 0; i &lt; vector.size(); i++) &#123;</span><br><span class="line">                    vector.remove(i);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        Thread printThread = new Thread(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                for (int i = 0; i &lt; vector.size(); i++) &#123;</span><br><span class="line">                    System.out.println((vector.get(i)));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        removeThread.start();</span><br><span class="line">        printThread.start();</span><br><span class="line"></span><br><span class="line">        //不要同时产生过多的线程，否则会导致操作系统假死</span><br><span class="line">        while (Thread.activeCount() &gt; 20);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz9ll69ejkj317m088ae7.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Thread removeThread = new Thread(new Runnable() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        synchronized (vector) &#123;</span><br><span class="line">            for (int i = 0; i &lt; vector.size(); i++) &#123;</span><br><span class="line">                vector.remove(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">Thread printThread = new Thread(new Runnable() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        synchronized (vector) &#123;</span><br><span class="line">            for (int i = 0; i &lt; vector.size(); i++) &#123;</span><br><span class="line">                System.out.println((vector.get(i)));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="三、相对线程安全"><a href="#三、相对线程安全" class="headerlink" title="三、相对线程安全"></a><font color="#3FBA8B" size="4" face="黑体">三、相对线程安全</font></h3><p>相对的线程安全就是我们通常意义上所讲的线程安全，它需要保证对这个对象单独的操作是线程安全的，我们在调⽤的时候不需要做额外的保障措施，但是对于⼀些特定顺序的连续调⽤，就可能需要在调⽤端使⽤额外的同步⼿段来保证调⽤的正确性。</p>
+<p>在Java语⾔中，⼤部分的线程安全类都属于这种类型，例如Vector、 HashTable、Collections的synchronizedCollection()⽅法包装的集合等。</p>
+<h3 id="四、线程兼容"><a href="#四、线程兼容" class="headerlink" title="四、线程兼容"></a><font color="#3FBA8B" size="4" face="黑体">四、线程兼容</font></h3><p>线程兼容是指对象「本⾝并不是线程安全」的，但是可以通过在调⽤端正确地使⽤「同步⼿段」来保证对象在并发环境中可以安全地使⽤，我们平常说 ⼀个类不是线程安全的，绝⼤多数时候指的是这⼀种情况。Java API中⼤部分的类都是属于线程兼容的，如与前⾯的Vector和HashTable相对应的 合类ArrayList和HashMap等。</p>
+<h3 id="五、线程对立"><a href="#五、线程对立" class="headerlink" title="五、线程对立"></a><font color="#3FBA8B" size="4" face="黑体">五、线程对立</font></h3><p>线程对⽴是指⽆论调⽤端是否采取了同步措施，都⽆法在多线程环境中并发使⽤的代码。由于Java语⾔天⽣就具备多线程特性，线程对⽴这种排斥多线程的代码是很少出现的，⽽且通常都是有害的，应当尽量避免。</p>
+<p>⼀个线程对⽴的例⼦是Thread类的suspend()和resume()⽅法，如果有两个线程同时持有⼀个线程对象，⼀个尝试去中断线程，另⼀个尝试去恢复线程，如果并发进⾏的话，⽆论调⽤时是否进⾏了同步，⽬标线程都是存在死锁风险的，如果suspend()中断的线程就是即将要执⾏resume()的那个线程，那就肯定要产⽣死锁了。也正是由于这个原因，suspend()和resume()⽅法已经被 JDK 声明废弃（@Deprecated）了。常见的线程对⽴的操作还有 System.setIn()、Sytem.setOut()和System.runFinalizersOnExit()等。</p>
+<h2 id="1-2-线程安全的实现方法"><a href="#1-2-线程安全的实现方法" class="headerlink" title="1.2 线程安全的实现方法"></a><font color="#3FBA8B" size="5" face="黑体">1.2 线程安全的实现方法</font></h2><h3 id="1-互斥同步"><a href="#1-互斥同步" class="headerlink" title="1. 互斥同步"></a><font color="#3FBA8B" size="4" face="黑体">1. 互斥同步</font></h3><p>互斥同步（Mutual Exclusion＆Synchronization）是常见的⼀种并发正确性保障⼿段。同步是指在多个线程并发访问共享数据时，保证共享数据在同⼀个时刻只被⼀个（或者是⼀些，使⽤信号量的时候）线程使⽤。⽽互斥是实现同步的⼀种⼿段，临界区（Critical Section）、互斥量 （Mutex）和信号量（Semaphore）都是主要的互斥实现⽅式。</p>
+<blockquote>
+<p>在「互斥同步」这 4个字⾥⾯，互斥是因，同步是果；互斥是⽅法，同步是⽬的。</p>
+</blockquote>
+<p>在Java中，最基本的互斥同步⼿段就是synchronized关键字， synchronized关键字经过编译之后，会在同步块的前后分别形成monitorenter 和monitorexit这两个字节码指令，这两个字节码都需要⼀个reference类型的参数来指明要锁定和解锁的对象。如果Java程序中的synchronized明确指定了对象参数，那就是这个对象的reference；如果没有明确指定，那就根据 synchronized 修饰的是实例⽅法还是类⽅法，去取对应的「对象实例」或 「Class 对象」来作为锁对象。</p>
+<p>根据虚拟机规范的要求，在执⾏monitorenter指令时，⾸先要尝试获取对象的锁。如果这个对象没被锁定，或者当前线程已经拥有了那个对象的锁，把锁的计数器「加1」，相应的，在执⾏monitorexit指令时会将锁计数器「减 1」，当计数器为0时，锁就被释放。如果获取对象锁失败，那当前线程就要阻塞等待，直到对象锁被另外⼀个线程释放为⽌。</p>
+<p>在虚拟机规范对monitorenter和monitorexit的⾏为描述中，有两点是需要特别注意的。⾸先，synchronized同步块对同⼀条线程来说是可重⼊的， 不会出现⾃⼰把⾃⼰锁死的问题。其次，同步块在已进⼊的线程执⾏完之 前，会阻塞后⾯其他线程的进⼊。</p>
+<p>Java的线程是映射到操作系统的原⽣线程之上的，如果要阻塞或唤醒⼀个线程，都需要操作系统来帮忙完成，这就需要从⽤户态转换到核⼼态中，因此状态转换需要耗费很多的处理器时间。对于代码简单的同步块（如被synchronized修饰的getter() 或setter()⽅法），状态转换消耗的时间有可能⽐⽤户代码执⾏的时间还要长。所以synchronized是Java语⾔中⼀个重量级（Heavyweight）的操作，有经验的程序员都会在确实必要的情况下才使⽤这种操作。⽽虚拟机本⾝也会进⾏⼀些优化，譬如在通知操作系统阻塞线程之前加⼊⼀段⾃旋等待过 程，避免频繁地切⼊到核⼼态之中。</p>
+<p>除了synchronized之外，我们还可以使⽤java.util.concurrent（下⽂称J.U.C）包中的重⼊锁（ReentrantLock）来实现同步，在基本⽤法上， ReentrantLock与synchronized很相似，他们都具备⼀样的线程重⼊特性，只是代码写法上有点区别，⼀个表现为API层⾯的互斥锁（lock()和unlock()⽅法配合try/finally语句块来完成），另⼀个表现为原⽣语法层⾯的互斥锁。 不过，相⽐synchronized，ReentrantLock增加了⼀些⾼级功能，主要有以下3 项：</p>
+<ul>
+<li><p>等待可中断</p>
+</li>
+<li><p>可实现公平锁</p>
+</li>
+<li><p>锁可以绑定多个条件</p>
+</li>
+</ul>
+<p>等待可中断是指当持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情，可中断特性对处理执⾏时间⾮常长的同步块很有帮助。</p>
+<p>公平锁是指多个线程在等待同⼀个锁时，必须按照申请锁的时间顺序来依次获得锁；⽽⾮公平锁则不保证这⼀点，在锁被释放时，任何⼀个等 待锁的线程都有机会获得锁。synchronized中的锁是⾮公平的， ReentrantLock默认情况下也是⾮公平的，但可以通过带布尔值的构造函数要求使⽤公平锁。</p>
+<p>锁绑定多个条件是指⼀个ReentrantLock对象可以同时绑定多个 Condition对象，⽽在synchronized中，锁对象的wait()和notify()或notifyAll()⽅法可以实现⼀个隐含的条件，如果要和多于⼀个的条件关联的时候，就不得不额外地添加⼀个锁，⽽ReentrantLock则⽆须这样做，只需要多次调⽤newCondition()⽅法即可。</p>
+<h3 id="2-非阻塞同步"><a href="#2-非阻塞同步" class="headerlink" title="2. 非阻塞同步"></a><font color="#3FBA8B" size="4" face="黑体">2. 非阻塞同步</font></h3><p>互斥同步最主要的问题就是进⾏线程阻塞和唤醒所带来的性能问题， 因此这种同步也称为阻塞同步（Blocking Synchronization）。从处理问题的⽅式上说，互斥同步属于⼀种「悲观的并发策略」，总是认为只要不去做正确 的同步措施（例如加锁），那就肯定会出现问题，⽆论共享数据是否真的 会出现竞争，它都要进⾏加锁（这⾥讨论的是概念模型，实际上虚拟机会优化掉很⼤⼀部分不必要的加锁）、⽤户态核⼼态转换、维护锁计数器和 检查是否有被阻塞的线程需要唤醒等操作。</p>
+<p>随着硬件指令集的发展，我们有了另外⼀个选择：基于冲突检测的「乐观并发策略」，通俗地说，就是先进⾏操作，如果没有其他线程争⽤共享数据，那操作就成功了；如果共享数据有争⽤，产⽣了冲突，那就再采取其他的补偿措施（最常见的补偿措施就是不断地重试，直到成功为⽌），这种乐观的并发策略的许多实现都不需要把线程挂起，因此这种同步操作称为「⾮阻塞同步」（Non-Blocking Synchronization）。</p>
+<p>为什么说使⽤乐观并发策略需要「硬件指令集的发展」才能进⾏ 呢？因为我们需要「操作」和「冲突检测」这两个步骤具备原⼦性，靠什么来保证呢？如果这⾥再使⽤「互斥同步」来保证就失去意义了，所以我们只能靠硬件来完成这件事情，硬件保证⼀个从语义上看起来需要多次操作的⾏为只通过⼀条处理器指令就能完成，这类指令常⽤的有：</p>
+<ul>
+<li><p>测试并设置：Test-and-Set</p>
+</li>
+<li><p>获取并增加：Fetch-and-Increment</p>
+</li>
+<li><p>交换：Swap</p>
+</li>
+<li><p>比较并交换：Compare-and-Swap 简称 CAS</p>
+</li>
+<li><p>加载链接/条件存储：Load-Linked/Store-Conditional 简称 LL/SC</p>
+</li>
+</ul>
+<p>其中，前⾯的 3 条是20世纪就已经存在于⼤多数指令集之中的处理器指 令，后⾯的两条是现代处理器新增的，⽽且这两条指令的⽬的和功能是类 似的。在 IA64、x86 指令集中有cmpxchg指令完成CAS功能，在sparc-TSO也有casa指令实现，⽽在 ARM 和 PowerPC 架构下，则需要使⽤⼀对 ldrex/strex 指令来完成 LL/SC 的功能。</p>
+<p>CAS 指令需要有3个操作数，分别是内存位置（在Java中可以简单理解为变量的内存地址，⽤ V 表⽰）、旧的预期值（⽤A表⽰）和新值（⽤B表 ⽰）。CAS 指令执⾏时，当且仅当V符合旧预期值A时，处理器⽤新值B更新V的值，否则它就不执⾏更新，但是⽆论是否更新了V的值，都会返回 V 的旧值，上述的处理过程是⼀个原⼦操作。</p>
+<p>在JDK 1.5之后，Java程序中才可以使⽤CAS操作，该操作由 sun.misc.Unsafe类⾥⾯的compareAndSwapInt()和compareAndSwapLong()等⼏个⽅法包装提供，虚拟机在内部对这些⽅法做了特殊处理，即时编译出来的结果就是⼀条平台相关的处理器CAS指令，没有⽅法调⽤的过程，或者可以认为是⽆条件内联进去了。</p>
+<p>下面看看如何使⽤CAS 操作来避免阻塞同步。我们曾经通过这段 20 个线程⾃增 10000 次的代码来证明volatile变量不具备原⼦性，那么如何才能让它具备原⼦性呢？把”race++“操作或increase()⽅法⽤同步块包裹起来当然是⼀个办法，但是如果改成如下所⽰的代码（用 AtomicInteger 代替原始 int），那效率将会提⾼许多。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class AtomicTest &#123;</span><br><span class="line"></span><br><span class="line">    public static AtomicInteger race = new AtomicInteger(0);</span><br><span class="line"></span><br><span class="line">    public static void increase() &#123;</span><br><span class="line">        race.incrementAndGet();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static final int THREADS_COUNT = 20;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        Thread[] threads = new Thread[THREADS_COUNT];</span><br><span class="line">        for (int i = 0; i &lt; THREADS_COUNT; i++) &#123;</span><br><span class="line">            threads[i] = new Thread(new Runnable() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    for (int i = 0; i &lt; 10000; i++) &#123;</span><br><span class="line">                        increase();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            threads[i].start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        while (Thread.activeCount() &gt; 1)</span><br><span class="line">            Thread.yield();</span><br><span class="line"></span><br><span class="line">        System.out.println(race);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>⽤AtomicInteger代替int后，程序输出了正确的结果，⼀切都要归功于 incrementAndGet()方法的原子性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Atomically increment by one the current value.</span><br><span class="line"> * @return the updated value</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">public final int incrementAndGet() &#123;</span><br><span class="line">    for (;;) &#123; // for 循环</span><br><span class="line">        int current = get();</span><br><span class="line">        int next = current + 1;</span><br><span class="line">        // 关键在于 compareAndset 操作</span><br><span class="line">        if (compareAndSet(current, next))</span><br><span class="line">            return next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>incrementAndGet()⽅法在⼀个⽆限循环中，不断尝试将⼀个「⽐当前值⼤1」的新值赋给⾃⼰。如果失败了，那说明在执⾏「获取-设置 fetch-and-increment」操作的时候值已经有了修改，于是再次循环进⾏下⼀次操作，直到设置成功为⽌。</p>
+<p>尽管CAS看起来很美，但显然这种操作⽆法涵盖互斥同步的所有使⽤场景，并且CAS从语义上来说并不是完美的，存在这样的⼀个逻辑漏洞： 如果⼀个变量V初次读取的时候是A值，并且在准备赋值的时候检查到它仍然为A值，那我们就能说它的值没有被其他线程改变过了吗？如果在这段期间它的值曾经被改成了B，后来又被改回为A，那 CAS 操作就会误认为它从来没有被改变过。这个漏洞称为CAS操作的”ABA”问题。J.U.C包为了解 决这个问题，提供了⼀个带有标记的原⼦引⽤类”AtomicStampedReference“，它可以通过控制变量值的版本来保证CAS的正确性。不过⽬前来说这个类⽐较”鸡肋”，⼤部分情况下「 ABA 问题」不会影 响程序并发的正确性，如果需要解决「ABA问题」，改⽤传统的互斥同步可能会⽐原⼦类更⾼效。</p>
+<h3 id="3-无同步方案"><a href="#3-无同步方案" class="headerlink" title="3. 无同步方案"></a><font color="#3FBA8B" size="4" face="黑体">3. 无同步方案</font></h3><p>要保证线程安全，并不是⼀定就要进⾏同步，两者没有因果关系。</p>
+<p>同步只是保证共享数据争⽤时的正确性的⼿段，如果⼀个⽅法本来就不涉及共享数据，那它⾃然就⽆须任何同步措施去保证正确性，因此会有⼀些代码天⽣就是线程安全的。</p>
+<ol>
+<li>可重入代码</li>
+<li>线程本地存储</li>
+</ol>
+<p>可重⼊代码（Reentrant Code）：这种代码也叫做纯代码（PureCode），可以在代码执⾏的任何时刻中断它，转⽽去执⾏另外⼀段代码 （包括递归调⽤它本⾝），⽽在控制权返回后，原来的程序不会出现任何 错误。相对线程安全来说，可重⼊性是更基本的特性，它可以保证线程安全，即所有的可重⼊的代码都是线程安全的，但是并⾮所有的线程安全的代码都是可重⼊的。</p>
+<p>可重⼊代码有⼀些共同的「特征」，例如不依赖存储在堆上的数据和公⽤的系统资源、⽤到的状态量都由参数中传⼊、不调⽤⾮可重⼊的⽅法等。 我们可以通过⼀个简单的原则来判断代码是否具备可重⼊性：如果⼀个⽅法，它的返回结果是可以预测的，只要输⼊了相同的数据，就都能返回相同的结果，那它就满⾜可重⼊性的要求，当然也就是线程安全的。</p>
+<p>线程本地存储（Thread Local Storage）：如果⼀段代码中所需要的数据必须与其他代码共享，那就看看这些共享数据的代码是否能保证在同⼀个线程中执⾏？如果能保证，我们就可以把共享数据的可见范围限制在同 ⼀个线程之内，这样，⽆须同步也能保证线程之间不出现数据争⽤的问 题。</p>
+<p>符合这种特点的应⽤并不少见，⼤部分使⽤消费队列的架构模式 （如「⽣产者-消费者」模式）都会将产品的「消费过程」尽量在⼀个线程中消费完，其中最重要的⼀个应⽤实例就是经典Web交互模型中的「⼀个请求对应⼀个服务器线程」（Thread-per-Request）的处理⽅式，这种处理⽅式的⼴泛应⽤使得很多Web服务端应⽤都可以使⽤线程本地存储来解决线程安全问 题。</p>
+<p>Java语⾔中，如果⼀个变量要被多线程访问，可以使⽤volatile关键字 声明它为「易变的」；如果⼀个变量要被某个线程独享，Java 中就没有类似 C++ 中__declspec（thread） 这样的关键字，不过还是可以通过 java.lang.ThreadLocal 类来实现线程本地存储的功能。每⼀个线程的 Thread 对象中都有⼀个ThreadLocalMap对象，这个对象存储了⼀组以 ThreadLocal.threadLocalHashCode 为键，以本地线程变量为值的K-V值对， ThreadLocal 对象就是当前线程的ThreadLocalMap的访问⼊⼜，每⼀个 ThreadLocal 对象都包含了⼀个独⼀⽆⼆的threadLocalHashCode值，使⽤这 个值就可以在线程K-V值对中找回对应的本地线程变量。</p>
+<h1 id="2-锁优化"><a href="#2-锁优化" class="headerlink" title="2. 锁优化"></a><font color="#3FBA8B" size="6" face="黑体">2. 锁优化</font></h1><p><br>⾼效并发是从 JDK 1.5 到 JDK 1.6 的⼀个重要改进，HotSpot 虚拟机开发团队在这个版本上花费了⼤量的精⼒去实现各种锁优化技术，如适应性⾃旋（Adaptive Spinning）、锁消除（Lock Elimination）、锁粗化（Lock Coarsening）、轻量级锁（Lightweight Locking）和偏向锁（Biased Locking）等，这些技术都是为了在线程之间更⾼效地共享数据，以及解决竞争问题，从⽽提⾼程序的执⾏效率。</p>
+<h2 id="1-自旋锁与自适应锁"><a href="#1-自旋锁与自适应锁" class="headerlink" title="1. 自旋锁与自适应锁"></a><font color="#3FBA8B" size="5" face="黑体">1. 自旋锁与自适应锁</font></h2><p>前面提到「互斥同步」对性能最⼤的影响是「阻塞」的实现，挂起线程和恢复线程的操作都需要转⼊内核态中完成，这些操作给系统的并发性能带来了很⼤的压⼒。虚拟机的开发团队也注意到在许多应⽤上，共享数据的锁定状态只会持续很短的⼀段时间，为了这段时间去挂起和恢复线程并不值得。</p>
+<blockquote>
+<p>如果物理机器有⼀个以上的处理器，能让两个或以上的线程同时并⾏执⾏，我们就可以让后⾯请求锁的那个线程”稍等⼀下”，但不放弃处理器的执⾏时间，看看持有锁的线程是否很快就会释放锁。为了让线程等待，我们只需让线程执⾏⼀个「忙循环（⾃旋）」，这项技术就是所谓的⾃旋锁。</p>
+</blockquote>
+<p>简而言之就是线程不急着「阻塞」，利用多处理器，忙循环（即自旋）等一会，如果锁马上被释放了，就不需要挂起和恢复的开销了。</p>
+<p>⾃旋锁在 JDK 1.4.2 中就已经引⼊，只不过默认是关闭的，可以使⽤-XX:+UseSpinning参数来开启，在JDK 1.6中就已经改为默认开启了。⾃旋等待不能代替阻塞，且先不说对处理器数量的要求，⾃旋等待本⾝虽然避免了线程切换的开销，但它是要占⽤处理器时间的，因此，如果锁被占⽤的时间很短，⾃旋等待的效果就会⾮常好，反之，如果锁被占⽤的时间很长，那么⾃旋的线程只会⽩⽩消耗处理器资源，⽽不会做任何有⽤的⼯作，反⽽会带来性能上的浪费。因此，⾃旋等待的时间必须要有⼀定的限度，如果⾃旋超过了限定的次数仍然没有成功获得锁，就应当使⽤传统的⽅式去挂起线程了。⾃旋次数的默认值是10次，⽤户可以使⽤参数XX:PreBlockSpin来更改。</p>
+<p>在JDK 1.6中引⼊了「⾃适应的⾃旋锁」。⾃适应意味着⾃旋的时间不再固定了，⽽是由前⼀次在「同⼀个锁上的⾃旋时间」及「锁的拥有者的状态」来决定。如果在同⼀个锁对象上，⾃旋等待刚刚成功获得过锁，并且持有锁的线程正在运⾏中，那么虚拟机就会认为这次⾃旋也很有可能再次成功，进⽽它将允许⾃旋等待持续相对更长的时间，⽐如100个循环。另外，如果对于某个锁，⾃旋很少成功获得过，那在以后要获取这个锁时将可能省略掉⾃旋过程，以避免浪费处理器资源。有了⾃适应⾃旋，随着程序运⾏和性 能监控信息的不断完善，虚拟机对程序锁的状况预测就会越来越准确，虚拟机就会变得越来越”聪明”了。</p>
+<h2 id="2-锁消除"><a href="#2-锁消除" class="headerlink" title="2. 锁消除"></a><font color="#3FBA8B" size="5" face="黑体">2. 锁消除</font></h2><p>锁消除是指虚拟机即时编译器在运⾏时，对⼀些代码上要求同步，但是被检测到不可能存在共享数据竞争的锁进⾏消除。锁消除的主要判定依据来源于逃逸分析的数据⽀持，如果判断在⼀段代码中，堆上的所有数据都不会逃逸出去从⽽被其他线程访问到，那就可以把它们当做栈上数据对待，认为它们是线程私有的，同步加锁⾃然就⽆须进⾏。</p>
+<p>变量是否逃逸，对于虚拟机来说需要使⽤数据流 析来确定，但是程序员⾃⼰应该是很清楚的，怎么会在明知道不存在数据争⽤的情况下要求同步呢？答案是有许多同步措施并不是程序员⾃⼰加⼊的，同步的代码在Java程序中的普遍程度也许超过了⼤部分读者的想象。下面的代码⾮常简单，仅仅是输出 3 个字符串相加的结果，⽆论是源码字⾯上还是程序语义上都没有同步。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public String concatString(String s1, String s2, String s3)&#123;</span><br><span class="line">    return s1 + s2 + s3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于String是⼀个不可变的类，对字符串的连接操作总是通过⽣成新的String对象来进⾏的，因此Javac 编译器会对 String 连接做⾃动优化。在JDK 1.5之前，会转化为StringBuffer对象（线程安全）的连续append()操作，在 JDK 1.5及以后的版本中，会转化为StringBuilder对象（非线程安全）的连续append()操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public String concatString(String s1, String s2, String s3)&#123;</span><br><span class="line"></span><br><span class="line">    StringBuffer sb = new StringBuffer();</span><br><span class="line">    sb.append(s1);</span><br><span class="line">    sb.append(s2);</span><br><span class="line">    sb.append(s3);</span><br><span class="line">    </span><br><span class="line">    return sb.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在⼤家还认为这段代码没有涉及同步吗？每个StringBuffer.append() ⽅法中都有⼀个同步块，锁就是 sb 对象。虚拟机观察变量 sb，很快就会发现它的动态作⽤域被限制在concatString()⽅法内部。也就是说，sb的所有引⽤永远不会”逃逸”到concatString()⽅法之外，其他线程⽆法访问到它， 因此，虽然这⾥有锁，但是可以被安全地消除掉，在即时编译之后，这段 代码就会忽略掉所有的同步⽽直接执⾏了。</p>
+<h2 id="3-锁粗化"><a href="#3-锁粗化" class="headerlink" title="3. 锁粗化"></a><font color="#3FBA8B" size="5" face="黑体">3. 锁粗化</font></h2><p>原则上，我们在编写代码的时候，总是推荐将同步块的「作⽤范围」限制得尽量⼩——只在共享数据的实际作⽤域中才进⾏同步，这样是为了使得需要同步的操作数量尽可能变⼩，如果存在锁竞争，那等待锁的线程也能尽快拿到锁。</p>
+<p>⼤部分情况下，上⾯的原则都是正确的，但是如果⼀系列的连续操作都对同⼀个对象反复加锁和解锁，甚⾄加锁操作是出现在循环体中的，那即使没有线程竞争，频繁地进⾏互斥同步操作也会导致不必要的性能损耗。</p>
+<p>上面concatString函数中，append()⽅法就属于这类情况。如果虚拟机探测到有这样⼀串零碎的操作都对同⼀个对象加锁，将会把加锁同步的范围扩展（粗化）到整个操作序列的外部，上面就是扩展到第 ⼀个append()操作之前直⾄最后⼀个append()操作之后，这样只需要加锁⼀次就可以了。</p>
+<h2 id="4-轻量级锁"><a href="#4-轻量级锁" class="headerlink" title="4. 轻量级锁"></a><font color="#3FBA8B" size="5" face="黑体">4. 轻量级锁</font></h2><p>轻量级锁是JDK 1.6之中加⼊的新型锁机制，它名字中的「轻量级」是相对于使⽤「操作系统互斥量」来实现的传统锁⽽⾔的，因此传统的锁机制就称 为”重量级”锁。⾸先需要强调⼀点的是，轻量级锁并不是⽤来代替重量级 锁的，它的本意是在没有多线程竞争的前提下，减少传统的重量级锁使⽤操作系统互斥量产⽣的性能消耗。</p>
+<blockquote>
+<p>轻量级锁的使用场景是「没有多少线程竞争」的情况。</p>
+</blockquote>
+<p>要理解轻量级锁，以及后⾯会讲到的偏向锁的原理和运作过程，必须从HotSpot虚拟机的对象（对象头部分）的内存布局开始介绍。HotSpot 虚拟机的对象头「Object Header」分为两部分信息：</p>
+<ul>
+<li><p>第⼀部分：⽤于存储对象⾃⾝的运⾏时数据，如哈希码（HashCode）、GC分代年龄（Generational GC Age）等，这部分数据的长度在32位和64位的虚拟机中分别为32bit和 64bit，官⽅称它为”Mark Word”，它是实现轻量级锁和偏向锁的关键。</p>
+</li>
+<li><p>第二部分：⽤于存储指向⽅法区对象类型数据的指针，如果是数组对象的话，还会有⼀个额外的部分⽤于存储数组长度。</p>
+</li>
+</ul>
+<p>对象头信息是与对象⾃⾝定义的数据⽆关的额外存储成本，考虑到虚拟机的空间效率，Mark Word被设计成⼀个⾮固定的数据结构以便在极⼩的空间内存储尽量多的信息，它会根据对象的状态复⽤⾃⼰的存储空间。 例如，在32位的 HotSpot 虚拟机中对象「未被锁定」的状态下，Mark Word的 32bit 空间中的 25bit ⽤于存储对象哈希码（HashCode），4bit ⽤于存储对象分代年龄，2bit ⽤于存储锁标志位，1bit 固定为 0，在其他状态（轻量级锁定、重量级锁定、GC标记、可偏向）下对象的存储内容见表</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz9lwvfmr8j31aw0b8dn7.jpg" alt=""></p>
+<p>在代码进⼊同步块的时候，如果此同步对象没有被锁定（锁标志 位为01状态），虚拟机⾸先将在当前线程的栈帧中建⽴⼀个名为锁记录 （Lock Record）的空间，⽤于存储锁对象⽬前的Mark Word的拷贝（官 把这份拷贝加了⼀个 Displaced 前缀，即 Displaced Mark Word），这时候线程堆栈与对象头的状态如左图所示。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fz9lxai3ccj319i0g845g.jpg" alt=""></p>
+<p>然后，虚拟机将使⽤ CAS 操作尝试将对象的 Mark Word 更新为指向 Lock Record 的指针。如果这个更新动作成功了，那么这个线程就拥有了该对象的锁，并且对象Mark Word的锁标志位（Mark Word的最后2bit）将转变为 00，即表⽰此对象处于「轻量级锁定状态」，这时候线程堆栈与对象头的状态如右图所⽰。</p>
+<p>如果这个更新操作失败了，虚拟机⾸先会检查对象的 Mark Word 是否指向当前线程的栈帧，如果是说明当前线程已经拥有了这个对象的锁，那就可以直接进⼊同步块继续执⾏，否则说明这个锁对象已经被其他线程抢占了。如果有两条以上的线程争⽤同⼀个锁，那轻量级锁就不再有效，要膨胀为重量级锁，锁标志的状态值变为10，Mark Word 中存储的就是指向重量级锁（互斥量）的指针，后⾯等待锁的线程也要进⼊阻塞状态。</p>
+<p>上⾯描述的是「轻量级锁」的加锁过程，它的解锁过程也是通过 CAS 操作来进⾏的，如果对象的 Mark Word 仍然指向着线程的锁记录，那就⽤ CAS 操作把对象当前的 Mark Word 和线程中复制的 Displaced Mark Word 替换回来，如果替换成功，整个同步过程就完成了。如果替换失败，说明有其他线程尝试过获取该锁，那就要在释放锁的同时，唤醒被挂起的线程。</p>
+<blockquote>
+<p>轻量级锁能提升程序同步性能的依据是”对于绝⼤部分的锁，在整个同步周期内都是不存在竞争的“，这是⼀个经验数据。如果没有竞争，轻量级锁使⽤CAS操作避免了使⽤互斥量的开销，但如果存在锁竞争，除了互斥量的开销外，还额外发⽣了CAS操作，因此在有竞争的情况下，轻量级锁会⽐传统的重量级锁更慢。</p>
+</blockquote>
+<h2 id="5-偏向锁"><a href="#5-偏向锁" class="headerlink" title="5. 偏向锁"></a><font color="#3FBA8B" size="5" face="黑体">5. 偏向锁</font></h2><p>偏向锁也是 JDK 1.6 中引⼊的⼀项锁优化，它的⽬的是消除数据在⽆竞争情况下的同步原语，进⼀步提⾼程序的运⾏性能。如果说「轻量级锁」是在「⽆竞争」的情况下使⽤ CAS 操作去消除同步使⽤的互斥量，那「偏向锁」就是在⽆竞争的情况下把整个同步都消除掉，连CAS操作都不做了。</p>
+<p>偏向锁的”偏”，就是偏⼼的”偏”、偏袒的”偏”，它的意思是这个锁会偏向于第⼀个获得它的线程，如果在接下来的执⾏过程中，该锁没有被其他的线程获取，则持有偏向锁的线程将永远不需要再进⾏同步。</p>
+<p>假设当前虚拟机启⽤了偏向锁（启⽤参数-XX:+UseBiasedLocking，这是JDK 1.6的默认值），那 么，当锁对象第⼀次被线程获取的时候，虚拟机将会把对象头中的标志位 设为”01“，即偏向模式。同时使⽤ CAS 操作把获取到这个锁的线程的 ID 记录在对象的 Mark Word 之中，如果CAS操作成功，持有偏向锁的线程以后每次进⼊这个锁相关的同步块时，虚拟机都可以不再进⾏任何同步操作 （例如 Locking、Unlocking 及对 Mark Word 的 Update 等）。</p>
+<p>当有另外⼀个线程去尝试获取这个锁时，偏向模式就宣告结束。根据锁对象⽬前是否处于被锁定的状态，撤销偏向（Revoke Bias）后恢复到未锁定（标志位为”01”）或轻量级锁定（标志位为”00”）的状态，后续的同步操作就如上⾯介绍的轻量级锁那样执⾏。偏向锁、轻量级锁的状态转化及对象 Mark Word 的关系如图所⽰：</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fz9ly6xx0cj31900lmqef.jpg" alt=""></p>
+<p>偏向锁可以提⾼带有同步但⽆竞争的程序性能。它同样是⼀个带有效益权衡（Trade Off）性质的优化，也就是说，它并不⼀定总是对程序运⾏有利，如果程序中⼤多数的锁总是被多个不同的线程访问，那偏向模式就是多余的。在具体问题具体分析的前提下，有时候使⽤参数-XX:UseBiasedLocking来禁⽌偏向锁优化反⽽可以提升性能。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/线程安全/" rel="tag"># 线程安全</a>
+          
+            <a href="/tags/锁/" rel="tag"># 锁</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/16/深入理解Java虚拟机读书笔记第12章-Java内存模型与线程/" rel="next" title="深入理解Java虚拟机读书笔记第12章---Java内存模型与线程">
+                <i class="fa fa-chevron-left"></i> 深入理解Java虚拟机读书笔记第12章---Java内存模型与线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">immrwk</p>
+              <p class="site-description motion-element" itemprop="description">Android程序员</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-线程安全"><span class="nav-number">1.</span> <span class="nav-text">1. 线程安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Java语言中的线程安全"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Java语言中的线程安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、-不可变"><span class="nav-number">1.1.1.</span> <span class="nav-text">一、 不可变</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、绝对线程安全"><span class="nav-number">1.1.2.</span> <span class="nav-text">二、绝对线程安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、相对线程安全"><span class="nav-number">1.1.3.</span> <span class="nav-text">三、相对线程安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、线程兼容"><span class="nav-number">1.1.4.</span> <span class="nav-text">四、线程兼容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、线程对立"><span class="nav-number">1.1.5.</span> <span class="nav-text">五、线程对立</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-线程安全的实现方法"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 线程安全的实现方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-互斥同步"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 互斥同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-非阻塞同步"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 非阻塞同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-无同步方案"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. 无同步方案</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-锁优化"><span class="nav-number">2.</span> <span class="nav-text">2. 锁优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-自旋锁与自适应锁"><span class="nav-number">2.1.</span> <span class="nav-text">1. 自旋锁与自适应锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-锁消除"><span class="nav-number">2.2.</span> <span class="nav-text">2. 锁消除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-锁粗化"><span class="nav-number">2.3.</span> <span class="nav-text">3. 锁粗化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-轻量级锁"><span class="nav-number">2.4.</span> <span class="nav-text">4. 轻量级锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-偏向锁"><span class="nav-number">2.5.</span> <span class="nav-text">5. 偏向锁</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">immrwk</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
