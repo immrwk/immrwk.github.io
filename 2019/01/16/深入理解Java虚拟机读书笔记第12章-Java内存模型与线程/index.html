@@ -94,7 +94,7 @@
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz8i547128j319w0doag4.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fz8ihefrqqj30zq0u01kx.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fz8ks8p703j30cs082gmg.jpg">
-<meta property="og:updated_time" content="2019-01-16T09:59:36.000Z">
+<meta property="og:updated_time" content="2019-02-18T11:49:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解Java虚拟机读书笔记第12章---Java内存模型与线程">
 <meta name="twitter:description" content="计算机的运行速度是远远大于它的存储和通信子系统的速度。  基于⾼速缓存的存储交互很好地解决了处理器与内存的速度⽭盾，但 是也为计算机系统带来更⾼的复杂度，因为它引⼊了⼀个新的问题：缓存⼀致性（Cache Coherence）。在多处理器系统中，每个处理器都有⾃⼰的⾼速缓存，⽽它们又共享同⼀主内存（Main Memory） 当多个处理器的运算任务都涉及同⼀块主内存区域时，将可能导致各⾃的缓存数据不">
@@ -461,11 +461,11 @@
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz8i1jnpjlj318g0hwtdr.jpg" alt=""></p>
 <p>发现只有⼀⾏代码的increase()⽅法在 Class ⽂件中是 由 4 条字节码指令构成的（ return 指令不是由 race++ 产⽣的，这条指令可以不计算），从字节码层⾯上很容易就分析出并发失败的原因了：当getstatic 指令把 race 的值取到操作栈顶时，volatile关键字保证了race的值在此时是确的，但是在执⾏ iconst_1、iadd 这些指令的时候，其他线程可能已经把 race 的值加⼤了，⽽在操作栈顶的值就变成了过期的数据，所以 putstatic 指令执⾏后就可能把较⼩的 race 值同步回主内存之中。</p>
 <blockquote>
-<p>也就是说，valatile 真的只是保证了变量的可见性而已，并没有任何同步的作用，对「变量更改」这个动作，除了「取到正确的数据」步骤外，在更改的过程中也要与其他线程互斥才能保证原子性，volatile 只保证取到了此刻内存中正确的数据。</p>
+<p>也就是说，volatile 真的只是保证了变量的可见性而已，并没有任何同步的作用，对「变量更改」这个动作，除了「取到正确的数据」步骤外，在更改的过程中也要与其他线程互斥才能保证原子性，volatile 只保证取到了此刻内存中正确的数据。</p>
 </blockquote>
 <p>而且即使编译出来只有⼀条字节码指令，也并不意味执⾏这条指令就是⼀ 个原⼦操作。⼀条字节码指令在解释执⾏时，解释器将要运⾏许多⾏代码才能实现它的语义，如果是编译执⾏，⼀条字节码指令也可能转化成若⼲条本地机器码指令，此处使⽤-XX:+PrintAssembly参数输出反汇编来分析会更加严谨⼀些，但考虑到阅读的⽅便，并且字节码已经能说明问题，所以此处使⽤字节码来分析。</p>
 <p>由于 volatile 变量只能保证可见性，在不符合以下两条规则的运算场景 中，我们仍然要通过加锁（使⽤synchronized 或java.util.concurrent中的原⼦类来保证原⼦性。</p>
-<p>什么时候用 valatile 没问题？即 volatile 的使用场景：</p>
+<p>什么时候用 volatile 没问题？即 volatile 的使用场景：</p>
 <ul>
 <li><p>运算结果并不依赖变量的当前值，或者能够确保只有单⼀的线程修改变量的值。</p>
 </li>
@@ -696,7 +696,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -718,7 +718,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
