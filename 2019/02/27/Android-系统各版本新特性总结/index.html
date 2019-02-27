@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android新特性,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Android 4.0 Space 留白 PopupMenu GlidLayout 网格布局  Android 5.0 MaterialDesign设计风格 Material Theme Meterial Dialog CardView RecyclerView SwipeRefreshLayout Toolbar RippleDrawable 视图的水波纹效果 android L 增加了一些 A">
+<meta name="keywords" content="Android新特性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 系统各版本新特性总结">
+<meta property="og:url" content="http://yoursite.com/2019/02/27/Android-系统各版本新特性总结/index.html">
+<meta property="og:site_name" content="多看书">
+<meta property="og:description" content="Android 4.0 Space 留白 PopupMenu GlidLayout 网格布局  Android 5.0 MaterialDesign设计风格 Material Theme Meterial Dialog CardView RecyclerView SwipeRefreshLayout Toolbar RippleDrawable 视图的水波纹效果 android L 增加了一些 A">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-26T08:24:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 系统各版本新特性总结">
+<meta name="twitter:description" content="Android 4.0 Space 留白 PopupMenu GlidLayout 网格布局  Android 5.0 MaterialDesign设计风格 Material Theme Meterial Dialog CardView RecyclerView SwipeRefreshLayout Toolbar RippleDrawable 视图的水波纹效果 android L 增加了一些 A">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/27/Android-系统各版本新特性总结/">
+
+
+
+
+
+  <title>Android 系统各版本新特性总结 | 多看书</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">多看书</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/27/Android-系统各版本新特性总结/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="immrwk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="多看书">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 系统各版本新特性总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-27T15:47:26+08:00">
+                2019-02-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Android-4-0"><a href="#Android-4-0" class="headerlink" title="Android 4.0"></a><font color="#3FBA8B" size="6" face="黑体">Android 4.0</font></h1><ul>
+<li>Space 留白</li>
+<li>PopupMenu</li>
+<li>GlidLayout 网格布局</li>
+</ul>
+<h1 id="Android-5-0"><a href="#Android-5-0" class="headerlink" title="Android 5.0"></a><font color="#3FBA8B" size="6" face="黑体">Android 5.0</font></h1><ul>
+<li>MaterialDesign设计风格</li>
+<li>Material Theme</li>
+<li>Meterial Dialog</li>
+<li>CardView</li>
+<li>RecyclerView</li>
+<li>SwipeRefreshLayout</li>
+<li>Toolbar</li>
+<li>RippleDrawable 视图的水波纹效果</li>
+<li>android L 增加了一些 Activity 的转场动画 —— 爆炸、滑动、淡入淡出</li>
+<li>tint 前后背景着色</li>
+<li>Palette 从图像中提取突出的颜色，这样可以把色值赋给 ActionBar、Toolbar、或者其他，可以让界面整个色调统一。</li>
+<li>支持64位ART虚拟机</li>
+<li>Heads-Up 风格通知。全新的通知中心设计（在锁屏界面也可以直接查看通知消息了，用户还可以直接在锁屏的情况下就行回复或进入应用。）</li>
+<li>setTaskDescription 最近使用。全新的“最近应用程序”。除了界面风格设计的改变之外，新的最近应用界面还借鉴了 Chrome 浏览器的理念，采用单独的标签展示方式。更重要的是，谷歌已经向开发者开放了 API，所以第三方开发人员可以利用这个改进为特定的应用增加全新的功能。</li>
+<li>Project Volta 电池续航改进计划。增加了 Battery Saver 模式，在低电量的时候系统会自动降低屏幕亮度、限制自动更换背景等功能。</li>
+<li>MediaProjection 截屏</li>
+<li>JobScheduler 通过为系统定义要在以后的某个时间或在指定的条件下（例如，当设备在充电时）异步运行的作业来优化电池寿命</li>
+<li>setClipToOutline 裁剪</li>
+<li>支持多种设备（手机、平板电脑、笔记本电脑、智能电视、汽车、智能手表甚至是各种家用电子产品）</li>
+<li>新的 API 支持，蓝牙 4.1、USB Audio、多人分享等其它特性</li>
+<li>Camera2</li>
+<li>PdfRenderer 使用位图来呈现 PDF 文件</li>
+<li>android.app.usage API 获取应用使用情况统计信息的 API\</li>
+</ul>
+<h1 id="Android-6-0"><a href="#Android-6-0" class="headerlink" title="Android 6.0"></a><font color="#3FBA8B" size="6" face="黑体">Android 6.0</font></h1><ul>
+<li>指纹识别</li>
+<li>动态权限申请</li>
+<li>FloatingActionButton</li>
+<li>Snackbar</li>
+<li>TabLayout</li>
+<li>NavigationView</li>
+<li>CoordinatorLayout</li>
+<li>AppBarLayout</li>
+<li>CollapsingToolbarLayout</li>
+<li>App Linking</li>
+<li>TextInputLayout</li>
+<li>大量漂亮流畅的动画</li>
+<li>支持快速充电的切换</li>
+<li>支持文件夹拖拽应用</li>
+<li>相机新增专业模式</li>
+<li>全新的电源键菜单 一般来说，安卓的电源键菜单都是关机/重启/飞行，安卓6.0变成了关机/重启/紧急，关机和重启就不用赘述了，这个紧急模式是为了手机快没电的时候设计的，相当于飞行模式的高级版，可以关闭一切耗电应用，尽最大可能节省电量。</li>
+<li>可自定义锁界面样式 支持电话、信息、相机等快捷方式在锁屏界面的定制，用户可以根据自己的喜好调整这些图标的位置，或者开启或关闭这些快捷方式。</li>
+<li>全新的快速设置风格 不但是锁屏界面可以定制，安卓6.0还采用了全新的快速面板的色彩方案，用户可以通过更换主题换颜色。</li>
+<li>原生的应用权限管理 无需第三方应用和Root权限，原生的安卓6.0就支持应用权限管理，用户可以在安装应用时选择关闭一些应用权限，这一功能非常方便，再也不用担心流量偷跑和扣费了。</li>
+<li>Now on Tap功能 “Now on Tap ”功能，是指将Google Now(一种语音助手)作为底层植入到安卓6.0系统中，用户只要只要双击home键启动Google Now，“这意味着用户随时都能启动搜索功能，目前暂时不知道这个功能进入国内会不会阉割掉。</li>
+<li>支持RAW格式照片 RAW格式的支持是众多拍照爱好者梦寐以求的， 然而绝大多数的安卓手机都没有或者剔除了这项功能。由于照片保存为jpg格式时或多或少都会损失一些画质，所以支持RAW格式是非常明智的。</li>
+</ul>
+<h1 id="Android-7-0"><a href="#Android-7-0" class="headerlink" title="Android 7.0"></a><font color="#3FBA8B" size="6" face="黑体">Android 7.0</font></h1><ul>
+<li>画中画</li>
+<li>分屏多任务</li>
+<li>增强的Java8语言模式</li>
+<li>通知栏快速回复</li>
+<li>夜间模式</li>
+<li>OpenJDK替换Java API</li>
+<li>Android 7.0中采用了一项具有实时代码剖析功能的ARI JIT编译器，它能够在安卓应用程序在运行时不断提高自身的性能</li>
+</ul>
+<h1 id="Android-8-0"><a href="#Android-8-0" class="headerlink" title="Android 8.0"></a><font color="#3FBA8B" size="6" face="黑体">Android 8.0</font></h1><h2 id="通知变更"><a href="#通知变更" class="headerlink" title="通知变更"></a><font color="#3FBA8B" size="5" face="黑体">通知变更</font></h2><ul>
+<li>引入了通知渠道用来让用户统一管理通知。</li>
+<li>Android O 还引入了通知角标，当一个应用的通知没有 dismiss 的时候，会在应用的图标上面显示一个角标，长摁这个应用的图标，也会显示通知的详情信息。</li>
+<li>同时还引入了一个通知睡眠的功能，用户可以休眠一个通知，让它在指定的时候再出现，被休眠的时候仍然可以修改这个通知的设置，但是不会让这个通知立马出现。另外还可以设置一个通知的超时时间，用来让某个通知在一段时间之后被自动 cancel。</li>
+<li><p>其他的比如可以获取通知的清除方式，修改通知的背景颜色，修改通知的样式</p>
+<h2 id="画中画模式"><a href="#画中画模式" class="headerlink" title="画中画模式"></a><font color="#3FBA8B" size="5" face="黑体">画中画模式</font></h2></li>
+<li><p>在 Android O 之前，画中画模式已经可用于 Android TV，而 Android O 则让这一个功能可以支持到其他的 Android 设备</p>
+<h2 id="自适应图标"><a href="#自适应图标" class="headerlink" title="自适应图标"></a><font color="#3FBA8B" size="5" face="黑体">自适应图标</font></h2><h2 id="自动填充框架"><a href="#自动填充框架" class="headerlink" title="自动填充框架"></a><font color="#3FBA8B" size="5" face="黑体">自动填充框架</font></h2><h2 id="xml-字体和可下载字体"><a href="#xml-字体和可下载字体" class="headerlink" title="xml 字体和可下载字体"></a><font color="#3FBA8B" size="5" face="黑体">xml 字体和可下载字体</font></h2><h2 id="Pinned-Shortcut"><a href="#Pinned-Shortcut" class="headerlink" title="Pinned Shortcut"></a><font color="#3FBA8B" size="5" face="黑体">Pinned Shortcut</font></h2></li>
+<li><p>这个功能在 7.1.1 之后就已经有了，长摁桌面图标就会显示一个 App shortcuts 菜单栏，然后长摁菜单栏上的一项，就能把它拖下来成为单独的一个应用图标，被拖下来的单独的应用图标就是Pinned shortcuts，虽然这个功能在 7.1.1 引入的，但是在 O 版本我们可以通过提供的 API 按照一定的步骤去使用代码添加</p>
+<h2 id="TextView-字体自动适配"><a href="#TextView-字体自动适配" class="headerlink" title="TextView 字体自动适配"></a><font color="#3FBA8B" size="5" face="黑体">TextView 字体自动适配</font></h2><h2 id="媒体增强"><a href="#媒体增强" class="headerlink" title="媒体增强"></a><font color="#3FBA8B" size="5" face="黑体">媒体增强</font></h2><h2 id="其他特性"><a href="#其他特性" class="headerlink" title="其他特性"></a><font color="#3FBA8B" size="5" face="黑体">其他特性</font></h2></li>
+<li><p>可以设置 Activity 支持广色域；</p>
+</li>
+<li>可以设置最大的屏幕宽高比；</li>
+<li>多屏幕支持，支持设备外接一个显示器；</li>
+<li>最新版本 emoji 支持，使用 EmojiCompat 类可以让应用在老版本的应用上显示新的 emoji；</li>
+<li>支持点击位置的捕捉；</li>
+<li>支持设置应用类别，这些类别用于将应用呈现给用户的用途或功能相同的应用归类在一起，例如按流量消耗、电池消耗和存储消耗将应用归类。</li>
+<li><p>Smart Text Selection，这个功能有人可能在今年老罗的锤子手机发布会上看到过，思想是很类似的，复制一段数字，就会出现直接拨打电话的选项，复制一段地址就会弹出进入地图的选项，地图 APP 可以一下这个地方能否成为一个很方便入口。</p>
+<h2 id="行为变更"><a href="#行为变更" class="headerlink" title="行为变更"></a><font color="#3FBA8B" size="5" face="黑体">行为变更</font></h2></li>
+<li><p>后台执行限制</p>
+</li>
+<li>安全性</li>
+<li>网络连接和 HTTP(S) 连接</li>
+<li>权限：在 Android O 之前，如果应用在运行时请求权限并且被授予该权限，系统会错误地将属于同一权限组并且在清单中注册的其他权限也一起授予应用。对于针对 Android O 的应用，此行为已被纠正。系统只会授予应用明确请求的权限。然而，一旦用户为应用授予某个权限，则所有后续对该权限组中权限的请求都将被自动批准。</li>
+<li>媒体变更</li>
+<li>Native libraries</li>
+<li>其他<ul>
+<li>ContentProvider 支持分页，即获取内容的选中区域的子集；</li>
+<li>ContentProvider 和 ContentResolver 增加 refresh 方法，用来让客户端更容易的知道数据是不是最新；</li>
+<li>JobScheduler 更新，让应用更容易遵从后台执行限制；</li>
+<li>集合的处理的变化，AbstractCollection.removeAll() 和 AbstractCollection.retainAll() 始终引发 NullPointerException；</li>
+<li>语言区域和国际化变化(<a href="https://developer.android.com/preview/behavior-changes.html#lai)；" target="_blank" rel="noopener">https://developer.android.com/preview/behavior-changes.html#lai)；</a></li>
+<li>联系人提供程序使用情况统计方法的变更(<a href="https://developer.android.com/preview/behavior-changes.html#cpu)；" target="_blank" rel="noopener">https://developer.android.com/preview/behavior-changes.html#cpu)；</a></li>
+<li>蓝牙 ScanRecord.getBytes() 方法检索的数据长度变更(<a href="https://developer.android.com/preview/behavior-changes.html#bt)；" target="_blank" rel="noopener">https://developer.android.com/preview/behavior-changes.html#bt)；</a></li>
+<li>输入和导航(<a href="https://developer.android.com/preview/behavior-changes.html#ian)；" target="_blank" rel="noopener">https://developer.android.com/preview/behavior-changes.html#ian)；</a>        <h2 id="API-变更"><a href="#API-变更" class="headerlink" title="API 变更"></a><font color="#3FBA8B" size="5" face="黑体">API 变更</font></h2></li>
+</ul>
+</li>
+<li>WebView 新 API</li>
+<li>findViewById：findViewById 函数现在返回的是\<t extends="" view="">，所以以后 findViewById 就不需要强转了。</t></li>
+<li>统一的 margins 和 padding：layout_marginVertical，layout_marginHorizontal，paddingVertical，paddingHorizontal</li>
+<li>AnimationSet：支持了动画的 seek 和动画倒转播放</li>
+<li>提醒窗口</li>
+</ul>
+<h1 id="Android-9-0"><a href="#Android-9-0" class="headerlink" title="Android 9.0"></a><font color="#3FBA8B" size="6" face="黑体">Android 9.0</font></h1><h2 id="室内WIFI定位"><a href="#室内WIFI定位" class="headerlink" title="室内WIFI定位"></a><font color="#3FBA8B" size="5" face="黑体">室内WIFI定位</font></h2><p>Android P增加了对RTT Wi-Fi协议的支持，以此作为室内定位的基础。<br>在支持硬件支持的Android P设备上，开启定位并且打开WIFI扫描后就可以使用该功能进行定位。应用可以测量与附近支持RTT的Wi-Fi接入点（AP）的距离。设备必须启用位置并启用Wi-Fi扫描（在设置&gt;位置下）。使用这个功能不会连接到WIFI，而且为了保持隐私，只有手机能确定AP到设备的距离，反之则不能。<br>如果设备测量到3个或更多AP的距离，则可以使用多点定位算法来估算最适合这些测量值的设备位置。其结果通常可以精确到1至2米范围。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//注：该处在2018.3.8的版本中还有bug，WIFI_RTT_RANGING_SERVICE没有添加到@ServiceName标记中</span><br><span class="line">WifiRttManager wifiRttManager = (WifiRttManager) getSystemService(Context.WIFI_RTT_RANGING_SERVICE);</span><br><span class="line">RangingRequest.Builder builder = new RangingRequest.Builder();</span><br><span class="line">builder.addAccessPoint();</span><br><span class="line">builder.addWifiAwarePeer();</span><br><span class="line">wifiRttManager.startRanging(builder.build(), () -&gt; &#123;...&#125;, new RangingResultCallback&#123;...&#125;);</span><br></pre></td></tr></table></figure>
+<p>该功能API在android.net.wifi.rtt下。</p>
+<h2 id="“刘海”屏幕支持"><a href="#“刘海”屏幕支持" class="headerlink" title="“刘海”屏幕支持"></a><font color="#3FBA8B" size="5" face="黑体">“刘海”屏幕支持</font></h2><p>Android P 支持了手机屏幕是不规则形状时的获取（主要是应对刘海屏吧）。可以使用类似windowInsets.getDisplayCutout()来获取一些你想要的信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//您可以在自己的View中获取到不应该绘制的部分屏幕</span><br><span class="line">getRootWindowInsets().getDisplayCutout().getBounds();</span><br><span class="line">getRootWindowInsets().getDisplayCutout().getSafeInsetBottom();</span><br><span class="line">getRootWindowInsets().getDisplayCutout().getSafeInsetLeft();</span><br><span class="line">getRootWindowInsets().getDisplayCutout().getSafeInsetRight();</span><br><span class="line">getRootWindowInsets().getDisplayCutout().getSafeInsetTop();</span><br><span class="line">//也可以设置Window的属性</span><br><span class="line">WindowManager windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);</span><br><span class="line">WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();</span><br><span class="line">layoutParams.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;</span><br><span class="line">layoutParams.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT;</span><br><span class="line">layoutParams.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;</span><br></pre></td></tr></table></figure>
+<h2 id="通知"><a href="#通知" class="headerlink" title="通知"></a><font color="#3FBA8B" size="5" face="黑体">通知</font></h2><p>Android P还增加了许多对通知的支持。</p>
+<h3 id="增强体验"><a href="#增强体验" class="headerlink" title="增强体验"></a><font color="#3FBA8B" size="4" face="黑体">增强体验</font></h3><p>从Android 7.0开始，就优化了Android通知栏的体验。<br>在P当中，又新增了下述功能：</p>
+<ul>
+<li>支持图像：Android P现在在手机上的消息通知中显示图像。您可以在消息上使用setData（）来显示图像。</li>
+<li>会话参与者的简化支持：新的Notification.Person类用于标记参与聊天的人，包括他们的头像和URI。还有其他的一些API，现在都用Person类作为标志参数而不是CharSequence。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Notification.Builder builder = new Notification.Builder(this, &quot;a&quot;);</span><br><span class="line">//新的聊天对象</span><br><span class="line">Notification.Person p = new Notification.Person();</span><br><span class="line">//在MessagingStyle中用Person代替了以往的CharSequence</span><br><span class="line">Notification.MessagingStyle messageStyle = new Notification.MessagingStyle(p);</span><br><span class="line">Notification.MessagingStyle.Message message = new Notification.MessagingStyle.Message(&quot;aaa&quot;, 100, p);</span><br><span class="line">//可以显示图像了</span><br><span class="line">message.setData();</span><br><span class="line">messageStyle.addMessage(message);</span><br><span class="line">builder.setStyle(messageStyle);</span><br><span class="line">Notification notification = builder.build();</span><br></pre></td></tr></table></figure>
+<ul>
+<li>将回复另存为草稿：当用户无意中关闭消息通知时，您的应用可以检索系统发送的EXTRA_REMOTE_INPUT_DRAFT来获取一些信息。</li>
+<li>确定对话是否是群组对话：您可以使用setGroupConversation（）来有目的地将对话标识为群组对话或非群组对话。</li>
+<li>为意图设置语义动作：setSemanticAction（）方法允许您为某个动作提供语义含义，如标记为读取，删除，回复等。<br>SmartReply</li>
+</ul>
+<h2 id="通道设置、广播以及免打扰"><a href="#通道设置、广播以及免打扰" class="headerlink" title="通道设置、广播以及免打扰"></a><font color="#3FBA8B" size="5" face="黑体">通道设置、广播以及免打扰</font></h2><p>Android O引入了Notification Channels，可让您为要显示的每种类型的通知创建一个用户可自定义的频道。 Android P通过以下更改简化了通知渠道设置：</p>
+<ul>
+<li>阻止渠道：用户现在可以在应用的通知设置中阻止整组渠道。您可以使用isBlocked（）方法来确定某个组何时被阻止，不对被阻止的组发送消息。<br>此外，您的应用可以使用新的getNotificationChannelGroup（）方法查询当前渠道设置。</li>
+<li>新的广播类型：Android系统现在在通知频道和频道组的阻塞状态发生变化时发送广播。拥有被阻止的频道或群组的应用可以监听这些Intent并作出相应的反应。有关这些Intent的更多信息，请参阅NotificationManager参考中更新后的常量列表。有关对广播Intent作出反应的信息，请参阅广播。</li>
+<li>新的免打扰优先级类别：NotificationManager.Policy有两个新的策略常量：PRIORITY_CATEGORY_ALARMS（按优先级排列）和PRIORITY_CATEGORY_MEDIA_SYSTEM_OTHER（优先排列媒体，系统和游戏声音）</li>
+</ul>
+<h2 id="多相机支持和相机更新"><a href="#多相机支持和相机更新" class="headerlink" title="多相机支持和相机更新"></a><font color="#3FBA8B" size="5" face="黑体">多相机支持和相机更新</font></h2><p>现在，可以同时从两个或更多的物理摄像头同时获得数据流。在具有双前置或双后置摄像头的设备上，可以实现无法使用单个摄像头实现的功能，例如无缝缩放，散景 ，和立体视觉。 该API还允许您调用合理的或者融合的相机流，以便在两台或更多台相机之间自动切换。<br>相机的其他改进包括新的android.hardware.camera2.params.SessionConfiguration，有助于减少初始捕捉期间的延迟。而Surface共享可让相机客户端处理各种使用情况，而无需停止和启动相机流式传输。 此外还添加了基于显示的闪光灯支持的API。<br>Android P还支持支持deveices上的外部USB / UVC相机。</p>
+<h2 id="新的图片解码"><a href="#新的图片解码" class="headerlink" title="新的图片解码"></a><font color="#3FBA8B" size="5" face="黑体">新的图片解码</font></h2><p>Android P新增了ImageDecoder类，为解码图像提供了一种更优的方法。由此可以用ImageDecoder来替换BitmapFactory和BitmapFactory.Options。更多使用方法请参见官方API。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">String filePath = &quot;test&quot;;</span><br><span class="line">File file = new File(filePath);</span><br><span class="line">ImageDecoder.Source source = ImageDecoder.createSource(file);</span><br><span class="line">ImageDecoder.decodeBitmap(source);</span><br><span class="line">ImageDecoder.decodeDrawable(source, (imageDecoder, imageInfo, source1) -&gt; &#123;</span><br><span class="line">    //裁剪图像</span><br><span class="line">    imageDecoder.setCrop();</span><br><span class="line">    //调整大小</span><br><span class="line">    imageDecoder.setResize();</span><br><span class="line">&#125;);</span><br><span class="line">BitmapFactory.decodeFile(filePath);</span><br></pre></td></tr></table></figure>
+<h2 id="动画"><a href="#动画" class="headerlink" title="动画"></a><font color="#3FBA8B" size="5" face="黑体">动画</font></h2><p>Android P引入了一个新的AnimatedImageDrawable类来绘制和显示GIF和WebP动画图像。 AnimatedImageDrawable与AnimatedVectorDrawable类似，因为AnimatedImageDrawable动画也是基于RenderThread工作的。 RenderThread本身在内部使用工作线程进行解码，因此解码不会干扰RenderThread。 这种实现允许您的应用拥有动画图像，而无需管理其更新或干扰应用的UI线程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Drawable d = ImageDecoder.decodeDrawable(...);</span><br><span class="line">if (d instanceof AnimatedImageDrawable) &#123;</span><br><span class="line">    // Prior to start(), the first frame is displayed</span><br><span class="line">    ((AnimatedImageDrawable) d).start();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="HDR-VP9视频，HEIF图像压缩和媒体API"><a href="#HDR-VP9视频，HEIF图像压缩和媒体API" class="headerlink" title="HDR VP9视频，HEIF图像压缩和媒体API"></a><font color="#3FBA8B" size="5" face="黑体">HDR VP9视频，HEIF图像压缩和媒体API</font></h2><p>Android P增加了对HDR VP9 Profile 2的内置支持。</p>
+<p>Android P支持HEIF图像（隔壁IOS在2017年10月推的新的图片编码）编码。<br>Android P还引入了MediaPlayer2。该播放器支持使用DataSourceDesc构建的播放列表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MediaPlayer2.create();</span><br></pre></td></tr></table></figure>
+<h2 id="JobScheduler中的数据成本敏感度"><a href="#JobScheduler中的数据成本敏感度" class="headerlink" title="JobScheduler中的数据成本敏感度"></a><font color="#3FBA8B" size="5" face="黑体">JobScheduler中的数据成本敏感度</font></h2><p>在Android P当中，JobScheduler得到了改进，使其能够更好地为用户处理与网络相关的工作，并配合运营商分别提供网络状态信号。<br>Jobs现在可以定义出其估计的数据大小，预取信号，并指定详细的网络要求 - 运营商可以将网络报告为拥塞或不用流量计费的。然后，JobScheduler根据网络状态管理工作。例如，当网络拥塞时，JobScheduler可能推迟大型网络请求。在不用流量计费的的网络上时，JobScheduler可以预读来改进用户体验。</p>
+<h2 id="神经网络API-1-1"><a href="#神经网络API-1-1" class="headerlink" title="神经网络API 1.1"></a><font color="#3FBA8B" size="5" face="黑体">神经网络API 1.1</font></h2><p>对神经网络API新增了9个功能：Pad, BatchToSpaceND, SpaceToBatchND, Transpose, Strided Slice, Mean, Div, Sub, and Squeeze。</p>
+<h2 id="改进表单自动填充"><a href="#改进表单自动填充" class="headerlink" title="改进表单自动填充"></a><font color="#3FBA8B" size="5" face="黑体">改进表单自动填充</font></h2><p>Android 8.0（API26）引入了自动填充框架，这使得在应用中填写表单变得更加容易。 Android P引入了自动填充服务并实现了多项改进，以在填写表单时进一步增强用户体验。 有关更多详细信息，请参阅自动填充框架。<br>注：该自动填充框架笔者应是Google服务中的内容，国内用户可能会体验不到（或许有厂商自己的版本）。</p>
+<h2 id="安全增强"><a href="#安全增强" class="headerlink" title="安全增强"></a><font color="#3FBA8B" size="5" face="黑体">安全增强</font></h2><p>Android P引入了许多新的安全功能，包括统一的指纹验证对话框和敏感交易的高确信度的用户确认。 有关更多详细信息，请参阅安全更新页面。</p>
+<h2 id="Android-备份加密"><a href="#Android-备份加密" class="headerlink" title="Android 备份加密"></a><font color="#3FBA8B" size="5" face="黑体">Android 备份加密</font></h2><p>Android P支持使用客户端密钥对Android备份进行加密。 这项隐私措施，需要设备的PIN，图案密码或标准密码才能从用户设备备份的数据中恢复数据。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android新特性/" rel="tag"># Android新特性</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/26/https建立连接的过程/" rel="next" title="https建立连接的过程">
+                <i class="fa fa-chevron-left"></i> https建立连接的过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">immrwk</p>
+              <p class="site-description motion-element" itemprop="description">Android程序员</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-4-0"><span class="nav-number">1.</span> <span class="nav-text">Android 4.0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-5-0"><span class="nav-number">2.</span> <span class="nav-text">Android 5.0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-6-0"><span class="nav-number">3.</span> <span class="nav-text">Android 6.0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-7-0"><span class="nav-number">4.</span> <span class="nav-text">Android 7.0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-8-0"><span class="nav-number">5.</span> <span class="nav-text">Android 8.0</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#通知变更"><span class="nav-number">5.1.</span> <span class="nav-text">通知变更</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#画中画模式"><span class="nav-number">5.2.</span> <span class="nav-text">画中画模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自适应图标"><span class="nav-number">5.3.</span> <span class="nav-text">自适应图标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动填充框架"><span class="nav-number">5.4.</span> <span class="nav-text">自动填充框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xml-字体和可下载字体"><span class="nav-number">5.5.</span> <span class="nav-text">xml 字体和可下载字体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pinned-Shortcut"><span class="nav-number">5.6.</span> <span class="nav-text">Pinned Shortcut</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TextView-字体自动适配"><span class="nav-number">5.7.</span> <span class="nav-text">TextView 字体自动适配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#媒体增强"><span class="nav-number">5.8.</span> <span class="nav-text">媒体增强</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他特性"><span class="nav-number">5.9.</span> <span class="nav-text">其他特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行为变更"><span class="nav-number">5.10.</span> <span class="nav-text">行为变更</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-变更"><span class="nav-number">5.11.</span> <span class="nav-text">API 变更</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-9-0"><span class="nav-number">6.</span> <span class="nav-text">Android 9.0</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#室内WIFI定位"><span class="nav-number">6.1.</span> <span class="nav-text">室内WIFI定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#“刘海”屏幕支持"><span class="nav-number">6.2.</span> <span class="nav-text">“刘海”屏幕支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通知"><span class="nav-number">6.3.</span> <span class="nav-text">通知</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#增强体验"><span class="nav-number">6.3.1.</span> <span class="nav-text">增强体验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通道设置、广播以及免打扰"><span class="nav-number">6.4.</span> <span class="nav-text">通道设置、广播以及免打扰</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多相机支持和相机更新"><span class="nav-number">6.5.</span> <span class="nav-text">多相机支持和相机更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新的图片解码"><span class="nav-number">6.6.</span> <span class="nav-text">新的图片解码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动画"><span class="nav-number">6.7.</span> <span class="nav-text">动画</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDR-VP9视频，HEIF图像压缩和媒体API"><span class="nav-number">6.8.</span> <span class="nav-text">HDR VP9视频，HEIF图像压缩和媒体API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JobScheduler中的数据成本敏感度"><span class="nav-number">6.9.</span> <span class="nav-text">JobScheduler中的数据成本敏感度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#神经网络API-1-1"><span class="nav-number">6.10.</span> <span class="nav-text">神经网络API 1.1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改进表单自动填充"><span class="nav-number">6.11.</span> <span class="nav-text">改进表单自动填充</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安全增强"><span class="nav-number">6.12.</span> <span class="nav-text">安全增强</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-备份加密"><span class="nav-number">6.13.</span> <span class="nav-text">Android 备份加密</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">immrwk</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
