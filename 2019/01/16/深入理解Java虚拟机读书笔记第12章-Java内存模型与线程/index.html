@@ -82,7 +82,7 @@
 <meta name="description" content="计算机的运行速度是远远大于它的存储和通信子系统的速度。  基于⾼速缓存的存储交互很好地解决了处理器与内存的速度⽭盾，但 是也为计算机系统带来更⾼的复杂度，因为它引⼊了⼀个新的问题：缓存⼀致性（Cache Coherence）。在多处理器系统中，每个处理器都有⾃⼰的⾼速缓存，⽽它们又共享同⼀主内存（Main Memory） 当多个处理器的运算任务都涉及同⼀块主内存区域时，将可能导致各⾃的缓存数据不">
 <meta name="keywords" content="线程,volatile">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入理解Java虚拟机读书笔记第12章---Java内存模型与线程">
+<meta property="og:title" content="Java内存模型与线程">
 <meta property="og:url" content="http://yoursite.com/2019/01/16/深入理解Java虚拟机读书笔记第12章-Java内存模型与线程/index.html">
 <meta property="og:site_name" content="山有扶苏">
 <meta property="og:description" content="计算机的运行速度是远远大于它的存储和通信子系统的速度。  基于⾼速缓存的存储交互很好地解决了处理器与内存的速度⽭盾，但 是也为计算机系统带来更⾼的复杂度，因为它引⼊了⼀个新的问题：缓存⼀致性（Cache Coherence）。在多处理器系统中，每个处理器都有⾃⼰的⾼速缓存，⽽它们又共享同⼀主内存（Main Memory） 当多个处理器的运算任务都涉及同⼀块主内存区域时，将可能导致各⾃的缓存数据不">
@@ -94,9 +94,9 @@
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz8i547128j319w0doag4.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fz8ihefrqqj30zq0u01kx.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fz8ks8p703j30cs082gmg.jpg">
-<meta property="og:updated_time" content="2019-02-18T11:49:26.000Z">
+<meta property="og:updated_time" content="2019-03-24T09:20:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深入理解Java虚拟机读书笔记第12章---Java内存模型与线程">
+<meta name="twitter:title" content="Java内存模型与线程">
 <meta name="twitter:description" content="计算机的运行速度是远远大于它的存储和通信子系统的速度。  基于⾼速缓存的存储交互很好地解决了处理器与内存的速度⽭盾，但 是也为计算机系统带来更⾼的复杂度，因为它引⼊了⼀个新的问题：缓存⼀致性（Cache Coherence）。在多处理器系统中，每个处理器都有⾃⼰的⾼速缓存，⽽它们又共享同⼀主内存（Main Memory） 当多个处理器的运算任务都涉及同⼀块主内存区域时，将可能导致各⾃的缓存数据不">
 <meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fz8hmlttgij30z60g4jwx.jpg">
 
@@ -134,7 +134,7 @@
 
 
 
-  <title>深入理解Java虚拟机读书笔记第12章---Java内存模型与线程 | 山有扶苏</title>
+  <title>Java内存模型与线程 | 山有扶苏</title>
   
 
 
@@ -288,7 +288,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">深入理解Java虚拟机读书笔记第12章---Java内存模型与线程</h1>
+          <h1 class="post-title" itemprop="name headline">Java内存模型与线程</h1>
         
 
         <div class="post-meta">
@@ -607,8 +607,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/15/深入理解Java虚拟机读书笔记第7章-虚拟机类加载机制/" rel="next" title="深入理解Java虚拟机读书笔记第7章---虚拟机类加载机制">
-                <i class="fa fa-chevron-left"></i> 深入理解Java虚拟机读书笔记第7章---虚拟机类加载机制
+              <a href="/2019/01/15/深入理解Java虚拟机读书笔记第7章-虚拟机类加载机制/" rel="next" title="Java虚拟机类加载机制">
+                <i class="fa fa-chevron-left"></i> Java虚拟机类加载机制
               </a>
             
           </div>
@@ -617,8 +617,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/" rel="prev" title="深入理解Java虚拟机读书笔记第13章---线程安全与锁优化">
-                深入理解Java虚拟机读书笔记第13章---线程安全与锁优化 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/" rel="prev" title="Java线程安全与锁优化">
+                Java线程安全与锁优化 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
