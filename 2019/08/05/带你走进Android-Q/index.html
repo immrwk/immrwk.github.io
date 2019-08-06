@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564850981652.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1565063713337.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/uninstall_app.jpg">
-<meta property="og:updated_time" content="2019-08-06T03:56:23.821Z">
+<meta property="og:updated_time" content="2019-08-06T04:02:51.282Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="带你走进Android Q">
 <meta name="twitter:description" content="写在前面Android Q版本的发布渐进尾声，Android团队将在2019年9月份发布Android的最终版本，目前已经发到了第5个beta版本，每当Android新版本发布后，开发者需要第一时间了解新特性，并进行相关适配，下面就带您一起了解一下Android Q上的几个主要改动。 一、禁止应用读取Device ID变更内容Q版本将限制应用访问不可重设的设备识别码，如 IMEI、序列号等，所有获">
@@ -431,10 +431,10 @@
 <li>应用的TargetSdkVersion&gt;=Q，如果应用必须要始终定位，可以只申请 ACCESS_BACKGROUND_LOCATION即可。</li>
 <li>如果用户选择仅前台使用允许，应用的页面退后台，通过启动前台服务让应用处于前台状态，必须把前台服务标为：foregroundServiceType=“ location”，才能获取位置信息。</li>
 </ol>
-<p>相关信息见下图：<br><img src="/2019/08/05/带你走进Android-Q/1564760502082.jpg"></p>
-<img src="/2019/08/05/带你走进Android-Q/only_fine.jpg">
+<p>相关信息见下图：<br><img src="/2019/08/05/带你走进Android-Q/1564760502082.jpg" width="400" height="600"></p>
+<img src="/2019/08/05/带你走进Android-Q/only_fine.jpg" width="400" height="600">
 <p>从手机权限控制查看：</p>
-<img src="/2019/08/05/带你走进Android-Q/1564763785751.jpg">
+<img src="/2019/08/05/带你走进Android-Q/1564763785751.jpg" width="400" height="600">
 <h2 id="适配指导-1"><a href="#适配指导-1" class="headerlink" title="适配指导"></a><font color="#EF692F" size="5" face="黑体">适配指导</font></h2><h3 id="1-谷歌提供的适配指导文档："><a href="#1-谷歌提供的适配指导文档：" class="headerlink" title="1.谷歌提供的适配指导文档："></a><font color="#EF692F" size="4" face="黑体">1.谷歌提供的适配指导文档：</font></h3><p><a href="https://developer.android.google.cn/preview/privacy/device-location" target="_blank" rel="noopener">https://developer.android.google.cn/preview/privacy/device-location</a></p>
 <h3 id="2-始终获取位置信息"><a href="#2-始终获取位置信息" class="headerlink" title="2.始终获取位置信息"></a><font color="#EF692F" size="4" face="黑体">2.始终获取位置信息</font></h3><p>可以不申请新的ACCESS_BACKGROUND_LOCATION权限，只申请下面这一个权限</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android :name=&quot;android.permission.ACCESS_FINE_LOCATION&quot; /&gt;</span><br></pre></td></tr></table></figure>
@@ -570,7 +570,7 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public void openImages() &#123;</span><br><span class="line">    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);</span><br><span class="line"></span><br><span class="line">    intent.addCategory(Intent.CATEGORY_OPENABLE);</span><br><span class="line">    intent.setType(&quot;image/*&quot;);</span><br><span class="line"></span><br><span class="line">    startActivityForResult(intent, code);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>执行上述方法会拉起DocumentUI，用户可以选择需要打开的图片文件：</p>
-<img src="/2019/08/05/带你走进Android-Q/1564850981652.jpg">
+<img src="/2019/08/05/带你走进Android-Q/1564850981652.jpg" width="400" height="600">
 <p>DocumentUI会把用户选择的图片文件的Content Uri通过intent传回给应用， 应用在onActivityResult回调中就可以拿到这个Uri，通过Uri操作文件，比如打开文件 </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">protected void onActivityResult(int requestCode, int resultCode, Intent resultData) &#123;</span><br><span class="line">    super.onActivityResult(requestCode, resultCode, data);</span><br><span class="line">    if (requestCode == READ_REQUEST_CODE &amp;&amp; resultCode == Activity.RESULT_OK) &#123;</span><br><span class="line">        Uri uri = null;</span><br><span class="line">        if (resultData != null) &#123;</span><br><span class="line">            uri = resultData.getData();</span><br><span class="line">            Log.i(TAG, &quot;Uri: &quot; + uri.toString());</span><br><span class="line">            showImage(uri);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
@@ -591,7 +591,7 @@
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">private void createFile(String mimeType, String fileName) &#123;</span><br><span class="line">    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);</span><br><span class="line"></span><br><span class="line">    intent.addCategory(Intent.CATEGORY_OPENABLE);</span><br><span class="line">    intent.setType(mimeType);</span><br><span class="line">    intent.putExtra(Intent.EXTRA_TITLE, fileName);</span><br><span class="line"></span><br><span class="line">    startActivityForResult(intent, code);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<img src="/2019/08/05/带你走进Android-Q/1565063713337.jpg">
+<img src="/2019/08/05/带你走进Android-Q/1565063713337.jpg" width="400" height="600">
 <p>用户点击保存之后，DocumentUI就会把需要保存的文件的Content Uri通过intent传回给应用：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">if (requestCode == WRITE_REQUEST_CODE &amp;&amp; resultCode == Activity.RESULT_OK) &#123;</span><br><span class="line"></span><br><span class="line">    Uri uri = null;</span><br><span class="line">    if (resultData != null) &#123;</span><br><span class="line">        uri = resultData.getData();</span><br><span class="line"></span><br><span class="line">        Log.i(TAG, &quot;Uri: &quot; + uri.toString());</span><br><span class="line">        final int takeFlags = getIntent().getFlags() &amp; (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);</span><br><span class="line"></span><br><span class="line">        getContentResolver().takePersistableUriPermission(uri, takeFlags);</span><br><span class="line"></span><br><span class="line">        writeFile(uri);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="卸载应用文件保留问题"><a href="#卸载应用文件保留问题" class="headerlink" title="卸载应用文件保留问题"></a><font color="#EF692F" size="4" face="黑体">卸载应用文件保留问题</font></h3><ol>
@@ -600,7 +600,7 @@
 <li><p>方法2：在应用的AndroidManifest.xml文件增加：<application android:hasfragileuserdata="true">，应用不增加该属性的话，应用能卸载的时候应用保存在沙箱目录的文件会直接被删除， 不会弹框提示让用户勾选保留。只有应用增加了这个属性，并且设置的值是为true，在应用被卸载的时候，才会弹框提示用户可以勾选保留应用的沙箱目录文件，默认删除，勾选保留</application></p>
 </li>
 </ol>
-<img src="/2019/08/05/带你走进Android-Q/uninstall_app.jpg">
+<img src="/2019/08/05/带你走进Android-Q/uninstall_app.jpg" width="400" height="600">
       
     </div>
     
