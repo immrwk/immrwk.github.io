@@ -146,7 +146,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -156,7 +156,7 @@
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -266,20 +266,20 @@
   
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/16/深入理解Java虚拟机读书笔记第12章-Java内存模型与线程/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="immrwk">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="山有扶苏">
     </span>
 
@@ -322,7 +322,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index">
                     <span itemprop="name">Java</span>
                   </a>
@@ -333,7 +333,7 @@
                   ， 
                 
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/读书笔记/" itemprop="url" rel="index">
                     <span itemprop="name">读书笔记</span>
                   </a>
@@ -376,7 +376,7 @@
 </blockquote>
 <p>基于⾼速缓存的存储交互很好地解决了处理器与内存的速度⽭盾，但 是也为计算机系统带来更⾼的复杂度，因为它引⼊了⼀个新的问题：缓存⼀致性（Cache Coherence）。在多处理器系统中，每个处理器都有⾃⼰的⾼速缓存，⽽它们又共享同⼀主内存（Main Memory）</p>
 <p>当多个处理器的运算任务都涉及同⼀块主内存区域时，将可能导致各⾃的缓存数据不⼀致，如果真的发⽣这种情况，那同步回到主内存时以谁的缓 存数据为准呢？为了解决⼀致性的问题，需要各个处理器访问缓存时都遵循⼀些协议，在读写时要根据协议来进⾏操作，这类协议有 MSI、 MESI（Illinois Protocol）、MOSI、Synapse、Firefly 及 Dragon Protocol 等。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fz8hmlttgij30z60g4jwx.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fz8hmlttgij30z60g4jwx.jpg" alt></p>
 <blockquote>
 <p>内存模型：可以理解为在特定的「操作协议」下，对特定的「内存」或「⾼速缓存」进⾏「读写访问」的过程抽象。</p>
 </blockquote>
@@ -397,7 +397,7 @@
 <p>根据Java虚拟机规范的规定，volatile 变量依然有⼯作内存的拷贝，但是由于它特殊的操作顺序性规定（后⽂会讲到），所以看起来如同直接在主内存中读写访问⼀般，</p>
 </blockquote>
 <p>有可能会对工作内存“拷贝副本”提出疑问，如“假设线程中访问 ⼀个10MB的对象，也会把这10MB的内存复制⼀份拷贝出来吗？”，事实上并不会如此，这个对象的引用、对象中某个在线程访问到的字段是有可能存在拷贝的，但不会有虚拟机实现成把整个对象拷贝A⼀次。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fz8hqt95h2j313m0fogry.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fz8hqt95h2j313m0fogry.jpg" alt></p>
 <blockquote>
 <p>这⾥所讲的「主内存、⼯作内存」与「Java内存区域」中的「Java堆、栈、⽅法区」等并不是同⼀个层次的内存划分，这两者基本上是没有关系的。如果两者⼀定要勉强对应起来，那从变量、主内存、⼯作内存的定义来看，主内存主要对应于Java堆中的对象实例数据部分 ，⽽⼯作内存则对应于虚拟机栈中的部分区域。从更低层次上说，主内存就直接对应于「物理硬件的内存」，⽽为了获取更好的运⾏速度，虚拟机（甚⾄是硬件系统本⾝的优化措施）可能会让「⼯作内存」优先存储于寄存器和⾼速缓存中，因为程序运⾏时主要访问读写的是⼯作内存。</p>
 </blockquote>
@@ -458,7 +458,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * volatile变量自增运算测试</span><br><span class="line"> */</span><br><span class="line">public class VolatileTest &#123;</span><br><span class="line"></span><br><span class="line">    public static volatile int race = 0;</span><br><span class="line"></span><br><span class="line">    public static void increase() &#123;</span><br><span class="line">        race++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static final int THREADS_COUNT = 20;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Thread[] threads = new Thread[THREADS_COUNT];</span><br><span class="line">        for (int i = 0; i &lt; THREADS_COUNT; i++) &#123;</span><br><span class="line">            threads[i] = new Thread(new Runnable() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    for (int i = 0; i &lt; 10000; i++) &#123;</span><br><span class="line">                        increase();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            threads[i].start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 等待所有累加线程都结束</span><br><span class="line">        while (Thread.activeCount() &gt; 1)</span><br><span class="line">            Thread.yield();</span><br><span class="line"></span><br><span class="line">        System.out.println(race);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这段代码发起了20个线程，每个线程对 race 变量进⾏10000次⾃增操 作，如果这段代码能够正确并发的话，最后输出的结果应该是200000。读者运⾏完这段代码之后，并不会获得期望的结果，⽽且会发现每次运⾏程 序，输出的结果都不⼀样，都是⼀个⼩于200000的数字，这是为什么呢？</p>
 <p>问题就出现在⾃增运算”race++“之中，我们⽤ Javap 反编译这段代码后会得到下列字节码：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz8i1jnpjlj318g0hwtdr.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz8i1jnpjlj318g0hwtdr.jpg" alt></p>
 <p>发现只有⼀⾏代码的increase()⽅法在 Class ⽂件中是 由 4 条字节码指令构成的（ return 指令不是由 race++ 产⽣的，这条指令可以不计算），从字节码层⾯上很容易就分析出并发失败的原因了：当getstatic 指令把 race 的值取到操作栈顶时，volatile关键字保证了race的值在此时是确的，但是在执⾏ iconst_1、iadd 这些指令的时候，其他线程可能已经把 race 的值加⼤了，⽽在操作栈顶的值就变成了过期的数据，所以 putstatic 指令执⾏后就可能把较⼩的 race 值同步回主内存之中。</p>
 <blockquote>
 <p>也就是说，volatile 真的只是保证了变量的可见性而已，并没有任何同步的作用，对「变量更改」这个动作，除了「取到正确的数据」步骤外，在更改的过程中也要与其他线程互斥才能保证原子性，volatile 只保证取到了此刻内存中正确的数据。</p>
@@ -477,12 +477,12 @@
 <h3 id="1-3-2-禁止指令重排序优化"><a href="#1-3-2-禁止指令重排序优化" class="headerlink" title="1.3.2. 禁止指令重排序优化"></a><font color="#3FBA8B" size="4" face="黑体">1.3.2. 禁止指令重排序优化</font></h3><blockquote>
 <p>「指令重排序」并不一定都是好事， 有时我们在并发的情况下，需要安全按照代码顺序执行。比如下面我们必须等到配置信息被初始化后再做后续操作。</p>
 </blockquote>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fz8i3yt6qhj317k0tm150.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fz8i3yt6qhj317k0tm150.jpg" alt></p>
 <p>如果定义initialized变量 时没有使⽤volatile修饰，就可能会由于指令重排序的优化，导致位于线程 A中最后⼀句的代码”initialized=true“被提前执⾏（这⾥虽然使⽤ Java 作为伪代码，但所指的重排序优化是机器级的优化操作，提前执⾏是指这句话对应的汇编代码被提前执⾏），这样在线程 B 中使⽤配置信息的代码就可能出现错误，⽽ volatile 关键字则可以避免此类情况的发⽣。</p>
 <p>下面用一可实际操作运行的例子分析 volatile 关键字如何禁止指令排序优化。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line"></span><br><span class="line">    // 加 volatile 关键字</span><br><span class="line">    private volatile static Singleton instance;</span><br><span class="line"></span><br><span class="line">    public static Singleton getInstance() &#123;</span><br><span class="line">        if (instance == null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if (instance == null) &#123;</span><br><span class="line">                    // 对 instance 复制</span><br><span class="line">                    instance = new Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">            Singleton.getInstance();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>编译后，这段代码对instance变量赋值部分的代码如下：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz8i547128j319w0doag4.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz8i547128j319w0doag4.jpg" alt></p>
 <p>关键变化在于有volatile修饰的变量，赋值后（前⾯mov %eax,0x150(%esi)这句便是赋值操作）多执⾏了⼀个“lock addl $0x0,(%esp)”操作，这个操作相当于⼀个「内存屏障」（Memory Barrier 或Memory Fence，指重排序时不能把后⾯的指令重排序到内存屏障之前的位置），只有⼀个CPU访问内存时，并不需要内存屏障；但如果有两个或更多CPU访问同⼀块内存，且其中有⼀个在观测另⼀个，就需要内存屏障 来保证⼀致性了。</p>
 <p>这句指令中的“addl $0x0,(%esp)”（把 ESP 寄存器的值加 0）显然是⼀个空操作（采⽤这个空操作⽽不是空操作指令 nop 是因为 IA32 ⼿册规定 lock 前缀不允许配合 nop 指令使⽤），关键在于 lock 前缀，查询 IA32⼿册，它的作⽤是使得本 CPU 的 Cache 写⼊了内存，该写⼊动作也会引起别的CPU或者别的内核⽆效化（Invalidate）其Cache，这种操作相当于对 Cache 中的变量做了⼀次前⾯介绍Java内存模式中所说的“store和write”操作 。所以通过这样⼀个空操作，可让前⾯volatile变量的修改对其他 CPU ⽴即可见。</p>
 <p>那为何说它禁⽌指令重排序呢？从硬件架构上讲，指令重排序是指 CPU 采⽤了允许将多条指令不按程序规定的顺序分开发送给各相应电路单元处理。但并不是说指令任意重排，CPU 需要能正确处理指令依赖情况以保障程序能得出正确的执⾏结果。譬如指令 1 把地址A中的值加 10，指令 2 把地址 A 中的值乘以 2，指令 3 把地址 B 中的值减去3，这时指令 1 和指令 2 是 有依赖的，它们之间的顺序不能重排——(A+10)<em>2与 (A</em>2+10)显然不相 等，但指令 3 可以重排到指令1、2之前或者中间，只要保证CPU执⾏后⾯依赖到A、B值的操作时能获取到正确的A和B值即可。</p>
@@ -516,13 +516,13 @@
 <p>先行发生原则，是判断数据是否存在竞争、线程 是否安全的主要依据，依靠这个原则，我们可以通过⼏条规则⼀揽⼦地解 决并发环境下两个操作之间是否可能存在冲突的所有问题。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">i = 1; // 在线程 A 中执行</span><br><span class="line">j = i; // B</span><br><span class="line">i = 2; // C</span><br></pre></td></tr></table></figure>
 <p>下面是 Java 内存模型下一些天然的 「先行发生」关系，这些先⾏发⽣关系⽆须任何同步器协助就已经存在，可以在编码中直接使⽤。如果两个操作之间的关系不在此列，并且⽆法从下列规则推导出来的话，它们就没有顺序性保障，虚拟机可以对它们随意地进⾏重排序。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fz8ihefrqqj30zq0u01kx.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fz8ihefrqqj30zq0u01kx.jpg" alt></p>
 <p>比如</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private int value = 0;</span><br><span class="line">public void setValue(int value)&#123;</span><br><span class="line">    this.value = value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public int getValue()&#123;</span><br><span class="line">    return value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>不满足上述任一个先行发生原则，操作不慎线程安全的。</p>
 <p>可以把 getter/setter 方法都定义为「synchronized」，这样就可以套用「管程锁规则」，要么把 value 定义为 volatile 变量，由于 setter 方法对 value 的修改不依赖于 value 值，满足 volatile 关键字使用场景，可以套用「volatile」变量的规则。</p>
 <p>⼀个操作“时间上的先发⽣”不代表这个操作会是“先⾏发⽣”，反之亦然，先行发生也不代表时间上先发生。时间先后顺序与先⾏发⽣原则之间基本没有太⼤的关系，所以我们衡量并发安全问题的时候不要受到 时间顺序的⼲扰，⼀切必须以先⾏发⽣原则为准。</p>
-<h1 id="2-Java与线程"><a href="#2-Java与线程" class="headerlink" title="2. Java与线程"></a><font color="#3FBA8B" size="6" face="黑体">2. Java与线程</font></h1><h2 id="2-1-线程的实现"><a href="#2-1-线程的实现" class="headerlink" title="2.1 线程的实现"></a><font color="#3FBA8B" size="face=" 黑体""="">2.1 线程的实现</font></h2><blockquote>
+<h1 id="2-Java与线程"><a href="#2-Java与线程" class="headerlink" title="2. Java与线程"></a><font color="#3FBA8B" size="6" face="黑体">2. Java与线程</font></h1><h2 id="2-1-线程的实现"><a href="#2-1-线程的实现" class="headerlink" title="2.1 线程的实现"></a><font color="#3FBA8B" size="face=" 黑体"">2.1 线程的实现</font></h2><blockquote>
 <p>线程是CPU调度的基本单位</p>
 </blockquote>
 <p>实现线程主要有3种方式：</p>
@@ -542,7 +542,7 @@
 </blockquote>
 <h3 id="2-1-3-使用用户线程加轻量级进程混合实现"><a href="#2-1-3-使用用户线程加轻量级进程混合实现" class="headerlink" title="2.1.3 使用用户线程加轻量级进程混合实现"></a><font color="#3FBA8B" size="4" face="黑体">2.1.3 使用用户线程加轻量级进程混合实现</font></h3><p>这种模式下用户线程与轻量级进程的数量比是不定的，即为N:M的关系。</p>
 <h3 id="2-1-4-Java线程的实现"><a href="#2-1-4-Java线程的实现" class="headerlink" title="2.1.4 Java线程的实现"></a><font color="#3FBA8B" size="4" face="黑体">2.1.4 Java线程的实现</font></h3><p>Java线程在不同平台上的实现不一样，但对Java编码和程序运行来说，这些差异都是透明的。</p>
-<h2 id="2-2-Java线程调度"><a href="#2-2-Java线程调度" class="headerlink" title="2.2 Java线程调度"></a><font color="#3FBA8B" size="face=" 黑体""="">2.2 Java线程调度</font></h2><p>主要调度方式有两种，分别是协同式线程调度和抢占式线程调度。</p>
+<h2 id="2-2-Java线程调度"><a href="#2-2-Java线程调度" class="headerlink" title="2.2 Java线程调度"></a><font color="#3FBA8B" size="face=" 黑体"">2.2 Java线程调度</font></h2><p>主要调度方式有两种，分别是协同式线程调度和抢占式线程调度。</p>
 <h3 id="2-2-1-协同式线程调度"><a href="#2-2-1-协同式线程调度" class="headerlink" title="2.2.1 协同式线程调度"></a><font color="#3FBA8B" size="4" face="黑体">2.2.1 协同式线程调度</font></h3><p>如果使用协同式调度的多线程系统，线程的执行时间由线程本身来控制，线程把自己的工作执行完了之后，要主动通知系统切换到另外一个线程上。</p>
 <ul>
 <li>优点： 实现简单，且切换操作对线程自己是可知的，没啥线程同步问题。</li>
@@ -553,7 +553,7 @@
 <p>Java中，Thread.yield()可以让出执行时间，但无法获取执行时间。</p>
 </blockquote>
 <h3 id="2-2-3-线程优先级"><a href="#2-2-3-线程优先级" class="headerlink" title="2.2.3 线程优先级"></a><font color="#3FBA8B" size="4" face="黑体">2.2.3 线程优先级</font></h3><p>如果希望系统能给某些线程多分配一些时间，给一些线程少分配一些时间，可以通过设置线程优先级来完成。<br>Java语言一共10个级别的线程优先级（Thread.MIN_PRIORITY至Thread.MAX_PRIORITY），在两线程同时处于ready状态时，优先级越高的线程越容易被系统选择执行。但优先级并不是很靠谱，因为Java线程是通过映射到系统的原生线程上来实现的，所以线程调度最终还是取决于操作系统。</p>
-<h2 id="2-3线程的状态转换"><a href="#2-3线程的状态转换" class="headerlink" title="2.3线程的状态转换"></a><font color="#3FBA8B" size="face=" 黑体""="">2.3线程的状态转换</font></h2><p>Java定义了5种线程状态，在任意一个点一个线程只能有且只有其中一种状态。无限等待和等待可以算在一起。所以共五种。（好像也有人喜欢说是六种）</p>
+<h2 id="2-3线程的状态转换"><a href="#2-3线程的状态转换" class="headerlink" title="2.3线程的状态转换"></a><font color="#3FBA8B" size="face=" 黑体"">2.3线程的状态转换</font></h2><p>Java定义了5种线程状态，在任意一个点一个线程只能有且只有其中一种状态。无限等待和等待可以算在一起。所以共五种。（好像也有人喜欢说是六种）</p>
 <ul>
 <li>新建(New)：创建后尚未启动的线程。</li>
 <li>运行(Runnable)：Runnable包括操作系统线程状态中的Running和Ready，也就是处于此状态的线程有可能正在执行，也有可能等待CPU为它分配执行时间。线程对象创建后，其他线程调用了该对象的start()方法。该状态的线程位于“可运行线程池”中，变得可运行，只等待获取CPU的使用权。即在就绪状态的进程除CPU之外，其它的运行所需资源都已全部获得。</li>
@@ -574,7 +574,7 @@
 <li>阻塞（Blocked）:线程被阻塞了。与等待状态的区别是：阻塞在等待着获取到一个排他锁，这个事件将在另外一个线程放弃这个锁的时候发生；而等待则在等待一段时间，或唤醒动作的发生。在等待进入同步区域时，线程将进入这种状态。</li>
 <li>结束（Terminated）：已终止线程的线程状态，线程已经结束执行。</li>
 </ul>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fz8ks8p703j30cs082gmg.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fz8ks8p703j30cs082gmg.jpg" alt></p>
 
       
     </div>
@@ -683,7 +683,7 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">immrwk</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -696,7 +696,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

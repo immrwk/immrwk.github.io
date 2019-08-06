@@ -142,7 +142,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -152,7 +152,7 @@
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -262,20 +262,20 @@
   
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/26/Android-Handler机制源码分析/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="immrwk">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="山有扶苏">
     </span>
 
@@ -318,7 +318,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Android系统源码/" itemprop="url" rel="index">
                     <span itemprop="name">Android系统源码</span>
                   </a>
@@ -394,14 +394,14 @@
 <font color="#ff0000" size="4" face="黑体"><strong>2. public Handler(Looper looper, Callback callback, boolean async)</strong></font>  
 
 <p>这个方法没有什么特别的，我们用到的Looper对象等可以通过该构造方法传进来。</p>
-<h3 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h3><p>Handler发送消息的方法也有很多个，用图片列举如下：<br><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx43cqz0xj31be0sa79j.jpg" alt=""><br><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fxx44g1nydj316r0u00zb.jpg" alt=""></p>
+<h3 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h3><p>Handler发送消息的方法也有很多个，用图片列举如下：<br><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx43cqz0xj31be0sa79j.jpg" alt><br><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fxx44g1nydj316r0u00zb.jpg" alt></p>
 <p>其中发送延时消息sendMessageDelayed内部计算时钟用的是SystemClock.uptimeMillis()，而不能用System.currentTimeMillis()</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public final boolean sendMessageDelayed(Message msg, long delayMillis)</span><br><span class="line">&#123;</span><br><span class="line">    if (delayMillis &lt; 0) &#123;</span><br><span class="line">        delayMillis = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    return sendMessageAtTime(msg, SystemClock.uptimeMillis() + delayMillis);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>根据<a href="https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/Handler.java" target="_blank" rel="noopener">Handler源码</a>追溯图片列举方法的实现，发现这些方法最终都是调用的sendMessageAtTime这个方法。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public boolean sendMessageAtTime(Message msg, long uptimeMillis) &#123;</span><br><span class="line">    MessageQueue queue = mQueue;</span><br><span class="line">    if (queue == null) &#123;</span><br><span class="line">        RuntimeException e = new RuntimeException(</span><br><span class="line">                this + &quot; sendMessageAtTime() called with no mQueue&quot;);</span><br><span class="line">        Log.w(&quot;Looper&quot;, e.getMessage(), e);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    return enqueueMessage(queue, msg, uptimeMillis);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这个方法最终是通过enqueueMessage将要发送的msg，添加进了消息队列，调用的是MessageQueue的enqueueMessage。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">private boolean enqueueMessage(MessageQueue queue, Message msg, long uptimeMillis) &#123;</span><br><span class="line">    msg.target = this;</span><br><span class="line">    if (mAsynchronous) &#123;</span><br><span class="line">        msg.setAsynchronous(true);</span><br><span class="line">    &#125;</span><br><span class="line">    return queue.enqueueMessage(msg, uptimeMillis);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="移除消息"><a href="#移除消息" class="headerlink" title="移除消息"></a>移除消息</h3><p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fxx44wg9u1j31bc0kyn1m.jpg" alt=""><br>当我们activity退出的时候，需要将队列中为处理的消息移除，否则容易产生内存泄漏。</p>
+<h3 id="移除消息"><a href="#移除消息" class="headerlink" title="移除消息"></a>移除消息</h3><p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fxx44wg9u1j31bc0kyn1m.jpg" alt><br>当我们activity退出的时候，需要将队列中为处理的消息移除，否则容易产生内存泄漏。</p>
 <h3 id="分发消息"><a href="#分发消息" class="headerlink" title="分发消息"></a>分发消息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public void dispatchMessage(Message msg) &#123;</span><br><span class="line">    if (msg.callback != null) &#123;</span><br><span class="line">        handleCallback(msg);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (mCallback != null) &#123;</span><br><span class="line">            if (mCallback.handleMessage(msg)) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        handleMessage(msg);</span><br></pre></td></tr></table></figure>
 <p>分发消息的时候首先看msg.callback是否为空，这个callback是Runnable，就是上面的构造方法传进来的，就是上面提到的Handler的第二种用法，如果不为空则会执Runnable的run方法。为空则继续判断，mCallback是上文提到的Handler定义的Callback接口，如果有传入进来，则会执行mCallback.handleMessage，并校验返回值，为false则会继续向下执行handleMessage方法，当然，mCallback为空也会执行，handleMessage是个空方法没有具体实现，需要我们写handler时，根据自己需求实现，就像上文提到的第一种用法里的</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Subclasses must implement this to receive messages.</span><br><span class="line"> */</span><br><span class="line">public void handleMessage(Message msg) &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -544,7 +544,7 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">immrwk</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -557,7 +557,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

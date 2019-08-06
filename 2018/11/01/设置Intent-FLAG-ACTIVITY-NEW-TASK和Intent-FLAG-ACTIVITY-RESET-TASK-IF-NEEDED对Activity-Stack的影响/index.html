@@ -143,7 +143,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -153,7 +153,7 @@
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -263,20 +263,20 @@
   
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/01/设置Intent-FLAG-ACTIVITY-NEW-TASK和Intent-FLAG-ACTIVITY-RESET-TASK-IF-NEEDED对Activity-Stack的影响/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="immrwk">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="山有扶苏">
     </span>
 
@@ -319,7 +319,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Android/" itemprop="url" rel="index">
                     <span itemprop="name">Android</span>
                   </a>
@@ -372,10 +372,10 @@
 <h2 id="四、0x10200000数值解释"><a href="#四、0x10200000数值解释" class="headerlink" title="四、0x10200000数值解释"></a>四、0x10200000数值解释</h2><p>0x10200000表示属性为Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED,其中Intent.FLAG_ACTIVITY_NEW_TASK和Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED是定义在Intent.java中的常量</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public static final int FLAG_ACTIVITY_NEW_TASK = 0x10000000;</span><br><span class="line">public static final int FLAG_ACTIVITY_RESET_TASK_IF_NEEDED = 0x00200000;</span><br></pre></td></tr></table></figure>
 <p>FLAG_ACTIVITY_NEW_TASK 和FLAG_ACTIVITY_RESET_TASK_IF_NEEDED 的谷歌官方解释</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fxx4ai22a6j31di0mytey.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fxx4ai22a6j31di0mytey.jpg" alt></p>
 <p>来源：</p>
 <p><a href="https://developer.android.com/reference/android/content/Intent.html#FLAG_ACTIVITY_NEW_TASK" target="_blank" rel="noopener">https://developer.android.com/reference/android/content/Intent.html#FLAG_ACTIVITY_NEW_TASK</a></p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx4at557kj31cu0c20vh.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx4at557kj31cu0c20vh.jpg" alt></p>
 <p>   <a href="https://developer.android.com/reference/android/content/Intent.html#FLAG_ACTIVITY_RESET_TASK_IF_NEEDED" target="_blank" rel="noopener">https://developer.android.com/reference/android/content/Intent.html#FLAG_ACTIVITY_RESET_TASK_IF_NEEDED</a></p>
 <p><strong>FLAG_ACTIVITY_NEW_TASK</strong></p>
 <pre><code>设置此状态，记住以下原则，首先会查找是否存在和被启动的Activity具有相同的亲和性的任务栈，如果有，刚直接把这个栈整体移动到前台，并保持栈中的状态不变，即栈中的activity顺序不变，如果没有，则新建一个栈来存放被启动的activity
@@ -383,9 +383,9 @@
 <pre><code>如果设置该属性，这个activity将在一个新的task中启动或者或者被带到一个已经存在的task的顶部，这时这个activity将会作为这个task的首个页面加载。将会导致与这个应用具有相同亲和力的task处于一个合适的状态(移动activity到这个task或者从中移出)，或者简单的重置这个task到它的初始状态
 </code></pre><p>设置0x10200000的作用</p>
 <p>如果目标程序已经启动过，但是隐藏了，设置0x10200000之后，及时之前打开了，现在打开的话就直接跳到之前打开的页面</p>
-<h2 id="五、修改前后Activity-Stack变化"><a href="#五、修改前后Activity-Stack变化" class="headerlink" title="五、修改前后Activity Stack变化"></a>五、修改前后Activity Stack变化</h2><p>修改前<br><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx4chmt7kj312k0u0td3.jpg" alt=""></p>
+<h2 id="五、修改前后Activity-Stack变化"><a href="#五、修改前后Activity-Stack变化" class="headerlink" title="五、修改前后Activity Stack变化"></a>五、修改前后Activity Stack变化</h2><p>修改前<br><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx4chmt7kj312k0u0td3.jpg" alt></p>
 <p>修改后</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fxx4cx52ptj313y0u078n.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fxx4cx52ptj313y0u078n.jpg" alt></p>
 
       
     </div>
@@ -486,7 +486,7 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">immrwk</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -499,7 +499,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

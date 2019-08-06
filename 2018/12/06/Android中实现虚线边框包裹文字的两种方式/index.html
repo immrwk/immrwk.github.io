@@ -142,7 +142,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -152,7 +152,7 @@
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -262,20 +262,20 @@
   
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/06/Android中实现虚线边框包裹文字的两种方式/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="immrwk">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="山有扶苏">
     </span>
 
@@ -318,7 +318,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Android/" itemprop="url" rel="index">
                     <span itemprop="name">Android</span>
                   </a>
@@ -356,15 +356,15 @@
       
 
       
-        <h3 id="下面介绍实现下图所示效果的两种方式："><a href="#下面介绍实现下图所示效果的两种方式：" class="headerlink" title="下面介绍实现下图所示效果的两种方式："></a>下面介绍实现下图所示效果的两种方式：</h3><p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx5kr97a4j30oq158jt4.jpg" alt=""></p>
+        <h3 id="下面介绍实现下图所示效果的两种方式："><a href="#下面介绍实现下图所示效果的两种方式：" class="headerlink" title="下面介绍实现下图所示效果的两种方式："></a>下面介绍实现下图所示效果的两种方式：</h3><p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx5kr97a4j30oq158jt4.jpg" alt></p>
 <h2 id="第一种是通过写shape布局文件来实现"><a href="#第一种是通过写shape布局文件来实现" class="headerlink" title="第一种是通过写shape布局文件来实现"></a>第一种是通过写shape布局文件来实现</h2><p>给TextView设置background时引用此布局文件即可实现效果，shape布局文件代码如下：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">shape</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag"><span class="attr">android:shape</span>=<span class="string">"rectangle"</span> &gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 虚线边框的宽度，颜色等 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">stroke</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:dashGap</span>=<span class="string">"3dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:dashWidth</span>=<span class="string">"6dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:width</span>=<span class="string">"1dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:color</span>=<span class="string">"#63a219"</span> &gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">stroke</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 矩形的圆角半径 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">corners</span> <span class="attr">android:radius</span>=<span class="string">"10dp"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">shape</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>stroke标签下为虚线框的主要设置，dashGap表示中间隔开一段距离，即定义了样式为虚线，效果图如下：</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fxx5mnxw0dj30uw0f674s.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fxx5mnxw0dj30uw0f674s.jpg" alt></p>
 <h2 id="第二种方式是通过自定义View使之继承View，然后在onDraw方法中将虚线和文字用Paint画笔画出。"><a href="#第二种方式是通过自定义View使之继承View，然后在onDraw方法中将虚线和文字用Paint画笔画出。" class="headerlink" title="第二种方式是通过自定义View使之继承View，然后在onDraw方法中将虚线和文字用Paint画笔画出。"></a>第二种方式是通过自定义View使之继承View，然后在onDraw方法中将虚线和文字用Paint画笔画出。</h2><p>主要代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DashedSurroundTextView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * mTextColor  文字颜色   mBorderColor 虚线边界颜色  mBorderWidth虚线边界宽度</span></span><br><span class="line"><span class="comment">     * mTextSizen  文字大小   mText  文字内容</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mTextColor;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mBorderColor;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> mBorderWidth;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> mTextSize;</span><br><span class="line">    <span class="keyword">private</span> String mText;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> start_x = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> start_y = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> padding = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> baseLineLong = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> radiusX = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> radiusY = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="title">DashedSurroundTextView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">        <span class="comment">//获取自定义参数</span></span><br><span class="line">        TypedArray typedArray = context.obtainStyledAttributes(attrs,</span><br><span class="line">                R.styleable.DashedSurroundTextView);</span><br><span class="line">        <span class="comment">//虚线border颜色</span></span><br><span class="line">        mBorderColor = typedArray.getColor(R.styleable.DashedSurroundTextView_border_color, Color.argb(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">        <span class="comment">//虚线border宽度</span></span><br><span class="line">        mBorderWidth = typedArray.getDimension(R.styleable.DashedSurroundTextView_border_width, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">//字体颜色</span></span><br><span class="line">        mTextColor = typedArray.getColor(R.styleable.DashedSurroundTextView_textColor, Color.argb(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">        <span class="comment">//字体大小</span></span><br><span class="line">        mTextSize = typedArray.getDimension(R.styleable.DashedSurroundTextView_textSize, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">//显示文字</span></span><br><span class="line">        mText = typedArray.getString(R.styleable.DashedSurroundTextView_text);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建文字画笔</span></span><br><span class="line">        Paint textP = <span class="keyword">new</span> Paint();</span><br><span class="line">        textP.setColor(mTextColor);</span><br><span class="line">        textP.setStyle(Paint.Style.FILL);</span><br><span class="line">        textP.setTextSize(mTextSize);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//StrokeWidth无需设置</span></span><br><span class="line">        <span class="comment">//textP.setStrokeWidth();</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//计算文字所占位置的大小</span></span><br><span class="line">        Rect bounds = <span class="keyword">new</span> Rect();</span><br><span class="line">        textP.getTextBounds(mText, <span class="number">0</span>, mText.length(), bounds);</span><br><span class="line">        canvas.drawText(mText, start_x, start_y + bounds.height() - padding, textP);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建边界虚线画笔</span></span><br><span class="line">        Paint borderP = <span class="keyword">new</span> Paint();</span><br><span class="line">        borderP.setColor(mBorderColor);</span><br><span class="line">        borderP.setStyle(Paint.Style.FILL_AND_STROKE);</span><br><span class="line">        borderP.setStrokeWidth(mBorderWidth);</span><br><span class="line">        borderP.setAntiAlias(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//画外面虚线边界</span></span><br><span class="line">        RectF oval3 = <span class="keyword">new</span> RectF(start_x, start_y, start_x + bounds.width() + padding * <span class="number">2</span>, start_y + bounds.height() + padding * <span class="number">2</span>);</span><br><span class="line">        PathEffect effects = <span class="keyword">new</span> DashPathEffect(<span class="keyword">new</span> <span class="keyword">float</span>[]&#123;baseLineLong, baseLineLong&#125;, <span class="number">0</span>);</span><br><span class="line">        borderP.setPathEffect(effects);</span><br><span class="line">        canvas.drawRoundRect(oval3, radiusX, radiusY, borderP);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>效果图如下：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx5kr97a4j30oq158jt4.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx5kr97a4j30oq158jt4.jpg" alt></p>
 <p>虚线框的画线设置style为Paint.Style.FILL_AND_STROKE<br>new DashPathEffect(new float[]{baseLineLong, baseLineLong}, 0)表示画线先画长度为baseLineLong的实线，再画长度为baseLineLong的虚线，后面0是偏移量。<br>文字的画法较简单，计算好坐标即可。</p>
 
       
@@ -472,7 +472,7 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">immrwk</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -485,7 +485,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -143,7 +143,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -153,7 +153,7 @@
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -263,20 +263,20 @@
   
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/05/Android系统是如何启动的/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="immrwk">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="山有扶苏">
     </span>
 
@@ -319,7 +319,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Android系统源码/" itemprop="url" rel="index">
                     <span itemprop="name">Android系统源码</span>
                   </a>
@@ -385,10 +385,10 @@
 <li>/misc：包含一些杂项内容，如系统设置和系统功能启用禁用设置</li>
 <li>/sdcard：用户自己的存储区，可以存放照片，音乐，视频等文件</li>
 </ul>
-<p><img src="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/boot_image.png?raw=true" alt=""></p>
+<p><img src="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/boot_image.png?raw=true" alt></p>
 <p>那么 Bootloader 是如何被加载的呢？跟 PC 启动过程类似，当开机通电时首先会加载 Bootloader，Bootloader 会读取 ROM 找到操作系统并将 Linux 内核加载到 RAM 中。</p>
 <p>当 Linux 内核启动后会初始化各种软硬件环境，加载驱动程序，挂载根文件系统，Linux 内核加载的最后阶段会启动执行第一个用户空间进程 init 进程。</p>
-<h2 id="init-进程"><a href="#init-进程" class="headerlink" title="init 进程"></a>init 进程</h2><p><img src="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/android-booting.png?raw=true" alt=""></p>
+<h2 id="init-进程"><a href="#init-进程" class="headerlink" title="init 进程"></a>init 进程</h2><p><img src="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/android-booting.png?raw=true" alt></p>
 <p>init 是 Linux 系统中用户空间的第一个进程(pid=1)，Kernel 启动后会调用 /system/core/init/Init.cpp 的 main() 方法。</p>
 <ul>
 <li>Init.main()</li>
@@ -412,7 +412,7 @@
 <p>具体过程详见 Binder：<a href="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/android/Android-Binder进程间通讯.md" target="_blank" rel="noopener">Android Binder 进程间通讯</a></p>
 <h2 id="surface-flinger-进程"><a href="#surface-flinger-进程" class="headerlink" title="surface_flinger 进程"></a>surface_flinger 进程</h2><p>SurfaceFlinger 负责图像绘制，是应用 UI 的核心，其功能是合成所有 Surface 并渲染到显示设备。SurfaceFlinger 进程主要是启动 FrameBuffer，初始化显示系统。</p>
 <h2 id="media-server-进程"><a href="#media-server-进程" class="headerlink" title="media_server 进程"></a>media_server 进程</h2><p>MediaServer 进程主要是启动 AudioFlinger 音频服务，CameraService 相机服务。负责处理音频解析播放，相机相关的处理。</p>
-<h2 id="Zygote-进程"><a href="#Zygote-进程" class="headerlink" title="Zygote 进程"></a>Zygote 进程</h2><p>fork 创建进程过程：<br><img src="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/android-process.png?raw=true" alt=""></p>
+<h2 id="Zygote-进程"><a href="#Zygote-进程" class="headerlink" title="Zygote 进程"></a>Zygote 进程</h2><p>fork 创建进程过程：<br><img src="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/android-process.png?raw=true" alt></p>
 <p>Zygote 进程孵化了所有的 Android 应用进程，是 Android Framework 的基础，该进程的启动也标志着 Framework 框架初始化启动的开始。 </p>
 <p>Zygote 服务进程的主要功能：</p>
 <ul>
@@ -433,7 +433,7 @@
 <h2 id="ActivityManagerService-启动"><a href="#ActivityManagerService-启动" class="headerlink" title="ActivityManagerService 启动"></a>ActivityManagerService 启动</h2><p>启动桌面 Launcher App 需要等待 ActivityManagerService 启动完成。我们来看下 ActivityManagerService 启动过程。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ActivityManagerService(Context) </span><br><span class="line"><span class="comment">//创建名为“ActivityManager”的前台线程，并获取mHandler。</span></span><br><span class="line"><span class="comment">//通过 UiThread 类，创建名为“android.ui”的线程。</span></span><br><span class="line"><span class="comment">//创建前台广播和后台广播接收器。</span></span><br><span class="line"><span class="comment">//创建目录 /data/system。</span></span><br><span class="line"><span class="comment">//创建服务 BatteryStatsService。</span></span><br><span class="line"></span><br><span class="line">ActivityManagerService.start()  <span class="comment">//启动电池统计服务，创建 LocalService，并添加到 LocalServices。</span></span><br><span class="line"></span><br><span class="line">ActivityManagerService.startOtherServices() -&gt; installSystemProviders()</span><br><span class="line"><span class="comment">//安装所有的系统 Provider。</span></span><br><span class="line"></span><br><span class="line">ActivityManagerService.systemReady()</span><br><span class="line"><span class="comment">//恢复最近任务栏的 task。</span></span><br><span class="line"><span class="comment">//启动 WebView，SystemUI，开启 Watchdog，启动桌面 Launcher App。</span></span><br><span class="line"><span class="comment">//发送系统广播。</span></span><br></pre></td></tr></table></figure>
 <p>启动桌面 Launcher App，首先会通过 Zygote 进程 fork 一个新进程作为 App 进程，然后创建 Application，创建启动 Activity，最后用户才会看到桌面。</p>
-<h2 id="完整启动过程"><a href="#完整启动过程" class="headerlink" title="完整启动过程"></a>完整启动过程</h2><p><img src="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/android-bootloader.png?raw=true" alt=""></p>
+<h2 id="完整启动过程"><a href="#完整启动过程" class="headerlink" title="完整启动过程"></a>完整启动过程</h2><p><img src="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/android-bootloader.png?raw=true" alt></p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><a href="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/edit/master/android/Android-%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.md" target="_blank" rel="noopener">Android - 系统启动过程</a></li>
 </ul>
@@ -537,7 +537,7 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">immrwk</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -550,7 +550,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
