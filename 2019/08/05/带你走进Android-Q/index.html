@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564850981652.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1565063713337.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/uninstall_app.jpg">
-<meta property="og:updated_time" content="2019-08-07T03:01:10.146Z">
+<meta property="og:updated_time" content="2019-08-07T03:01:47.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="带你走进Android Q">
 <meta name="twitter:description" content="写在前面Android Q版本的发布渐进尾声，Android团队将在2019年9月份发布Android的最终版本，目前已经发到了第5个beta版本，每当Android新版本发布后，开发者需要第一时间了解新特性，并进行相关适配，下面就带您一起了解一下Android Q上的几个主要改动。 一、禁止应用读取Device ID变更内容Q版本将限制应用访问不可重设的设备识别码，如 IMEI、序列号等，所有获">
@@ -596,7 +596,7 @@
 <h3 id="卸载应用文件保留问题"><a href="#卸载应用文件保留问题" class="headerlink" title="卸载应用文件保留问题"></a><font color="#EF692F" size="4" face="黑体">卸载应用文件保留问题</font></h3><ol>
 <li><p>推荐方法：把不希望删除的文件通过MediaStore或者SAF的接口里面，保存在公共集合目录的文件在应用卸载的时候是不会被删除的。</p>
 </li>
-<li><p>方法2：在应用的AndroidManifest.xml文件增加：<application android:hasfragileuserdata="true">，应用不增加该属性的话，应用能卸载的时候应用保存在沙箱目录的文件会直接被删除， 不会弹框提示让用户勾选保留。只有应用增加了这个属性，并且设置的值是为true，在应用被卸载的时候，才会弹框提示用户可以勾选保留应用的沙箱目录文件，默认删除，勾选保留</application></p>
+<li><p>方法2：在应用的AndroidManifest.xml文件增加：android:hasFragileUserData=”true”，应用不增加该属性的话，应用能卸载的时候应用保存在沙箱目录的文件会直接被删除， 不会弹框提示让用户勾选保留。只有应用增加了这个属性，并且设置的值是为true，在应用被卸载的时候，才会弹框提示用户可以勾选保留应用的沙箱目录文件，默认删除，勾选保留</p>
 </li>
 </ol>
 <img src="/2019/08/05/带你走进Android-Q/uninstall_app.jpg" width="400" height="600">
