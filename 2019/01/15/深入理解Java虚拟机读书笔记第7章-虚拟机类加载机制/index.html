@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="一、类加载时机类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括：  加载-&amp;gt;验证-&amp;gt;准备-&amp;gt;解析-&amp;gt;初始化-&amp;gt;使用-&amp;gt;卸载   其中加载、验证、准备、初始化、卸载这5个阶段是固定的，解析阶段则不一定，它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定）。 对于初始化阶段，虚拟机规范严格规定有且只有5">
+<meta name="description" content="一、类加载时机  类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括：  加载-&amp;gt;验证-&amp;gt;准备-&amp;gt;解析-&amp;gt;初始化-&amp;gt;使用-&amp;gt;卸载   其中加载、验证、准备、初始化、卸载这5个阶段是固定的，解析阶段则不一定，它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定）。 对于初始化阶段，虚拟机规范严格规定有且只">
 <meta name="keywords" content="类加载">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java虚拟机类加载机制">
 <meta property="og:url" content="http://yoursite.com/2019/01/15/深入理解Java虚拟机读书笔记第7章-虚拟机类加载机制/index.html">
 <meta property="og:site_name" content="山有扶苏">
-<meta property="og:description" content="一、类加载时机类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括：  加载-&amp;gt;验证-&amp;gt;准备-&amp;gt;解析-&amp;gt;初始化-&amp;gt;使用-&amp;gt;卸载   其中加载、验证、准备、初始化、卸载这5个阶段是固定的，解析阶段则不一定，它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定）。 对于初始化阶段，虚拟机规范严格规定有且只有5">
+<meta property="og:description" content="一、类加载时机  类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括：  加载-&amp;gt;验证-&amp;gt;准备-&amp;gt;解析-&amp;gt;初始化-&amp;gt;使用-&amp;gt;卸载   其中加载、验证、准备、初始化、卸载这5个阶段是固定的，解析阶段则不一定，它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定）。 对于初始化阶段，虚拟机规范严格规定有且只">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e066cnbj30gn039748.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e3pj2huj30af0adwf4.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e9ym9rqj313m0puwl7.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fz7eb1rgpuj31030u0gxt.jpg">
-<meta property="og:updated_time" content="2019-04-26T10:33:41.732Z">
+<meta property="og:updated_time" content="2019-12-19T08:48:42.726Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机类加载机制">
-<meta name="twitter:description" content="一、类加载时机类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括：  加载-&amp;gt;验证-&amp;gt;准备-&amp;gt;解析-&amp;gt;初始化-&amp;gt;使用-&amp;gt;卸载   其中加载、验证、准备、初始化、卸载这5个阶段是固定的，解析阶段则不一定，它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定）。 对于初始化阶段，虚拟机规范严格规定有且只有5">
+<meta name="twitter:description" content="一、类加载时机  类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括：  加载-&amp;gt;验证-&amp;gt;准备-&amp;gt;解析-&amp;gt;初始化-&amp;gt;使用-&amp;gt;卸载   其中加载、验证、准备、初始化、卸载这5个阶段是固定的，解析阶段则不一定，它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定）。 对于初始化阶段，虚拟机规范严格规定有且只">
 <meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz7e066cnbj30gn039748.jpg">
 
 
@@ -368,7 +368,9 @@
       
 
       
-        <h1 id="一、类加载时机"><a href="#一、类加载时机" class="headerlink" title="一、类加载时机"></a><font color="#ff0000" size="6" face="黑体">一、类加载时机</font></h1><p>类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括： </p>
+        <h1 id="一、类加载时机"><a href="#一、类加载时机" class="headerlink" title="一、类加载时机"></a><font color="#ff0000" size="6" face="黑体">一、类加载时机</font></h1><meta name="referrer" content="no-referrer">
+
+<p>类从被加载到虚拟机内存开始，到卸载出内存为止，生命周期包括： </p>
 <font color="#ff0000" size="5" face="黑体">加载-&gt;验证-&gt;准备-&gt;解析-&gt;初始化-&gt;使用-&gt;卸载<br></font>
 
 
