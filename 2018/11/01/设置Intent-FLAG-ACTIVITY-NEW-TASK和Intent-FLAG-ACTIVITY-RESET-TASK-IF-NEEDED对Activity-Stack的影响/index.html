@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="这是一个小区广播问题引发的对Intent.FLAG_ACTIVITY_NEW_TASK和Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED的思考现把该问题的解决过程和分析记录如下：  一、问题描述-删除未读广播消息后，进入短信-menu小区广播还会弹出广播提示框预制条件 手机有一条未读广播消息 测试步骤： 1.进入设置-更多-小区广播 删除此条消息 2.进入短信-">
+<meta name="description" content="这是一个小区广播问题引发的对Intent.FLAG_ACTIVITY_NEW_TASK和Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED的思考现把该问题的解决过程和分析记录如下：  一、问题描述-删除未读广播消息后，进入短信-menu小区广播还会弹出广播提示框预制条件 手机有一条未读广播消息 测试步骤： 1.进入设置-更多-小区广播 删除此条消息 2.进入短">
 <meta name="keywords" content="keywords">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设置Intent.FLAG_ACTIVITY_NEW_TASK和Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED对Activity Stack的影响">
 <meta property="og:url" content="http://yoursite.com/2018/11/01/设置Intent-FLAG-ACTIVITY-NEW-TASK和Intent-FLAG-ACTIVITY-RESET-TASK-IF-NEEDED对Activity-Stack的影响/index.html">
 <meta property="og:site_name" content="山有扶苏">
-<meta property="og:description" content="这是一个小区广播问题引发的对Intent.FLAG_ACTIVITY_NEW_TASK和Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED的思考现把该问题的解决过程和分析记录如下：  一、问题描述-删除未读广播消息后，进入短信-menu小区广播还会弹出广播提示框预制条件 手机有一条未读广播消息 测试步骤： 1.进入设置-更多-小区广播 删除此条消息 2.进入短信-">
+<meta property="og:description" content="这是一个小区广播问题引发的对Intent.FLAG_ACTIVITY_NEW_TASK和Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED的思考现把该问题的解决过程和分析记录如下：  一、问题描述-删除未读广播消息后，进入短信-menu小区广播还会弹出广播提示框预制条件 手机有一条未读广播消息 测试步骤： 1.进入设置-更多-小区广播 删除此条消息 2.进入短">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fxx4ai22a6j31di0mytey.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fxx4at557kj31cu0c20vh.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fxx4chmt7kj312k0u0td3.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fxx4cx52ptj313y0u078n.jpg">
-<meta property="og:updated_time" content="2019-04-26T10:33:41.732Z">
+<meta property="og:updated_time" content="2019-12-19T09:06:38.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设置Intent.FLAG_ACTIVITY_NEW_TASK和Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED对Activity Stack的影响">
-<meta name="twitter:description" content="这是一个小区广播问题引发的对Intent.FLAG_ACTIVITY_NEW_TASK和Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED的思考现把该问题的解决过程和分析记录如下：  一、问题描述-删除未读广播消息后，进入短信-menu小区广播还会弹出广播提示框预制条件 手机有一条未读广播消息 测试步骤： 1.进入设置-更多-小区广播 删除此条消息 2.进入短信-">
+<meta name="twitter:description" content="这是一个小区广播问题引发的对Intent.FLAG_ACTIVITY_NEW_TASK和Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED的思考现把该问题的解决过程和分析记录如下：  一、问题描述-删除未读广播消息后，进入短信-menu小区广播还会弹出广播提示框预制条件 手机有一条未读广播消息 测试步骤： 1.进入设置-更多-小区广播 删除此条消息 2.进入短">
 <meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fxx4ai22a6j31di0mytey.jpg">
 
 
@@ -357,7 +357,9 @@
       
 
       
-        <blockquote>
+        <meta name="referrer" content="no-referrer">
+
+<blockquote>
 <p>这是一个小区广播问题引发的对Intent.FLAG_ACTIVITY_NEW_TASK和Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED的思考<br>现把该问题的解决过程和分析记录如下：</p>
 </blockquote>
 <h2 id="一、问题描述-删除未读广播消息后，进入短信-menu小区广播还会弹出广播提示框"><a href="#一、问题描述-删除未读广播消息后，进入短信-menu小区广播还会弹出广播提示框" class="headerlink" title="一、问题描述-删除未读广播消息后，进入短信-menu小区广播还会弹出广播提示框"></a>一、问题描述-删除未读广播消息后，进入短信-menu小区广播还会弹出广播提示框</h2><p>预制条件 手机有一条未读广播消息</p>

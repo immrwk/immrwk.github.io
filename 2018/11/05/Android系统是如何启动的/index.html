@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="Android系统是如何启动的计算机是如何启动的？首先熟悉一些概念，计算机的硬件包括：CPU，内存，硬盘，显卡，显示器，键盘鼠标等其他输入输出设备。 所有的软件（比如：操作系统）都是存放在硬盘上，程序执行时需要将程序从硬盘上读取到内存中然后加载到 CPU 中来运行。 当我们按下开机键时，此时内存中什么都没有，因此需要借助某种方式，将操作系统加载到内存中，而完成这项任务的就是 BIOS。  引导阶段">
+<meta name="description" content="Android系统是如何启动的计算机是如何启动的？首先熟悉一些概念，计算机的硬件包括：CPU，内存，硬盘，显卡，显示器，键盘鼠标等其他输入输出设备。 所有的软件（比如：操作系统）都是存放在硬盘上，程序执行时需要将程序从硬盘上读取到内存中然后加载到 CPU 中来运行。 当我们按下开机键时，此时内存中什么都没有，因此需要借助某种方式，将操作系统加载到内存中，而完成这项任务的就是 BIOS。  引导">
 <meta name="keywords" content="keywords">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android系统是如何启动的">
 <meta property="og:url" content="http://yoursite.com/2018/11/05/Android系统是如何启动的/index.html">
 <meta property="og:site_name" content="山有扶苏">
-<meta property="og:description" content="Android系统是如何启动的计算机是如何启动的？首先熟悉一些概念，计算机的硬件包括：CPU，内存，硬盘，显卡，显示器，键盘鼠标等其他输入输出设备。 所有的软件（比如：操作系统）都是存放在硬盘上，程序执行时需要将程序从硬盘上读取到内存中然后加载到 CPU 中来运行。 当我们按下开机键时，此时内存中什么都没有，因此需要借助某种方式，将操作系统加载到内存中，而完成这项任务的就是 BIOS。  引导阶段">
+<meta property="og:description" content="Android系统是如何启动的计算机是如何启动的？首先熟悉一些概念，计算机的硬件包括：CPU，内存，硬盘，显卡，显示器，键盘鼠标等其他输入输出设备。 所有的软件（比如：操作系统）都是存放在硬盘上，程序执行时需要将程序从硬盘上读取到内存中然后加载到 CPU 中来运行。 当我们按下开机键时，此时内存中什么都没有，因此需要借助某种方式，将操作系统加载到内存中，而完成这项任务的就是 BIOS。  引导">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/boot_image.png?raw=true">
 <meta property="og:image" content="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/android-booting.png?raw=true">
 <meta property="og:image" content="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/android-process.png?raw=true">
 <meta property="og:image" content="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/android-bootloader.png?raw=true">
-<meta property="og:updated_time" content="2019-04-26T10:33:41.722Z">
+<meta property="og:updated_time" content="2019-12-19T09:06:17.839Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android系统是如何启动的">
-<meta name="twitter:description" content="Android系统是如何启动的计算机是如何启动的？首先熟悉一些概念，计算机的硬件包括：CPU，内存，硬盘，显卡，显示器，键盘鼠标等其他输入输出设备。 所有的软件（比如：操作系统）都是存放在硬盘上，程序执行时需要将程序从硬盘上读取到内存中然后加载到 CPU 中来运行。 当我们按下开机键时，此时内存中什么都没有，因此需要借助某种方式，将操作系统加载到内存中，而完成这项任务的就是 BIOS。  引导阶段">
+<meta name="twitter:description" content="Android系统是如何启动的计算机是如何启动的？首先熟悉一些概念，计算机的硬件包括：CPU，内存，硬盘，显卡，显示器，键盘鼠标等其他输入输出设备。 所有的软件（比如：操作系统）都是存放在硬盘上，程序执行时需要将程序从硬盘上读取到内存中然后加载到 CPU 中来运行。 当我们按下开机键时，此时内存中什么都没有，因此需要借助某种方式，将操作系统加载到内存中，而完成这项任务的就是 BIOS。  引导">
 <meta name="twitter:image" content="https://github.com/jeanboydev/Android-ReadTheFuckingSourceCode/blob/master/resources/images/android_boot_loader/boot_image.png?raw=true">
 
 
@@ -357,7 +357,9 @@
       
 
       
-        <h1 id="Android系统是如何启动的"><a href="#Android系统是如何启动的" class="headerlink" title="Android系统是如何启动的"></a>Android系统是如何启动的</h1><h2 id="计算机是如何启动的？"><a href="#计算机是如何启动的？" class="headerlink" title="计算机是如何启动的？"></a>计算机是如何启动的？</h2><p>首先熟悉一些概念，计算机的硬件包括：CPU，内存，硬盘，显卡，显示器，键盘鼠标等其他输入输出设备。 所有的软件（比如：操作系统）都是存放在硬盘上，程序执行时需要将程序从硬盘上读取到内存中然后加载到 CPU 中来运行。 当我们按下开机键时，此时内存中什么都没有，因此需要借助某种方式，将操作系统加载到内存中，而完成这项任务的就是 BIOS。</p>
+        <meta name="referrer" content="no-referrer">
+
+<h1 id="Android系统是如何启动的"><a href="#Android系统是如何启动的" class="headerlink" title="Android系统是如何启动的"></a>Android系统是如何启动的</h1><h2 id="计算机是如何启动的？"><a href="#计算机是如何启动的？" class="headerlink" title="计算机是如何启动的？"></a>计算机是如何启动的？</h2><p>首先熟悉一些概念，计算机的硬件包括：CPU，内存，硬盘，显卡，显示器，键盘鼠标等其他输入输出设备。 所有的软件（比如：操作系统）都是存放在硬盘上，程序执行时需要将程序从硬盘上读取到内存中然后加载到 CPU 中来运行。 当我们按下开机键时，此时内存中什么都没有，因此需要借助某种方式，将操作系统加载到内存中，而完成这项任务的就是 BIOS。</p>
 <ul>
 <li>引导阶段</li>
 </ul>

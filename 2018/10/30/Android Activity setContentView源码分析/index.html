@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="前言 平时我们开发过程中，给Activity设置布局的时候，直接调用的setContentView，然后我们在xml布局文件中写的布局就可以显示出来，那这个过程到底是怎么样的呢，今天我们来分析一下，setContentView都做了什么。  Activity setContentView首先我们看Activity的setContentView方法，这个方法有几个重载: 12345678910111">
+<meta name="description" content="前言 平时我们开发过程中，给Activity设置布局的时候，直接调用的setContentView，然后我们在xml布局文件中写的布局就可以显示出来，那这个过程到底是怎么样的呢，今天我们来分析一下，setContentView都做了什么。  Activity setContentView首先我们看Activity的setContentView方法，这个方法有几个重载: 123456789101">
 <meta name="keywords" content="Android源码,setContenetView">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Activity setContentView源码分析">
 <meta property="og:url" content="http://yoursite.com/2018/10/30/Android Activity setContentView源码分析/index.html">
 <meta property="og:site_name" content="山有扶苏">
-<meta property="og:description" content="前言 平时我们开发过程中，给Activity设置布局的时候，直接调用的setContentView，然后我们在xml布局文件中写的布局就可以显示出来，那这个过程到底是怎么样的呢，今天我们来分析一下，setContentView都做了什么。  Activity setContentView首先我们看Activity的setContentView方法，这个方法有几个重载: 12345678910111">
+<meta property="og:description" content="前言 平时我们开发过程中，给Activity设置布局的时候，直接调用的setContentView，然后我们在xml布局文件中写的布局就可以显示出来，那这个过程到底是怎么样的呢，今天我们来分析一下，setContentView都做了什么。  Activity setContentView首先我们看Activity的setContentView方法，这个方法有几个重载: 123456789101">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fxx3ucp4odj30o40z4ae2.jpg">
-<meta property="og:updated_time" content="2019-04-26T10:33:41.706Z">
+<meta property="og:updated_time" content="2019-12-19T09:07:18.036Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Activity setContentView源码分析">
-<meta name="twitter:description" content="前言 平时我们开发过程中，给Activity设置布局的时候，直接调用的setContentView，然后我们在xml布局文件中写的布局就可以显示出来，那这个过程到底是怎么样的呢，今天我们来分析一下，setContentView都做了什么。  Activity setContentView首先我们看Activity的setContentView方法，这个方法有几个重载: 12345678910111">
+<meta name="twitter:description" content="前言 平时我们开发过程中，给Activity设置布局的时候，直接调用的setContentView，然后我们在xml布局文件中写的布局就可以显示出来，那这个过程到底是怎么样的呢，今天我们来分析一下，setContentView都做了什么。  Activity setContentView首先我们看Activity的setContentView方法，这个方法有几个重载: 123456789101">
 <meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fxx3ucp4odj30o40z4ae2.jpg">
 
 
@@ -354,7 +354,9 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
+        <meta name="referrer" content="no-referrer">
+
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
 <p>平时我们开发过程中，给Activity设置布局的时候，直接调用的setContentView，然后我们在xml布局文件中写的布局就可以显示出来，那这个过程到底是怎么样的呢，今天我们来分析一下，setContentView都做了什么。</p>
 </blockquote>
 <h2 id="Activity-setContentView"><a href="#Activity-setContentView" class="headerlink" title="Activity setContentView"></a>Activity setContentView</h2><p>首先我们看Activity的setContentView方法，这个方法有几个重载:</p>

@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="下面介绍实现下图所示效果的两种方式： 第一种是通过写shape布局文件来实现给TextView设置background时引用此布局文件即可实现效果，shape布局文件代码如下： 12345678910111213141516&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;shape xmlns:android=&quot;http://schemas.andr">
+<meta name="description" content="下面介绍实现下图所示效果的两种方式： 第一种是通过写shape布局文件来实现给TextView设置background时引用此布局文件即可实现效果，shape布局文件代码如下： 12345678910111213141516&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;shape xmlns:android=&quot;http://schemas.an">
 <meta name="keywords" content="虚线包裹文字">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android中实现虚线边框包裹文字的两种方式">
 <meta property="og:url" content="http://yoursite.com/2018/12/06/Android中实现虚线边框包裹文字的两种方式/index.html">
 <meta property="og:site_name" content="山有扶苏">
-<meta property="og:description" content="下面介绍实现下图所示效果的两种方式： 第一种是通过写shape布局文件来实现给TextView设置background时引用此布局文件即可实现效果，shape布局文件代码如下： 12345678910111213141516&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;shape xmlns:android=&quot;http://schemas.andr">
+<meta property="og:description" content="下面介绍实现下图所示效果的两种方式： 第一种是通过写shape布局文件来实现给TextView设置background时引用此布局文件即可实现效果，shape布局文件代码如下： 12345678910111213141516&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;shape xmlns:android=&quot;http://schemas.an">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fxx5kr97a4j30oq158jt4.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fxx5mnxw0dj30uw0f674s.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fxx5kr97a4j30oq158jt4.jpg">
-<meta property="og:updated_time" content="2019-04-26T10:33:41.720Z">
+<meta property="og:updated_time" content="2019-12-19T09:04:10.776Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android中实现虚线边框包裹文字的两种方式">
-<meta name="twitter:description" content="下面介绍实现下图所示效果的两种方式： 第一种是通过写shape布局文件来实现给TextView设置background时引用此布局文件即可实现效果，shape布局文件代码如下： 12345678910111213141516&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;shape xmlns:android=&quot;http://schemas.andr">
+<meta name="twitter:description" content="下面介绍实现下图所示效果的两种方式： 第一种是通过写shape布局文件来实现给TextView设置background时引用此布局文件即可实现效果，shape布局文件代码如下： 12345678910111213141516&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;shape xmlns:android=&quot;http://schemas.an">
 <meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fxx5kr97a4j30oq158jt4.jpg">
 
 
@@ -356,7 +356,9 @@
       
 
       
-        <h3 id="下面介绍实现下图所示效果的两种方式："><a href="#下面介绍实现下图所示效果的两种方式：" class="headerlink" title="下面介绍实现下图所示效果的两种方式："></a>下面介绍实现下图所示效果的两种方式：</h3><p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx5kr97a4j30oq158jt4.jpg" alt></p>
+        <meta name="referrer" content="no-referrer">
+
+<h3 id="下面介绍实现下图所示效果的两种方式："><a href="#下面介绍实现下图所示效果的两种方式：" class="headerlink" title="下面介绍实现下图所示效果的两种方式："></a>下面介绍实现下图所示效果的两种方式：</h3><p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxx5kr97a4j30oq158jt4.jpg" alt></p>
 <h2 id="第一种是通过写shape布局文件来实现"><a href="#第一种是通过写shape布局文件来实现" class="headerlink" title="第一种是通过写shape布局文件来实现"></a>第一种是通过写shape布局文件来实现</h2><p>给TextView设置background时引用此布局文件即可实现效果，shape布局文件代码如下：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">shape</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag"><span class="attr">android:shape</span>=<span class="string">"rectangle"</span> &gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 虚线边框的宽度，颜色等 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">stroke</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:dashGap</span>=<span class="string">"3dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:dashWidth</span>=<span class="string">"6dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:width</span>=<span class="string">"1dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:color</span>=<span class="string">"#63a219"</span> &gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">stroke</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 矩形的圆角半径 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">corners</span> <span class="attr">android:radius</span>=<span class="string">"10dp"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">shape</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>stroke标签下为虚线框的主要设置，dashGap表示中间隔开一段距离，即定义了样式为虚线，效果图如下：</p>
