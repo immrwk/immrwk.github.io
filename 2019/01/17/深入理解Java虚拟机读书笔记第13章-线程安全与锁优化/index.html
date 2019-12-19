@@ -87,16 +87,16 @@
 <meta property="og:site_name" content="山有扶苏">
 <meta property="og:description" content="1. 线程安全1.1 Java语言中的线程安全按照线程安全的”安全强度”由强至弱来排序，我们可以将 Java 语⾔中各种操作共享的数据分为以下5类：不可变、绝对线程安全、相对线程安全、线程兼容和线程对⽴。 一、 不可变不可变（Immutable）的对象⼀定是线程安全的，⽆论是对象的⽅ 法实现还是⽅法的调⽤者，都不需要再采取任何的线程安全保障措施，我们谈到final关键字带来的可见性时曾经提到过这⼀">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fz9linc86ij313k0p2wlm.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz9ll69ejkj317m088ae7.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fz9lwvfmr8j31aw0b8dn7.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fz9lxai3ccj319i0g845g.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fz9ly6xx0cj31900lmqef.jpg">
-<meta property="og:updated_time" content="2019-04-26T10:33:41.730Z">
+<meta property="og:image" content="http://yoursite.com/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_01.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_02.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_03.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_04.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_05.jpg">
+<meta property="og:updated_time" content="2019-12-19T08:39:12.304Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java线程安全与锁优化">
 <meta name="twitter:description" content="1. 线程安全1.1 Java语言中的线程安全按照线程安全的”安全强度”由强至弱来排序，我们可以将 Java 语⾔中各种操作共享的数据分为以下5类：不可变、绝对线程安全、相对线程安全、线程兼容和线程对⽴。 一、 不可变不可变（Immutable）的对象⼀定是线程安全的，⽆论是对象的⽅ 法实现还是⽅法的调⽤者，都不需要再采取任何的线程安全保障措施，我们谈到final关键字带来的可见性时曾经提到过这⼀">
-<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fz9linc86ij313k0p2wlm.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_01.jpg">
 
 
 
@@ -373,12 +373,12 @@
 <h3 id="一、-不可变"><a href="#一、-不可变" class="headerlink" title="一、 不可变"></a><font color="#3FBA8B" size="4" face="黑体">一、 不可变</font></h3><p>不可变（Immutable）的对象⼀定是线程安全的，⽆论是对象的⽅ 法实现还是⽅法的调⽤者，都不需要再采取任何的线程安全保障措施，我们谈到final关键字带来的可见性时曾经提到过这⼀点，只要⼀个 不可变的对象被正确地构建出来（没有发⽣this引⽤逃逸的情况），那其外 部的可见状态永远也不会改变，永远也不会看到它在多个线程之中处于不 ⼀致的状态。”不可变”带来的安全性是最简单和最纯粹的。</p>
 <p>Java语⾔中，如果共享数据是⼀个基本数据类型，那么只要在定义时使⽤final关键字修饰它就可以保证它是不可变的。如果共享数据是⼀个对 象，那就需要保证对象的⾏为不会对其状态产⽣任何影响才⾏，如果读者 还没想明⽩这句话，不妨想⼀想java.lang.String类的对象，它是⼀个典型的 不可变对象，我们调⽤它的substring()、replace()和concat()这些⽅法都不会影响它原来的值，只会返回⼀个新构造的字符串对象。</p>
 <p>保证对象⾏为不影响⾃⼰状态的途径有很多种，其中最简单的就是把对象中带有状态的变量都声明为final，这样在构造函数结束之后，它就是不可变的，例如下面java.lang.Integer构造函数所⽰的，它通过将内部状态变量value定义为final来保障状态不变。</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fz9linc86ij313k0p2wlm.jpg" alt></p>
+<img src="/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_01.jpg">
 <p>在 Java API 中符合不可变要求的类型，除了上⾯提到的String之外，常 ⽤的还有枚举类型，以及java.lang.Number的部分⼦类，如Long和Double等「数值包装类型」，BigInteger和BigDecimal等⼤数据类型；但同为Number的⼦类型的原⼦类AtomicInteger和AtomicLong则并⾮不可变的。</p>
 <h3 id="二、绝对线程安全"><a href="#二、绝对线程安全" class="headerlink" title="二、绝对线程安全"></a><font color="#3FBA8B" size="4" face="黑体">二、绝对线程安全</font></h3><p>绝对的线程安全完全满⾜ Brian Goetz 给出的线程安全的定义，这个定义其实是很严格的，⼀个类要达到”不管运⾏时环境如何，调⽤者都不需要任何额外的同步措施“通常需要付出很⼤的，甚⾄有时候是不切实际的代价。在Java API中标注⾃⼰是线程安全的类，⼤多数都不是绝对的线程安全。</p>
 <p>如果说java.util.Vector是⼀个线程安全的容器，相信所有的Java程序员对此都不会有异议，因为它的add()、get()和size()这类⽅法都是被synchronized修饰的，尽管这样效率很低，但确实是安全的。但是，即使它所有的⽅法都被修饰成同步，也不意味着调⽤它的时候永远都不再需要同步⼿段了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">private static Vector&lt;Integer&gt; vector = new Vector&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    while (true) &#123;</span><br><span class="line">        for (int i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">            vector.add(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Thread removeThread = new Thread(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                for (int i = 0; i &lt; vector.size(); i++) &#123;</span><br><span class="line">                    vector.remove(i);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        Thread printThread = new Thread(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                for (int i = 0; i &lt; vector.size(); i++) &#123;</span><br><span class="line">                    System.out.println((vector.get(i)));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        removeThread.start();</span><br><span class="line">        printThread.start();</span><br><span class="line"></span><br><span class="line">        //不要同时产生过多的线程，否则会导致操作系统假死</span><br><span class="line">        while (Thread.activeCount() &gt; 20);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz9ll69ejkj317m088ae7.jpg" alt></p>
+<img src="/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_02.jpg">
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Thread removeThread = new Thread(new Runnable() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        synchronized (vector) &#123;</span><br><span class="line">            for (int i = 0; i &lt; vector.size(); i++) &#123;</span><br><span class="line">                vector.remove(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">Thread printThread = new Thread(new Runnable() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        synchronized (vector) &#123;</span><br><span class="line">            for (int i = 0; i &lt; vector.size(); i++) &#123;</span><br><span class="line">                System.out.println((vector.get(i)));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <h3 id="三、相对线程安全"><a href="#三、相对线程安全" class="headerlink" title="三、相对线程安全"></a><font color="#3FBA8B" size="4" face="黑体">三、相对线程安全</font></h3><p>相对的线程安全就是我们通常意义上所讲的线程安全，它需要保证对这个对象单独的操作是线程安全的，我们在调⽤的时候不需要做额外的保障措施，但是对于⼀些特定顺序的连续调⽤，就可能需要在调⽤端使⽤额外的同步⼿段来保证调⽤的正确性。</p>
 <p>在Java语⾔中，⼤部分的线程安全类都属于这种类型，例如Vector、 HashTable、Collections的synchronizedCollection()⽅法包装的集合等。</p>
@@ -469,9 +469,9 @@
 </li>
 </ul>
 <p>对象头信息是与对象⾃⾝定义的数据⽆关的额外存储成本，考虑到虚拟机的空间效率，Mark Word被设计成⼀个⾮固定的数据结构以便在极⼩的空间内存储尽量多的信息，它会根据对象的状态复⽤⾃⼰的存储空间。 例如，在32位的 HotSpot 虚拟机中对象「未被锁定」的状态下，Mark Word的 32bit 空间中的 25bit ⽤于存储对象哈希码（HashCode），4bit ⽤于存储对象分代年龄，2bit ⽤于存储锁标志位，1bit 固定为 0，在其他状态（轻量级锁定、重量级锁定、GC标记、可偏向）下对象的存储内容见表</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fz9lwvfmr8j31aw0b8dn7.jpg" alt></p>
+<img src="/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_03.jpg">
 <p>在代码进⼊同步块的时候，如果此同步对象没有被锁定（锁标志 位为01状态），虚拟机⾸先将在当前线程的栈帧中建⽴⼀个名为锁记录 （Lock Record）的空间，⽤于存储锁对象⽬前的Mark Word的拷贝（官 把这份拷贝加了⼀个 Displaced 前缀，即 Displaced Mark Word），这时候线程堆栈与对象头的状态如左图所示。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fz9lxai3ccj319i0g845g.jpg" alt></p>
+<img src="/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_04.jpg">
 <p>然后，虚拟机将使⽤ CAS 操作尝试将对象的 Mark Word 更新为指向 Lock Record 的指针。如果这个更新动作成功了，那么这个线程就拥有了该对象的锁，并且对象Mark Word的锁标志位（Mark Word的最后2bit）将转变为 00，即表⽰此对象处于「轻量级锁定状态」，这时候线程堆栈与对象头的状态如右图所⽰。</p>
 <p>如果这个更新操作失败了，虚拟机⾸先会检查对象的 Mark Word 是否指向当前线程的栈帧，如果是说明当前线程已经拥有了这个对象的锁，那就可以直接进⼊同步块继续执⾏，否则说明这个锁对象已经被其他线程抢占了。如果有两条以上的线程争⽤同⼀个锁，那轻量级锁就不再有效，要膨胀为重量级锁，锁标志的状态值变为10，Mark Word 中存储的就是指向重量级锁（互斥量）的指针，后⾯等待锁的线程也要进⼊阻塞状态。</p>
 <p>上⾯描述的是「轻量级锁」的加锁过程，它的解锁过程也是通过 CAS 操作来进⾏的，如果对象的 Mark Word 仍然指向着线程的锁记录，那就⽤ CAS 操作把对象当前的 Mark Word 和线程中复制的 Displaced Mark Word 替换回来，如果替换成功，整个同步过程就完成了。如果替换失败，说明有其他线程尝试过获取该锁，那就要在释放锁的同时，唤醒被挂起的线程。</p>
@@ -482,7 +482,7 @@
 <p>偏向锁的”偏”，就是偏⼼的”偏”、偏袒的”偏”，它的意思是这个锁会偏向于第⼀个获得它的线程，如果在接下来的执⾏过程中，该锁没有被其他的线程获取，则持有偏向锁的线程将永远不需要再进⾏同步。</p>
 <p>假设当前虚拟机启⽤了偏向锁（启⽤参数-XX:+UseBiasedLocking，这是JDK 1.6的默认值），那 么，当锁对象第⼀次被线程获取的时候，虚拟机将会把对象头中的标志位 设为”01“，即偏向模式。同时使⽤ CAS 操作把获取到这个锁的线程的 ID 记录在对象的 Mark Word 之中，如果CAS操作成功，持有偏向锁的线程以后每次进⼊这个锁相关的同步块时，虚拟机都可以不再进⾏任何同步操作 （例如 Locking、Unlocking 及对 Mark Word 的 Update 等）。</p>
 <p>当有另外⼀个线程去尝试获取这个锁时，偏向模式就宣告结束。根据锁对象⽬前是否处于被锁定的状态，撤销偏向（Revoke Bias）后恢复到未锁定（标志位为”01”）或轻量级锁定（标志位为”00”）的状态，后续的同步操作就如上⾯介绍的轻量级锁那样执⾏。偏向锁、轻量级锁的状态转化及对象 Mark Word 的关系如图所⽰：</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fz9ly6xx0cj31900lmqef.jpg" alt></p>
+<img src="/2019/01/17/深入理解Java虚拟机读书笔记第13章-线程安全与锁优化/java_lock_05.jpg">
 <p>偏向锁可以提⾼带有同步但⽆竞争的程序性能。它同样是⼀个带有效益权衡（Trade Off）性质的优化，也就是说，它并不⼀定总是对程序运⾏有利，如果程序中⼤多数的锁总是被多个不同的线程访问，那偏向模式就是多余的。在具体问题具体分析的前提下，有时候使⽤参数-XX:UseBiasedLocking来禁⽌偏向锁优化反⽽可以提升性能。</p>
 
       
