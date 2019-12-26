@@ -87,22 +87,10 @@
 <meta property="og:site_name" content="山有扶苏">
 <meta property="og:description" content="写在前面Android Q版本的发布渐进尾声，Android团队将在2019年9月份发布Android的最终版本，目前已经发到了第5个beta版本，每当Android新版本发布后，开发者需要第一时间了解新特性，并进行相关适配，下面就带您一起了解一下Android Q上的几个主要改动。 一、禁止应用读取Device ID变更内容Q版本将限制应用访问不可重设的设备识别码，如 IMEI、序列号等，所有获">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564736838686.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564760502082.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/only_fine.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564763785751.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564765770942.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564406423490.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564406498003.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564847488000.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564850981652.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1565063713337.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/uninstall_app.jpg">
 <meta property="og:updated_time" content="2019-08-07T03:01:47.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="带你走进Android Q">
 <meta name="twitter:description" content="写在前面Android Q版本的发布渐进尾声，Android团队将在2019年9月份发布Android的最终版本，目前已经发到了第5个beta版本，每当Android新版本发布后，开发者需要第一时间了解新特性，并进行相关适配，下面就带您一起了解一下Android Q上的几个主要改动。 一、禁止应用读取Device ID变更内容Q版本将限制应用访问不可重设的设备识别码，如 IMEI、序列号等，所有获">
-<meta name="twitter:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564736838686.jpg">
 
 
 
@@ -373,7 +361,7 @@
 <li>TargetSdkVersion&lt;Q并且没有申请READ_PHONE_STATE权限，获取device id会抛异常SecurityException</li>
 <li>TargetSdkVersion&lt;Q并且申请了READ_PHONE_STATE，通过getDeviceId接口读取的值为Null；</li>
 </ul>
-<p>异常信息如下：<br><img src="/2019/08/05/带你走进Android-Q/1564736838686.jpg"></p>
+<p>异常信息如下：<br></p>
 <h2 id="适配指导"><a href="#适配指导" class="headerlink" title="适配指导"></a><font color="#EF692F" size="5" face="黑体">适配指导</font></h2><h3 id="1-Google推荐的适配方法"><a href="#1-Google推荐的适配方法" class="headerlink" title="1. Google推荐的适配方法"></a><font color="#EF692F" size="4" face="黑体">1. Google推荐的适配方法</font></h3><p>唯一标识符最佳做法：<a href="https://developer.android.google.cn/training/articles/user-data-ids" target="_blank" rel="noopener">https://developer.android.google.cn/training/articles/user-data-ids</a></p>
 <p>大致分为以下三种：</p>
 <ol>
@@ -431,10 +419,10 @@
 <li>应用的TargetSdkVersion&gt;=Q，如果应用必须要始终定位，可以只申请 ACCESS_BACKGROUND_LOCATION即可。</li>
 <li>如果用户选择仅前台使用允许，应用的页面退后台，通过启动前台服务让应用处于前台状态，必须把前台服务标为：foregroundServiceType=“ location”，才能获取位置信息。</li>
 </ol>
-<p>相关信息见下图：<br><img src="/2019/08/05/带你走进Android-Q/1564760502082.jpg" width="400" height="600"></p>
-<img src="/2019/08/05/带你走进Android-Q/only_fine.jpg" width="400" height="600">
+<p>相关信息见下图：<br></p>
+
 <p>从手机权限控制查看：</p>
-<img src="/2019/08/05/带你走进Android-Q/1564763785751.jpg" width="400" height="600">
+
 <h2 id="适配指导-1"><a href="#适配指导-1" class="headerlink" title="适配指导"></a><font color="#EF692F" size="5" face="黑体">适配指导</font></h2><h3 id="1-谷歌提供的适配指导文档："><a href="#1-谷歌提供的适配指导文档：" class="headerlink" title="1.谷歌提供的适配指导文档："></a><font color="#EF692F" size="4" face="黑体">1.谷歌提供的适配指导文档：</font></h3><p><a href="https://developer.android.google.cn/preview/privacy/device-location" target="_blank" rel="noopener">https://developer.android.google.cn/preview/privacy/device-location</a></p>
 <h3 id="2-始终获取位置信息"><a href="#2-始终获取位置信息" class="headerlink" title="2.始终获取位置信息"></a><font color="#EF692F" size="4" face="黑体">2.始终获取位置信息</font></h3><p>可以不申请新的ACCESS_BACKGROUND_LOCATION权限，只申请下面这一个权限</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android :name=&quot;android.permission.ACCESS_FINE_LOCATION&quot; /&gt;</span><br></pre></td></tr></table></figure>
@@ -480,9 +468,9 @@
 <h3 id="应用涉及接口查看"><a href="#应用涉及接口查看" class="headerlink" title="应用涉及接口查看"></a><font color="#EF692F" size="4" face="黑体">应用涉及接口查看</font></h3><p>静态扫描</p>
 <p><a href="https://android.googlesource.com/platform/prebuilts/runtime/+/refs/heads/master/appcompat/" target="_blank" rel="noopener">预编译版本的 veridex 工具</a></p>
 <p>工具使用说明请查看下载工具压缩包里面的README.txt文件说明</p>
-<h2 id="兼容性影响"><a href="#兼容性影响" class="headerlink" title="兼容性影响"></a><font color="#EF692F" size="5" face="黑体">兼容性影响</font></h2><img src="/2019/08/05/带你走进Android-Q/1564765770942.jpg">
-<h3 id="接口变动对比"><a href="#接口变动对比" class="headerlink" title="接口变动对比"></a><font color="#EF692F" size="4" face="黑体">接口变动对比</font></h3><img src="/2019/08/05/带你走进Android-Q/1564406423490.jpg" title="P版本">
-<img src="/2019/08/05/带你走进Android-Q/1564406498003.jpg" title="Q版本">
+<h2 id="兼容性影响"><a href="#兼容性影响" class="headerlink" title="兼容性影响"></a><font color="#EF692F" size="5" face="黑体">兼容性影响</font></h2>
+<h3 id="接口变动对比"><a href="#接口变动对比" class="headerlink" title="接口变动对比"></a><font color="#EF692F" size="4" face="黑体">接口变动对比</font></h3>
+
 <p>数据对比明显，Q版本的黑名单数量大大增加</p>
 <h3 id="影响较大的接口"><a href="#影响较大的接口" class="headerlink" title="影响较大的接口"></a><font color="#EF692F" size="4" face="黑体">影响较大的接口</font></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Landroid/view/DisplayListCanvas;-&gt;drawGLFunctor2(JLjava/lang/Runnable;)V</span><br><span class="line">Lcom/android/internal/telephony/CallManager;-&gt;getAllPhones()Ljava/util/List;</span><br><span class="line">Lcom/android/internal/telephony/CommandsInterface$RadioState;-&gt;isOn()Z</span><br><span class="line">Lcom/android/internal/telephony/CommandsInterface;-&gt;getRadioState()Lcom/android/internal/tel ephony/CommandsInterface$RadioState;</span><br><span class="line">Lcom/android/internal/telephony/dataconnection/DcTracker;-&gt;cleanUpAllConnections(ZLjava/la ng/String;)Z</span><br><span class="line">Lcom/android/internal/telephony/dataconnection/DcTracker;-&gt;onDataSetupComplete(Landroid/os /AsyncResult;)V</span><br><span class="line">Lcom/android/internal/telephony/ITelephony;-&gt;answerRingingCall()V</span><br><span class="line">Lcom/android/internal/telephony/ITelephony;-&gt;endCall()Z</span><br><span class="line">Lcom/android/internal/telephony/ITelephony;-&gt;getVoiceMessageCount()I</span><br><span class="line">Lcom/android/internal/telephony/ITelephony;-&gt;silenceRinger()V</span><br><span class="line">Lcom/android/internal/telephony/ITelephonyRegistry;-&gt;notifyDataConnectionFailed(Ljava/lang/S tring;Ljava/lang/String;)V</span><br></pre></td></tr></table></figure>
 <h2 id="Google适配指导"><a href="#Google适配指导" class="headerlink" title="Google适配指导"></a><font color="#EF692F" size="5" face="黑体">Google适配指导</font></h2><p><a href="https://developer.android.google.cn/preview/non-sdk-q" target="_blank" rel="noopener">https://developer.android.google.cn/preview/non-sdk-q</a></p>
@@ -538,7 +526,7 @@
 <li><p>读公共集合目录文件 ：多媒体文件，需要申请存储权限并通过MediaStore和SAF的方式读取；读取下载目录的文件只能使用SAF的方式；</p>
 </li>
 </ol>
-<img src="/2019/08/05/带你走进Android-Q/1564847488000.jpg">
+
 <ol start="4">
 <li>写公共集合目录文件 ，需要通过用户主动授权或者SAF的方式 ，无法直接删除</li>
 <li>需要读写指定的任意目录的文件只能通过SAF的方式实现；</li>
@@ -569,7 +557,7 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public void openImages() &#123;</span><br><span class="line">    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);</span><br><span class="line"></span><br><span class="line">    intent.addCategory(Intent.CATEGORY_OPENABLE);</span><br><span class="line">    intent.setType(&quot;image/*&quot;);</span><br><span class="line"></span><br><span class="line">    startActivityForResult(intent, code);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>执行上述方法会拉起DocumentUI，用户可以选择需要打开的图片文件：</p>
-<img src="/2019/08/05/带你走进Android-Q/1564850981652.jpg" width="400" height="600">
+
 <p>DocumentUI会把用户选择的图片文件的Content Uri通过intent传回给应用， 应用在onActivityResult回调中就可以拿到这个Uri，通过Uri操作文件，比如打开文件 </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">protected void onActivityResult(int requestCode, int resultCode, Intent resultData) &#123;</span><br><span class="line">    super.onActivityResult(requestCode, resultCode, data);</span><br><span class="line">    if (requestCode == READ_REQUEST_CODE &amp;&amp; resultCode == Activity.RESULT_OK) &#123;</span><br><span class="line">        Uri uri = null;</span><br><span class="line">        if (resultData != null) &#123;</span><br><span class="line">            uri = resultData.getData();</span><br><span class="line">            Log.i(TAG, &quot;Uri: &quot; + uri.toString());</span><br><span class="line">            showImage(uri);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
@@ -590,7 +578,7 @@
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">private void createFile(String mimeType, String fileName) &#123;</span><br><span class="line">    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);</span><br><span class="line"></span><br><span class="line">    intent.addCategory(Intent.CATEGORY_OPENABLE);</span><br><span class="line">    intent.setType(mimeType);</span><br><span class="line">    intent.putExtra(Intent.EXTRA_TITLE, fileName);</span><br><span class="line"></span><br><span class="line">    startActivityForResult(intent, code);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<img src="/2019/08/05/带你走进Android-Q/1565063713337.jpg" width="400" height="600">
+
 <p>用户点击保存之后，DocumentUI就会把需要保存的文件的Content Uri通过intent传回给应用：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">if (requestCode == WRITE_REQUEST_CODE &amp;&amp; resultCode == Activity.RESULT_OK) &#123;</span><br><span class="line"></span><br><span class="line">    Uri uri = null;</span><br><span class="line">    if (resultData != null) &#123;</span><br><span class="line">        uri = resultData.getData();</span><br><span class="line"></span><br><span class="line">        Log.i(TAG, &quot;Uri: &quot; + uri.toString());</span><br><span class="line">        final int takeFlags = getIntent().getFlags() &amp; (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);</span><br><span class="line"></span><br><span class="line">        getContentResolver().takePersistableUriPermission(uri, takeFlags);</span><br><span class="line"></span><br><span class="line">        writeFile(uri);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="卸载应用文件保留问题"><a href="#卸载应用文件保留问题" class="headerlink" title="卸载应用文件保留问题"></a><font color="#EF692F" size="4" face="黑体">卸载应用文件保留问题</font></h3><ol>
@@ -599,7 +587,7 @@
 <li><p>方法2：在应用的AndroidManifest.xml文件增加：android:hasFragileUserData=”true”，应用不增加该属性的话，应用能卸载的时候应用保存在沙箱目录的文件会直接被删除， 不会弹框提示让用户勾选保留。只有应用增加了这个属性，并且设置的值是为true，在应用被卸载的时候，才会弹框提示用户可以勾选保留应用的沙箱目录文件，默认删除，勾选保留</p>
 </li>
 </ol>
-<img src="/2019/08/05/带你走进Android-Q/uninstall_app.jpg" width="400" height="600">
+
       
     </div>
     
