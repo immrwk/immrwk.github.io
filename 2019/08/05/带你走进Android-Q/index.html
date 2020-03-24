@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1564850981652.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/1565063713337.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/08/05/带你走进Android-Q/uninstall_app.jpg">
-<meta property="og:updated_time" content="2020-03-10T09:14:25.096Z">
+<meta property="og:updated_time" content="2020-03-12T10:36:44.518Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="带你走进Android Q">
 <meta name="twitter:description" content="写在前面Android Q版本的发布渐进尾声，Android团队将在2019年9月份发布Android的最终版本，目前已经发到了第5个beta版本，每当Android新版本发布后，开发者需要第一时间了解新特性，并进行相关适配，下面就带您一起了解一下Android Q上的几个主要改动。 一、禁止应用读取Device ID变更内容Q版本将限制应用访问不可重设的设备识别码，如 IMEI、序列号等，所有获">
@@ -548,7 +548,7 @@
 <li>需要读写指定的任意目录的文件只能通过SAF的方式实现；</li>
 </ol>
 <h2 id="沙箱模式的选择"><a href="#沙箱模式的选择" class="headerlink" title="沙箱模式的选择"></a><font color="#EF692F" size="5" face="黑体">沙箱模式的选择</font></h2><p>该特性将在R版本强制开启，Q版本可以自行选择是否进入沙箱模式<br>方法如下：<br>在 AndroidManifest.xml中修改增加requestLegacyExternalStorage</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:hasFragileUserData=&quot;true&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:requestLegacyExternalStorage=&quot;true&quot;</span><br></pre></td></tr></table></figure>
 <p>其中</p>
 <ul>
 <li>android:requestLegacyExternalStorage=”true”，表示适配没有完成，会进入Legacy Mode</li>
@@ -646,6 +646,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/03/19/Handler同步屏障机制/" rel="prev" title="Handler同步屏障机制">
+                Handler同步屏障机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -721,7 +725,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
