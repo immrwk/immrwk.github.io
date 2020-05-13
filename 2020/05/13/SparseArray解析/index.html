@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SparseArray,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是SparseArray翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那他是干什么的，怎么用，不要急，看下面 什么情况下用用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲">
+<meta name="keywords" content="SparseArray">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SparseArray解析">
+<meta property="og:url" content="http://yoursite.com/2020/05/13/SparseArray解析/index.html">
+<meta property="og:site_name" content="山有扶苏">
+<meta property="og:description" content="什么是SparseArray翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那他是干什么的，怎么用，不要急，看下面 什么情况下用用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-13T10:18:50.255Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SparseArray解析">
+<meta name="twitter:description" content="什么是SparseArray翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那他是干什么的，怎么用，不要急，看下面 什么情况下用用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/13/SparseArray解析/">
+
+
+
+
+
+  <title>SparseArray解析 | 山有扶苏</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">山有扶苏</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/13/SparseArray解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="immrwk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="山有扶苏">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SparseArray解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-13T11:00:53+08:00">
+                2020-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android系统源码/" itemprop="url" rel="index">
+                    <span itemprop="name">Android系统源码</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <meta name="referrer" content="no-referrer">
+
+<h1 id="什么是SparseArray"><a href="#什么是SparseArray" class="headerlink" title="什么是SparseArray"></a><font color="#EF692F" size="6" face="黑体">什么是SparseArray</font></h1><p>翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那他是干什么的，怎么用，不要急，看下面</p>
+<h1 id="什么情况下用"><a href="#什么情况下用" class="headerlink" title="什么情况下用"></a><font color="#EF692F" size="6" face="黑体">什么情况下用</font></h1><p>用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用<br>SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲，后面会讲述。</p>
+<h1 id="什么原理"><a href="#什么原理" class="headerlink" title="什么原理"></a><font color="#EF692F" size="6" face="黑体">什么原理</font></h1><h2 id="初始容量"><a href="#初始容量" class="headerlink" title="初始容量"></a><font color="#EF692F" size="5" face="黑体">初始容量</font></h2><p>既然是一种数据结构，肯定就有容量大小问题，先来看它的构造方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public SparseArray() &#123;</span><br><span class="line">    this(10);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public SparseArray(int initialCapacity) &#123;</span><br><span class="line">    if (initialCapacity == 0) &#123;</span><br><span class="line">        mKeys = EmptyArray.INT;</span><br><span class="line">        mValues = EmptyArray.OBJECT;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        mValues = ArrayUtils.newUnpaddedObjectArray(initialCapacity);</span><br><span class="line">        mKeys = new int[mValues.length];</span><br><span class="line">    &#125;</span><br><span class="line">    mSize = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，默认初始容量是10 ，当然，也可以自己指定。</p>
+<h2 id="成员变量"><a href="#成员变量" class="headerlink" title="成员变量"></a><font color="#EF692F" size="5" face="黑体">成员变量</font></h2><p>一共有下面几个成员变量，分别给出了注释</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 空内容，表示当前的value被删除了</span><br><span class="line">private static final Object DELETED = new Object();</span><br><span class="line">// 表示存在需要回收的内容</span><br><span class="line">private boolean mGarbage = false;</span><br><span class="line">// SparseArray所有内容的key都是int类型的，这个数组就是保存这些key用的</span><br><span class="line">private int[] mKeys;</span><br><span class="line">// key对应的value</span><br><span class="line">private Object[] mValues;</span><br><span class="line">// 数组实际内容大小（数组里可能存在已被删除还未回收的内容</span><br><span class="line">// 所以这个mSize记录的真正的数据的多少，不包含未回收的）</span><br><span class="line">private int mSize;</span><br></pre></td></tr></table></figure>
+<h2 id="基本操作方法"><a href="#基本操作方法" class="headerlink" title="基本操作方法"></a><font color="#EF692F" size="5" face="黑体">基本操作方法</font></h2><p>如HashMap，SparseArray也有自己的增删查方法。</p>
+<h3 id="增加"><a href="#增加" class="headerlink" title="增加"></a><font color="#EF692F" size="4" face="黑体">增加</font></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public void put(int key, E value) &#123;</span><br><span class="line">    // 根据二分法找到数据需要加入的位置</span><br><span class="line">    // mSize是实际有效的部分，这里不能用mKeys.length</span><br><span class="line">    int i = ContainerHelpers.binarySearch(mKeys, mSize, key);</span><br><span class="line">    // 大于0证明找到了合适的位置，直接增加即可</span><br><span class="line">    // 即数组中之前存在一个同样key的内容</span><br><span class="line">    if (i &gt;= 0) &#123;</span><br><span class="line">        mValues[i] = value;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // 未找到，将二分法返回的index取反，之所以取反，是跟二分法查找的方法有关</span><br><span class="line">        i = ~i;</span><br><span class="line">        // 下面意思是，如果这个节点是被标记删除的节点，则直接给他赋值</span><br><span class="line">        if (i &lt; mSize &amp;&amp; mValues[i] == DELETED) &#123;</span><br><span class="line">            mKeys[i] = key;</span><br><span class="line">            mValues[i] = value;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        // 符合条件先gc，然后重新查找位置</span><br><span class="line">        if (mGarbage &amp;&amp; mSize &gt;= mKeys.length) &#123;</span><br><span class="line">            gc();</span><br><span class="line">            // Search again because indices may have changed.</span><br><span class="line">            i = ~ContainerHelpers.binarySearch(mKeys, mSize, key);</span><br><span class="line">        &#125;</span><br><span class="line">        // 利用GrowingArrayUtils将内容插入，不够就扩容</span><br><span class="line">        mKeys = GrowingArrayUtils.insert(mKeys, mSize, i, key);</span><br><span class="line">        mValues = GrowingArrayUtils.insert(mValues, mSize, i, value);</span><br><span class="line">        mSize++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a><font color="#EF692F" size="4" face="黑体">查找</font></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public E get(int key) &#123;</span><br><span class="line">    return get(key, null);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">public E get(int key, E valueIfKeyNotFound) &#123;</span><br><span class="line">    int i = ContainerHelpers.binarySearch(mKeys, mSize, key);</span><br><span class="line">    if (i &lt; 0 || mValues[i] == DELETED) &#123;</span><br><span class="line">        return valueIfKeyNotFound;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return (E) mValues[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查找比较简单，也是利用二分法查找，大家还记得二分法查找的时间复杂度吗？<br>答案是 k=log2(N)，以2为底，N的对数</p>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a><font color="#EF692F" size="4" face="黑体">删除</font></h3><p><strong>这里的删除统一只做标记，真正的删除是在gc()的时候</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public void delete(int key) &#123;</span><br><span class="line">    int i = ContainerHelpers.binarySearch(mKeys, mSize, key);</span><br><span class="line">    if (i &gt;= 0) &#123;</span><br><span class="line">        if (mValues[i] != DELETED) &#123;</span><br><span class="line">            mValues[i] = DELETED;</span><br><span class="line">            mGarbage = true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>删除也比较简单，还是二分法查找，找到就删除，但是这里的删除不是立即删除，而是将对应的value置为DELETED，做一个标记</p>
+<p>SpareArray除了delete还提供了几个删除的方法，这里简单介绍下他们分别的作用：</p>
+<ul>
+<li>public void remove(int key) 直接调用的delete(int key)</li>
+<li>public E removeReturnOld(int key) 删除并返回旧的value</li>
+<li>public void removeAt(int index) 直接删除指定index的内容</li>
+<li>public void removeAtRange(int index, int size) 从index开始，删除指定size数量的内容</li>
+</ul>
+<h1 id="扩容机制"><a href="#扩容机制" class="headerlink" title="扩容机制"></a><font color="#EF692F" size="6" face="黑体">扩容机制</font></h1><p>上面跳到，扩容是用的GrowingArrayUtils.insert，下面看下这个方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;T&gt; T[] insert(T[] array, int currentSize, int index, T element) &#123;</span><br><span class="line">    assert currentSize &lt;= array.length;</span><br><span class="line">    if (currentSize + 1 &lt;= array.length) &#123;</span><br><span class="line">        System.arraycopy(array, index, array, index + 1, currentSize - index);</span><br><span class="line">        array[index] = element;</span><br><span class="line">        return array;</span><br><span class="line">    &#125;</span><br><span class="line">    T[] newArray = (T[]) Array.newInstance(array.getClass().getComponentType(),</span><br><span class="line">            growSize(currentSize));</span><br><span class="line">    System.arraycopy(array, 0, newArray, 0, index);</span><br><span class="line">    newArray[index] = element;</span><br><span class="line">    System.arraycopy(array, index, newArray, index + 1, array.length - index);</span><br><span class="line">    return newArray;</span><br><span class="line">&#125;</span><br><span class="line">/**</span><br></pre></td></tr></table></figure>
+<p>System.arraycopy是一个native方法，上面的growSize()是获取扩容后的大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static int growSize(int currentSize) &#123;</span><br><span class="line">    return currentSize &lt;= 4 ? 8 : currentSize * 2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到currentSize&lt;=4,就扩容到8，否则是2倍扩容</p>
+<h1 id="二分法查找"><a href="#二分法查找" class="headerlink" title="二分法查找"></a><font color="#EF692F" size="6" face="黑体">二分法查找</font></h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">static int binarySearch(int[] array, int size, int value) &#123;</span><br><span class="line">    int lo = 0;</span><br><span class="line">    int hi = size - 1;</span><br><span class="line">    while (lo &lt;= hi) &#123;</span><br><span class="line">        final int mid = (lo + hi) &gt;&gt;&gt; 1;</span><br><span class="line">        final int midVal = array[mid];</span><br><span class="line">        if (midVal &lt; value) &#123;</span><br><span class="line">            lo = mid + 1;</span><br><span class="line">        &#125; else if (midVal &gt; value) &#123;</span><br><span class="line">            hi = mid - 1;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return mid;  // value found</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return ~lo;  // value not present</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码就是，SparseArray用到的二分法找到的代码，当没有找到对应的index时，返回的时~lo，也就是需要插入的位置取反，所以上面在put时，index&lt;0,又取了一次反</p>
+<h1 id="跟HashMap的对比"><a href="#跟HashMap的对比" class="headerlink" title="跟HashMap的对比"></a><font color="#EF692F" size="6" face="黑体">跟HashMap的对比</font></h1><table>
+<thead>
+<tr>
+<th></th>
+<th>SparseArray</th>
+<th>HashMap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>key</td>
+<td>只能是int</td>
+<td>Object</td>
+</tr>
+<tr>
+<td>查找时间复杂度</td>
+<td>O(log2(N))</td>
+<td>最坏O(logn)</td>
+</tr>
+<tr>
+<td>占用空间</td>
+<td>相对少</td>
+<td>2倍扩容</td>
+</tr>
+<tr>
+<td>最大容量</td>
+<td>Integer.MAX_VALUE</td>
+<td>1 &lt;&lt; 30</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>从我们使用角度总的来说<br>SparseArray占用内存少，HashMap占用内存多<br>SparseArray查找相对慢，HashMap查找快<br>因为移动端设备资源宝贵，所以SparseArray舍弃了部分时间效率，提升了内存效率</p>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a><font color="#EF692F" size="5" face="黑体">补充</font></h2><ol>
+<li>HashMap 的MAXIMUM_CAPACITY = 1 &lt;&lt; 30，即2的30次方，他达不到2^31,因为Integer的最大值就是2^31-1，如果threshold超过2^30,会把Integer的最大值赋给它</li>
+<li>SparseArray因为key是int类型，所以避免了自动装箱</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SparseArray/" rel="tag"># SparseArray</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/14/View-post/" rel="next" title="View.post()源码解析">
+                <i class="fa fa-chevron-left"></i> View.post()源码解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">immrwk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是SparseArray"><span class="nav-number">1.</span> <span class="nav-text">什么是SparseArray</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么情况下用"><span class="nav-number">2.</span> <span class="nav-text">什么情况下用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么原理"><span class="nav-number">3.</span> <span class="nav-text">什么原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始容量"><span class="nav-number">3.1.</span> <span class="nav-text">初始容量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成员变量"><span class="nav-number">3.2.</span> <span class="nav-text">成员变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本操作方法"><span class="nav-number">3.3.</span> <span class="nav-text">基本操作方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#增加"><span class="nav-number">3.3.1.</span> <span class="nav-text">增加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找"><span class="nav-number">3.3.2.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">3.3.3.</span> <span class="nav-text">删除</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#扩容机制"><span class="nav-number">4.</span> <span class="nav-text">扩容机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二分法查找"><span class="nav-number">5.</span> <span class="nav-text">二分法查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跟HashMap的对比"><span class="nav-number">6.</span> <span class="nav-text">跟HashMap的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#补充"><span class="nav-number">6.1.</span> <span class="nav-text">补充</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">immrwk</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
