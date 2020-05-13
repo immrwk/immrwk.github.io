@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="什么是SparseArray翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那他是干什么的，怎么用，不要急，看下面 什么情况下用用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲">
+<meta name="description" content="什么是SparseArray翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那它是干什么的，怎么用，不要急，看下面 什么情况下用用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲">
 <meta name="keywords" content="SparseArray">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SparseArray解析">
 <meta property="og:url" content="http://yoursite.com/2020/05/13/SparseArray解析/index.html">
 <meta property="og:site_name" content="山有扶苏">
-<meta property="og:description" content="什么是SparseArray翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那他是干什么的，怎么用，不要急，看下面 什么情况下用用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲">
+<meta property="og:description" content="什么是SparseArray翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那它是干什么的，怎么用，不要急，看下面 什么情况下用用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-13T10:18:50.255Z">
+<meta property="og:updated_time" content="2020-05-13T11:15:21.256Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SparseArray解析">
-<meta name="twitter:description" content="什么是SparseArray翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那他是干什么的，怎么用，不要急，看下面 什么情况下用用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲">
+<meta name="twitter:description" content="什么是SparseArray翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那它是干什么的，怎么用，不要急，看下面 什么情况下用用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲">
 
 
 
@@ -354,8 +354,8 @@
       
         <meta name="referrer" content="no-referrer">
 
-<h1 id="什么是SparseArray"><a href="#什么是SparseArray" class="headerlink" title="什么是SparseArray"></a><font color="#EF692F" size="6" face="黑体">什么是SparseArray</font></h1><p>翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那他是干什么的，怎么用，不要急，看下面</p>
-<h1 id="什么情况下用"><a href="#什么情况下用" class="headerlink" title="什么情况下用"></a><font color="#EF692F" size="6" face="黑体">什么情况下用</font></h1><p>用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用<br>SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲，后面会讲述。</p>
+<h1 id="什么是SparseArray"><a href="#什么是SparseArray" class="headerlink" title="什么是SparseArray"></a><font color="#EF692F" size="6" face="黑体">什么是SparseArray</font></h1><p>翻译为稀疏数组（听起来感觉别扭），还是直接叫英文顺畅，那它是干什么的，怎么用，不要急，看下面</p>
+<h1 id="什么情况下用"><a href="#什么情况下用" class="headerlink" title="什么情况下用"></a><font color="#EF692F" size="6" face="黑体">什么情况下用</font></h1><p>用来替代key为Integer是的HashMap的一种数据结构，相对于HashMap可以节省更多的内存，对于我们Android系统来说，内存是十分宝贵的。这也是为什么Google推荐我们使用SparseArray的原因，当然，节省内存的同时，在时间上做了一些牺牲，后面会讲述。</p>
 <h1 id="什么原理"><a href="#什么原理" class="headerlink" title="什么原理"></a><font color="#EF692F" size="6" face="黑体">什么原理</font></h1><h2 id="初始容量"><a href="#初始容量" class="headerlink" title="初始容量"></a><font color="#EF692F" size="5" face="黑体">初始容量</font></h2><p>既然是一种数据结构，肯定就有容量大小问题，先来看它的构造方法</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public SparseArray() &#123;</span><br><span class="line">    this(10);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public SparseArray(int initialCapacity) &#123;</span><br><span class="line">    if (initialCapacity == 0) &#123;</span><br><span class="line">        mKeys = EmptyArray.INT;</span><br><span class="line">        mValues = EmptyArray.OBJECT;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        mValues = ArrayUtils.newUnpaddedObjectArray(initialCapacity);</span><br><span class="line">        mKeys = new int[mValues.length];</span><br><span class="line">    &#125;</span><br><span class="line">    mSize = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -381,6 +381,11 @@
 <p>System.arraycopy是一个native方法，上面的growSize()是获取扩容后的大小</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static int growSize(int currentSize) &#123;</span><br><span class="line">    return currentSize &lt;= 4 ? 8 : currentSize * 2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看到currentSize&lt;=4,就扩容到8，否则是2倍扩容</p>
+<h2 id="SparseArray比HashMap内存表现更好的原因"><a href="#SparseArray比HashMap内存表现更好的原因" class="headerlink" title="SparseArray比HashMap内存表现更好的原因"></a><font color="#EF692F" size="5" face="黑体">SparseArray比HashMap内存表现更好的原因</font></h2><ol>
+<li>HashMap的扩容因子是0.75，所以有25%的容量未被使用</li>
+<li>HashMap冲突，导致部分空间浪费</li>
+<li>初始创建时，HashMap默认就占用了内存</li>
+</ol>
 <h1 id="二分法查找"><a href="#二分法查找" class="headerlink" title="二分法查找"></a><font color="#EF692F" size="6" face="黑体">二分法查找</font></h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">static int binarySearch(int[] array, int size, int value) &#123;</span><br><span class="line">    int lo = 0;</span><br><span class="line">    int hi = size - 1;</span><br><span class="line">    while (lo &lt;= hi) &#123;</span><br><span class="line">        final int mid = (lo + hi) &gt;&gt;&gt; 1;</span><br><span class="line">        final int midVal = array[mid];</span><br><span class="line">        if (midVal &lt; value) &#123;</span><br><span class="line">            lo = mid + 1;</span><br><span class="line">        &#125; else if (midVal &gt; value) &#123;</span><br><span class="line">            hi = mid - 1;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return mid;  // value found</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return ~lo;  // value not present</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上面的代码就是，SparseArray用到的二分法找到的代码，当没有找到对应的index时，返回的时~lo，也就是需要插入的位置取反，所以上面在put时，index&lt;0,又取了一次反</p>
 <h1 id="跟HashMap的对比"><a href="#跟HashMap的对比" class="headerlink" title="跟HashMap的对比"></a><font color="#EF692F" size="6" face="黑体">跟HashMap的对比</font></h1><table>
@@ -411,10 +416,6 @@
 <td>最大容量</td>
 <td>Integer.MAX_VALUE</td>
 <td>1 &lt;&lt; 30</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
 </tr>
 </tbody>
 </table>
@@ -593,7 +594,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是SparseArray"><span class="nav-number">1.</span> <span class="nav-text">什么是SparseArray</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么情况下用"><span class="nav-number">2.</span> <span class="nav-text">什么情况下用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么原理"><span class="nav-number">3.</span> <span class="nav-text">什么原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始容量"><span class="nav-number">3.1.</span> <span class="nav-text">初始容量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成员变量"><span class="nav-number">3.2.</span> <span class="nav-text">成员变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本操作方法"><span class="nav-number">3.3.</span> <span class="nav-text">基本操作方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#增加"><span class="nav-number">3.3.1.</span> <span class="nav-text">增加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找"><span class="nav-number">3.3.2.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">3.3.3.</span> <span class="nav-text">删除</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#扩容机制"><span class="nav-number">4.</span> <span class="nav-text">扩容机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二分法查找"><span class="nav-number">5.</span> <span class="nav-text">二分法查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跟HashMap的对比"><span class="nav-number">6.</span> <span class="nav-text">跟HashMap的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#补充"><span class="nav-number">6.1.</span> <span class="nav-text">补充</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是SparseArray"><span class="nav-number">1.</span> <span class="nav-text">什么是SparseArray</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么情况下用"><span class="nav-number">2.</span> <span class="nav-text">什么情况下用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么原理"><span class="nav-number">3.</span> <span class="nav-text">什么原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始容量"><span class="nav-number">3.1.</span> <span class="nav-text">初始容量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成员变量"><span class="nav-number">3.2.</span> <span class="nav-text">成员变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本操作方法"><span class="nav-number">3.3.</span> <span class="nav-text">基本操作方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#增加"><span class="nav-number">3.3.1.</span> <span class="nav-text">增加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找"><span class="nav-number">3.3.2.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">3.3.3.</span> <span class="nav-text">删除</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#扩容机制"><span class="nav-number">4.</span> <span class="nav-text">扩容机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SparseArray比HashMap内存表现更好的原因"><span class="nav-number">4.1.</span> <span class="nav-text">SparseArray比HashMap内存表现更好的原因</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二分法查找"><span class="nav-number">5.</span> <span class="nav-text">二分法查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跟HashMap的对比"><span class="nav-number">6.</span> <span class="nav-text">跟HashMap的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#补充"><span class="nav-number">6.1.</span> <span class="nav-text">补充</span></a></li></ol></li></ol></div>
             
 
           </div>
