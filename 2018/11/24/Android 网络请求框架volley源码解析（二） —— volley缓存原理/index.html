@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Volley,网络框架,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="volley的缓存目录通过上一篇分析中我们发现，创建一个请求队列的同时，会同时创建Volley的缓存目录和DiskBasedCache缓存对象，我们可以得知Volley的缓存目录就是在我们应用内置的cacheDir目录下的volley文件夹中，然后把这个目录用作DiskBasedCache硬盘缓存的目录，源码如下： 1234567public static RequestQueue newRequ">
+<meta name="keywords" content="Volley,网络框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 网络请求框架volley源码解析（二） —— volley缓存原理">
+<meta property="og:url" content="http://yoursite.com/2018/11/24/Android 网络请求框架volley源码解析（二） —— volley缓存原理/index.html">
+<meta property="og:site_name" content="山有扶苏">
+<meta property="og:description" content="volley的缓存目录通过上一篇分析中我们发现，创建一个请求队列的同时，会同时创建Volley的缓存目录和DiskBasedCache缓存对象，我们可以得知Volley的缓存目录就是在我们应用内置的cacheDir目录下的volley文件夹中，然后把这个目录用作DiskBasedCache硬盘缓存的目录，源码如下： 1234567public static RequestQueue newRequ">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-26T10:33:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 网络请求框架volley源码解析（二） —— volley缓存原理">
+<meta name="twitter:description" content="volley的缓存目录通过上一篇分析中我们发现，创建一个请求队列的同时，会同时创建Volley的缓存目录和DiskBasedCache缓存对象，我们可以得知Volley的缓存目录就是在我们应用内置的cacheDir目录下的volley文件夹中，然后把这个目录用作DiskBasedCache硬盘缓存的目录，源码如下： 1234567public static RequestQueue newRequ">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/24/Android 网络请求框架volley源码解析（二） —— volley缓存原理/">
+
+
+
+
+
+  <title>Android 网络请求框架volley源码解析（二） —— volley缓存原理 | 山有扶苏</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">山有扶苏</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/24/Android 网络请求框架volley源码解析（二） —— volley缓存原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.W">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="山有扶苏">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 网络请求框架volley源码解析（二） —— volley缓存原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-24T14:12:34+08:00">
+                2018-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/第三方框架源码/" itemprop="url" rel="index">
+                    <span itemprop="name">第三方框架源码</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="volley的缓存目录"><a href="#volley的缓存目录" class="headerlink" title="volley的缓存目录"></a>volley的缓存目录</h2><p>通过上一篇分析中我们发现，创建一个请求队列的同时，会同时创建Volley的缓存目录和DiskBasedCache缓存对象，我们可以得知Volley的缓存目录就是在我们应用内置的cacheDir目录下的volley文件夹中，然后把这个目录用作DiskBasedCache硬盘缓存的目录，源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public static RequestQueue newRequestQueue(Context context, HttpStack stack) &#123;</span><br><span class="line">        File cacheDir = new File(context.getCacheDir(), &quot;volley&quot;);</span><br><span class="line">        ...</span><br><span class="line">        RequestQueue queue1 = new RequestQueue(new DiskBasedCache(cacheDir), network1);</span><br><span class="line">        queue1.start();</span><br><span class="line">        return queue1;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>volley为我们实现了磁盘缓存我们来详细分析一下，主要是DiskBasedCache这个类。</p>
+<h3 id="缓存容量控制"><a href="#缓存容量控制" class="headerlink" title="缓存容量控制"></a>缓存容量控制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// volley缓存的默认容量 默认5M的大小</span><br><span class="line">private static final int DEFAULT_DISK_USAGE_BYTES = 5 * 1024 * 1024;</span><br><span class="line">    </span><br><span class="line">//系数 需要缓存占用总容量&gt;volley设置的最大总容量的90%时，需要扩容</span><br><span class="line">private static final float HYSTERESIS_FACTOR = 0.9f;</span><br></pre></td></tr></table></figure>
+<h3 id="缓存初始化"><a href="#缓存初始化" class="headerlink" title="缓存初始化"></a>缓存初始化</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">//初始化操作 扫描缓存目录，并将缓存文件(header)添加到内存中,即map对象</span><br><span class="line">@Override</span><br><span class="line">public synchronized void initialize() &#123;</span><br><span class="line">    if (!mRootDirectory.exists()) &#123;</span><br><span class="line">        if (!mRootDirectory.mkdirs()) &#123;</span><br><span class="line">            VolleyLog.e(&quot;Unable to create cache dir %s&quot;, mRootDirectory.getAbsolutePath());</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    File[] files = mRootDirectory.listFiles();</span><br><span class="line">    if (files == null) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    for (File file : files) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            long entrySize = file.length();</span><br><span class="line">            CountingInputStream cis =</span><br><span class="line">                    new CountingInputStream(</span><br><span class="line">                            new BufferedInputStream(createInputStream(file)), entrySize);</span><br><span class="line">            try &#123;</span><br><span class="line">                CacheHeader entry = CacheHeader.readHeader(cis);</span><br><span class="line">                // NOTE: When this entry was put, its size was recorded as data.length, but</span><br><span class="line">                // when the entry is initialized below, its size is recorded as file.length()</span><br><span class="line">                entry.size = entrySize;</span><br><span class="line">                putEntry(entry.key, entry);</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                // Any IOException thrown here is handled by the below catch block by design.</span><br><span class="line">                //noinspection ThrowFromFinallyBlock</span><br><span class="line">                cis.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            //noinspection ResultOfMethodCallIgnored</span><br><span class="line">            file.delete();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private final Map&lt;String, CacheHeader&gt; mEntries = new LinkedHashMap&lt;&gt;(16, .75f, true);</span><br><span class="line"></span><br><span class="line">//将key和cacheheader对象存入map中</span><br><span class="line">private void putEntry(String key, CacheHeader entry) &#123;</span><br><span class="line">    if (!mEntries.containsKey(key)) &#123;</span><br><span class="line">        mTotalSize += entry.size;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        CacheHeader oldEntry = mEntries.get(key);</span><br><span class="line">        mTotalSize += (entry.size - oldEntry.size);</span><br><span class="line">    &#125;</span><br><span class="line">    mEntries.put(key, entry);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，当缓存初始化的时候会读取设置的缓存目录，然后将缓存通过putEntry放到内存对象mEntries当中，并会记录当前已使用的总容量大小mTotalSize。</p>
+<h3 id="插入一条缓存"><a href="#插入一条缓存" class="headerlink" title="插入一条缓存"></a>插入一条缓存</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">//根据key存缓存</span><br><span class="line">@Override</span><br><span class="line">public synchronized void put(String key, Entry entry) &#123;</span><br><span class="line">    pruneIfNeeded(entry.data.length);</span><br><span class="line">    File file = getFileForKey(key);</span><br><span class="line">    try &#123;</span><br><span class="line">        BufferedOutputStream fos = new BufferedOutputStream(createOutputStrea</span><br><span class="line">        CacheHeader e = new CacheHeader(key, entry);</span><br><span class="line">        boolean success = e.writeHeader(fos);</span><br><span class="line">        if (!success) &#123;</span><br><span class="line">            fos.close();</span><br><span class="line">            VolleyLog.d(&quot;Failed to write header for %s&quot;, file.getAbsolutePath</span><br><span class="line">            throw new IOException();</span><br><span class="line">        &#125;</span><br><span class="line">        fos.write(entry.data);</span><br><span class="line">        fos.close();</span><br><span class="line">        putEntry(key, e);</span><br><span class="line">        return;</span><br><span class="line">    &#125; catch (IOException e) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    boolean deleted = file.delete();</span><br><span class="line">    if (!deleted) &#123;</span><br><span class="line">        VolleyLog.d(&quot;Could not clean up file %s&quot;, file.getAbsolutePath());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/**</span><br></pre></td></tr></table></figure>
+<p>这段代码我们分开来看，首先看最开始的pruneIfNeeded，pruneIfNeeded是检查当前可用空间是否满足新加入缓存的需要，如果容量不够，会删除旧的缓存。</p>
+<h4 id="1-判断剩余容量是否够用"><a href="#1-判断剩余容量是否够用" class="headerlink" title="1. 判断剩余容量是否够用"></a>1. 判断剩余容量是否够用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">private void pruneIfNeeded(int neededSpace) &#123;</span><br><span class="line">    // 如果总容量够直接返回</span><br><span class="line">    if ((mTotalSize + neededSpace) &lt; mMaxCacheSizeInBytes) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    if (VolleyLog.DEBUG) &#123;</span><br><span class="line">        VolleyLog.v(&quot;Pruning old cache entries.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    long before = mTotalSize;</span><br><span class="line">    int prunedFiles = 0;</span><br><span class="line">    long startTime = SystemClock.elapsedRealtime();</span><br><span class="line">    Iterator&lt;Map.Entry&lt;String, CacheHeader&gt;&gt; iterator = mEntries.entrySet().iterator();</span><br><span class="line">    // 循环遍历删除缓存文件，直到占用空间小于最大可用空间的90%时停止</span><br><span class="line">    while (iterator.hasNext()) &#123;</span><br><span class="line">        Map.Entry&lt;String, CacheHeader&gt; entry = iterator.next();</span><br><span class="line">        CacheHeader e = entry.getValue();</span><br><span class="line">        boolean deleted = getFileForKey(e.key).delete();</span><br><span class="line">        if (deleted) &#123;</span><br><span class="line">            mTotalSize -= e.size;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            VolleyLog.d(</span><br><span class="line">                    &quot;Could not delete cache entry for key=%s, filename=%s&quot;,</span><br><span class="line">                    e.key, getFilenameForKey(e.key));</span><br><span class="line">        &#125;</span><br><span class="line">        iterator.remove();</span><br><span class="line">        prunedFiles++;</span><br><span class="line">        if ((mTotalSize + neededSpace) &lt; mMaxCacheSizeInBytes * HYSTERESIS_FACTOR) &#123;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (VolleyLog.DEBUG) &#123;</span><br><span class="line">        VolleyLog.v(</span><br><span class="line">                &quot;pruned %d files, %d bytes, %d ms&quot;,</span><br><span class="line">                prunedFiles, (mTotalSize - before), SystemClock.elapsedRealtime() - startTime);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-缓存文件的命名"><a href="#2-缓存文件的命名" class="headerlink" title="2. 缓存文件的命名"></a>2. 缓存文件的命名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//生成缓存文件名</span><br><span class="line">private String getFilenameForKey(String key) &#123;</span><br><span class="line">    int firstHalfLength = key.length() / 2;</span><br><span class="line">    String localFilename = String.valueOf(key.substring(0, firstHalfLength).hashCode());</span><br><span class="line">    localFilename += String.valueOf(key.substring(firstHalfLength).hashCode());</span><br><span class="line">    return localFilename;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>生成缓存文件名的时候主要根据key来区分，一般用url做key，这里会把key从中间一分为二，分别取hashCode()，最后再拼接到一起。</p>
+<p>为什么不直接取hashCode()呢？一般认为可以这样可以从更大的程度上避免hash冲突。</p>
+<h4 id="3-写入缓存"><a href="#3-写入缓存" class="headerlink" title="3.写入缓存"></a>3.写入缓存</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fos.write(entry.data);</span><br><span class="line">fos.close();</span><br><span class="line">putEntry(key, e);</span><br></pre></td></tr></table></figure>
+<p>再后面一步就是写入文件，并且在内存对象mEntries中插入一条记录。</p>
+<h3 id="读取一条缓存记录"><a href="#读取一条缓存记录" class="headerlink" title="读取一条缓存记录"></a>读取一条缓存记录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public synchronized Entry get(String key) &#123;</span><br><span class="line">    CacheHeader entry = mEntries.get(key);</span><br><span class="line">    // 检查entry是否存在，不存在直接返回null</span><br><span class="line">    if (entry == null) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    File file = getFileForKey(key);</span><br><span class="line">    try &#123;</span><br><span class="line">        CountingInputStream cis =</span><br><span class="line">                new CountingInputStream(</span><br><span class="line">                        new BufferedInputStream(createInputStream(file)), file.length());</span><br><span class="line">        try &#123;</span><br><span class="line">            CacheHeader entryOnDisk = CacheHeader.readHeader(cis);</span><br><span class="line">            if (!TextUtils.equals(key, entryOnDisk.key)) &#123;</span><br><span class="line">                // File was shared by two keys and now holds data for a different entry!</span><br><span class="line">                VolleyLog.d(</span><br><span class="line">                        &quot;%s: key=%s, found=%s&quot;, file.getAbsolutePath(), key, entryOnDisk.key);</span><br><span class="line">                // Remove key whose contents on disk have been replaced.</span><br><span class="line">                removeEntry(key);</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line">            // 生成最终的entry返回</span><br><span class="line">            byte[] data = streamToBytes(cis, cis.bytesRemaining());</span><br><span class="line">            return entry.toCacheEntry(data);</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            // Any IOException thrown here is handled by the below catch block by design.</span><br><span class="line">            //noinspection ThrowFromFinallyBlock</span><br><span class="line">            cis.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (IOException e) &#123;</span><br><span class="line">        VolleyLog.d(&quot;%s: %s&quot;, file.getAbsolutePath(), e.toString());</span><br><span class="line">        remove(key);</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="删除一条缓存"><a href="#删除一条缓存" class="headerlink" title="删除一条缓存"></a>删除一条缓存</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public synchronized void remove(String key) &#123;</span><br><span class="line">    boolean deleted = getFileForKey(key).delete();</span><br><span class="line">    removeEntry(key);</span><br><span class="line">    if (!deleted) &#123;</span><br><span class="line">        VolleyLog.d(</span><br><span class="line">                &quot;Could not delete cache entry for key=%s, filename=%s&quot;,</span><br><span class="line">                key, getFilenameForKey(key));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void removeEntry(String key) &#123;</span><br><span class="line">    CacheHeader removed = mEntries.remove(key);</span><br><span class="line">    if (removed != null) &#123;</span><br><span class="line">        mTotalSize -= removed.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分两步来操作，首先获取到缓存文件删除，然后将mEntries中的记录删除，mTotalSize减去相应的大小。</p>
+<h3 id="清空缓存"><a href="#清空缓存" class="headerlink" title="清空缓存"></a>清空缓存</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 清除所有缓存</span><br><span class="line">@Override</span><br><span class="line">public synchronized void clear() &#123;</span><br><span class="line">    File[] files = mRootDirectory.listFiles();</span><br><span class="line">    if (files != null) &#123;</span><br><span class="line">        for (File file : files) &#123;</span><br><span class="line">            file.delete();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    mEntries.clear();</span><br><span class="line">    mTotalSize = 0;</span><br><span class="line">    VolleyLog.d(&quot;Cache cleared.&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也是分两步，第一步遍历缓存目录下的所有文件删除，第二步是清空mEntries。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Volley/" rel="tag"># Volley</a>
+          
+            <a href="/tags/网络框架/" rel="tag"># 网络框架</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/23/Android 网络请求框架volley源码解析（一） —— 网络请求部分/" rel="next" title="Android 网络请求框架volley源码解析（一） —— 网络请求部分">
+                <i class="fa fa-chevron-left"></i> Android 网络请求框架volley源码解析（一） —— 网络请求部分
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/01/Android如何在service中弹出对话框/" rel="prev" title="Android如何在service中弹出对话框">
+                Android如何在service中弹出对话框 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Mr.W</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#volley的缓存目录"><span class="nav-number">1.</span> <span class="nav-text">volley的缓存目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存容量控制"><span class="nav-number">1.1.</span> <span class="nav-text">缓存容量控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存初始化"><span class="nav-number">1.2.</span> <span class="nav-text">缓存初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入一条缓存"><span class="nav-number">1.3.</span> <span class="nav-text">插入一条缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-判断剩余容量是否够用"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 判断剩余容量是否够用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-缓存文件的命名"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 缓存文件的命名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-写入缓存"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.写入缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取一条缓存记录"><span class="nav-number">1.4.</span> <span class="nav-text">读取一条缓存记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除一条缓存"><span class="nav-number">1.5.</span> <span class="nav-text">删除一条缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清空缓存"><span class="nav-number">1.6.</span> <span class="nav-text">清空缓存</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mr.W</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
